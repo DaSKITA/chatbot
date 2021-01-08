@@ -1,5 +1,5 @@
 # Chatbot
-Entwicklung eines Chatbots, mit dem Nutzer*innen kommunizieren können, als Nutzerschnittstelle zu tilt-Dokumenten.
+Entwicklung eines Chatbots, mit dem Nutzer*innen kommunizieren können, als Nutzer*innenschnittstelle zu tilt-Dokumenten.
 
 Mögliche Anwendungen: 
 1.	AP2 Transparenz: 
