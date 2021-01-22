@@ -14,4 +14,3 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
 
 
 (weitere Anwendungen möglich)
-
