@@ -1,0 +1,261 @@
+version: "2.0"
+
+stories:
+
+- story: privacy path; no more datatypes; no more services; no request
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: privacy_policy
+  - action: utter_ask_privacy_form_service
+  - intent: services
+  - action: utter_ask_privacy_form_datatype
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: deny
+  - action: utter_goodbye
+  
+- story: privacy path; no more datatypes; no more services; change to request, another service
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: privacy_policy
+  - action: utter_ask_privacy_form_service
+  - intent: services
+  - action: utter_ask_privacy_form_datatype
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: affirm
+  - action: utter_ask_this_service_request
+  - intent: another_service_request
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: deny
+  - action: utter_goodbye
+
+
+- story: privacy path; no more datatypes; no more services; change to request; this service
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: privacy_policy
+  - action: utter_ask_privacy_form_service
+  - intent: services
+  - action: utter_ask_privacy_form_datatype
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: affirm
+  - action: utter_ask_this_service_request
+  - intent: this_service_request
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: deny
+  - action: utter_goodbye
+  
+- story: privacy path; start with services
+  steps: 
+  - intent: services
+  - action: utter_ask_privacy_form_datatype
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: deny
+  - action: utter_goodbye
+
+- story: privacy path; start with datatype question
+  steps: 
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: deny
+  - action: utter_goodbye
+
+
+- story: ask for services again if user says so; privacy
+  steps: 
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: affirm
+  - action: utter_ask_privacy_form_service
+  - intent: services
+  - action: utter_ask_privacy_form_datatype
+
+- story: request; no more services; no privacy policy
+  steps: 
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: request
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: deny
+  - action: utter_goodbye  
+
+- story: request; more services; no privacy policy
+  steps: 
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: request
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: affirm
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: deny
+  - action: utter_goodbye
+
+
+- story: request; more services; change to privacy policy; another service
+  steps: 
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: request
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: affirm
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: affirm
+  - action: utter_ask_this_service_privacy
+  - intent: another_service_privacy
+  - action: utter_ask_privacy_form_service
+  - intent: services
+  - action: utter_ask_privacy_form_datatype
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: deny
+  - action: utter_goodbye
+
+
+- story: request; more services; change to privacy policy; this service
+  steps: 
+  - intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - intent: request
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: affirm
+  - action: utter_ask_request_form_service
+  #- action: request_form
+  #- active_loop: request_form
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: affirm
+  - action: utter_ask_this_service_privacy
+  - intent: this_service_privacy
+  - action: utter_ask_privacy_form_datatype
+  - intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - intent: deny
+  - action: utter_ask_service_again
+  - intent: deny
+  - action: utter_ask_request
+  - intent: deny
+  - action: utter_goodbye
+
+
+- story: request path; start with services
+  steps:
+  - intent: services
+  - action: utter_ask_request_form_datatype
+  - intent: datatypes
+  - action: utter_ask_authentification
+  - action: utter_ask_request_again
+  - intent: deny
+  - action: utter_ask_privacy_policy
+  - intent: deny
+  - action: utter_goodbye
