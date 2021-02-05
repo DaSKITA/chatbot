@@ -38,11 +38,9 @@ stories:
   - intent: deny
   - action: utter_ask_request
   - intent: affirm
-  - action: utter_ask_this_service_request
+  - action: utter_ask_change_to_request_form_request
   - intent: another_service_request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -71,7 +69,7 @@ stories:
   - intent: deny
   - action: utter_ask_request
   - intent: affirm
-  - action: utter_ask_this_service_request
+  - action: utter_ask_change_to_request_form_request
   - intent: this_service_request
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -144,8 +142,6 @@ stories:
   - action: utter_bot_usage
   - intent: request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -153,8 +149,6 @@ stories:
   - action: utter_ask_request_again
   - intent: affirm
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -173,8 +167,6 @@ stories:
   - action: utter_bot_usage
   - intent: request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -182,8 +174,6 @@ stories:
   - action: utter_ask_request_again
   - intent: affirm
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -192,7 +182,7 @@ stories:
   - intent: deny
   - action: utter_ask_privacy_policy
   - intent: affirm
-  - action: utter_ask_this_service_privacy
+  - action: utter_ask_change_to_privacy_form_policy
   - intent: another_service_privacy
   - action: utter_ask_privacy_form_service
   - intent: services
@@ -215,8 +205,6 @@ stories:
   - action: utter_bot_usage
   - intent: request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -224,8 +212,6 @@ stories:
   - action: utter_ask_request_again
   - intent: affirm
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
   - intent: datatypes
@@ -234,7 +220,7 @@ stories:
   - intent: deny
   - action: utter_ask_privacy_policy
   - intent: affirm
-  - action: utter_ask_this_service_privacy
+  - action: utter_ask_change_to_privacy_form_policy
   - intent: this_service_privacy
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes

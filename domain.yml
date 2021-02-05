@@ -36,9 +36,9 @@ slots:
   datatype:
     type: categorical
     values:
-    - Metadata
-    - Countries to which your data is transferred
-    - Third parties to which your data is transferred
+    - metadata
+    - countries to which your data is transferred
+    - third parties to which your data is transferred
   request:
     type: categorical
     values: 
@@ -66,21 +66,22 @@ responses:
 
 # bot introduction
   utter_bot_usage:
-  - text: "Welcome, I am a bot that helps you to get information about the privacy policies of differnt services. I can also make a request at a company about the data the company collected about you. What are you interested in?"
+  - text: "Welcome, I am a bot that helps you to get information about the privacy policies of different services. I can also make a request at a service about the data the service collected about you. What are you interested in?"
  
 #change to privacy path
   utter_ask_privacy_policy:
   - text: "Are you interested in the privacy policy of this or another service?"
 
-  utter_ask_this_service_privacy:
-  - text: "Are you interested in getting information of the privacy policy at this service or at another service?"
+  #utter_ask_this_service_privacy:
+  utter_ask_change_to_privacy_form_policy:
+  - text: "Are you interested in getting information about the privacy policy at this service or at another service?"
     buttons: 
-    - title: "Policy of this service"
-      payload: '/this_service_privacy{"policy":"Policy of this service"}'
-    - title: "Policy of another service"
-      payload: '/another_service_privacy{"policy":"Policy of another service"}'
-    - title: "No policy at all"
-      payload: '/no_service_privacy{"policy":"No policy at all"}'
+    - title: "This service"
+      payload: '/this_service_privacy{"policy":"This service"}'
+    - title: "Another service"
+      payload: '/another_service_privacy{"policy":"Another service"}'
+    - title: "I am not interested"
+      payload: '/no_service_privacy{"policy":"No service"}'
     
 
 #privacy path
@@ -96,7 +97,7 @@ responses:
   
   
   utter_ask_privacy_form_service:
-    - text: "Which service are you interested in? -> Form privacy"
+    - text: "Which service are you interested in?"
       buttons: 
       - title: "Google"
         payload: '/services{"service":"Google"}'
@@ -106,27 +107,26 @@ responses:
         payload: '/services{"service":"Facebook"}'
   
 
-  
   utter_ask_privacy_form_datatype:
   - text: "What data collected by this service are you interested in?"
     buttons: 
     - title: "Metadata"
-      payload: '/datatypes{"datatype":"Metadata"}'
-    - title: "Countries to which your data is transferred"
-      payload: '/datatypes{"datatype":"Countries to which your data is transferred"}'
-    - title: "Third parties to which your data is transferred"
-      payload: '/datatypes{"datatype":"Third parties to which your data is transferred"}'
+      payload: '/datatypes{"datatype":"metadata"}'
+    - title: "Countries to which my data is transferred"
+      payload: '/datatypes{"datatype":"countries to which your data is transferred"}'
+    - title: "Third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"third parties to which your data is transferred"}'
       
       
   utter_ask_datatype_privacy:
   - text: "What data collected by this service are you interested in?"
     buttons: 
     - title: "Metadata"
-      payload: '/datatypes{"datatype":"Metadata"}'
-    - title: "Countries to which your data is transferred"
-      payload: '/datatypes{"datatype":"Countries to which your data is transferred"}'
-    - title: "Third parties to which your data is transferred"
-      payload: '/datatypes{"datatype":"Third parties to which your data is transferred"}'
+      payload: '/datatypes{"datatype":"metadata"}'
+    - title: "Countries to which my data is transferred"
+      payload: '/datatypes{"datatype":"countries to which your data is transferred"}'
+    - title: "Third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"third parties to which your data is transferred"}'
   
   utter_datatypes:
   - text: "Soon I will be able to provide information about {datatype}."
@@ -141,20 +141,21 @@ responses:
   utter_ask_request:
   - text: "Are you interested in making a request about the data this or another service collected about you?"
   
-  utter_ask_this_service_request:
+  #utter_ask_this_service_request:
+  utter_ask_change_to_request_form_request:
   - text: "Are you interested in making a request at this service or at another service?"
     buttons: 
-    - title: "Requesting at this service"
-      payload: '/this_service_request{"request":"Requesting at this service"}'
-    - title: "Requesting at another service"
-      payload: '/another_service_request{"request":"Requesting at another service"}'
-    - title: "No requesting at all"
-      payload: '/no_service_request{"request":"No requesting at all"}'
+    - title: "This service"
+      payload: '/this_service_request{"request":"This service"}'
+    - title: "Another service"
+      payload: '/another_service_request{"request":"Another service"}'
+    - title: "I am not interested"
+      payload: '/no_service_request{"request":"No service"}'
 
 
 #request path
   utter_ask_request_form_service:
-  - text: "Which service are you interested in? -> Form request"
+  - text: "Which service are you interested in?"
     buttons: 
     - title: "Google"
       payload: '/services{"service":"Google"}'
@@ -167,14 +168,14 @@ responses:
   - text: "What data collected by this service are you interested in?"
     buttons: 
     - title: "Metadata"
-      payload: '/datatypes{"datatype":"Metadata"}'
-    - title: "Countries to which your data is transferred"
-      payload: '/datatypes{"datatype":"Countries to which your data is transferred"}'
-    - title: "Third parties to which your data is transferred"
-      payload: '/datatypes{"datatype":"Third parties to which your data is transferred"}'
+      payload: '/datatypes{"datatype":"metadata"}'
+    - title: "Countries to which my data is transferred"
+      payload: '/datatypes{"datatype":"countries to which your data is transferred"}'
+    - title: "Third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"third parties to which your data is transferred"}'
   
   utter_ask_authentification:
-  - text: "What is your authentification at this service? The request has been send ... todo"
+  - text: "What is your authentification? The request has been send ... todo"
 
   utter_ask_request_again:
   - text: "Are you interested in making a request for another service?"
@@ -217,7 +218,16 @@ forms:
     datatype:
       - type: from_entity
         entity: datatype
-
+        
+  change_to_request_form:
+    request:
+      - type: from_entity
+        entity: request
+        
+  change_to_privacy_form:
+    privacy:
+      - type: from_entity
+        entity: privacy
 
 session_config:
   session_expiration_time: 60

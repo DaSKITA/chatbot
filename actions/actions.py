@@ -23,7 +23,7 @@ class ActionGiveServiceInfo(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         service=tracker.get_slot("service")
         datatype=tracker.get_slot("datatype")
-        dispatcher.utter_message(text="Here is the info about {} by the service {}.".format(datatype, service))
+        dispatcher.utter_message(text="Here is the information about {} by the service {}.".format(datatype, service))
 
         return []
 

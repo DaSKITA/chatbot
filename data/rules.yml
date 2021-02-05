@@ -23,23 +23,17 @@ rules:
   steps:
   - intent: request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   
 - rule: Activate request form; another service
   steps:
   - intent: another_service_request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   
 
 - rule: Activate request form; this service
   steps:
   - intent: this_service_request
   - action: utter_ask_request_form_datatype
-  #- action: request_form # service soll aus letzter form übernommen werden (evtl mit action programmieren)
-  #- active_loop: request_form
 
 #privacy path
 - rule: start privacy track 
@@ -95,25 +89,23 @@ rules:
   steps:
   - action: utter_ask_request
   - intent: affirm
-  - action: utter_ask_this_service_request
+  - action: utter_ask_change_to_request_form_request
   
 - rule: change to request track; another service
   steps:
-  - action: utter_ask_this_service_request
+  - action: utter_ask_change_to_request_form_request
   - intent: another_service_request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
 
 - rule: change to request track; this service
   steps:
-  - action: utter_ask_this_service_request
+  - action: utter_ask_change_to_request_form_request
   - intent: this_service_request
   - action: utter_ask_request_form_datatype
 
 - rule: change to request track; no change
   steps: 
-  - action: utter_ask_this_service_request
+  - action: utter_ask_change_to_request_form_request
   - intent: no_service_request
   - action: utter_goodbye
 
@@ -128,14 +120,10 @@ rules:
   steps: 
   - intent: request
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
 
 - rule: ask for datatype; request
   steps:
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
   - intent: services
   - action: utter_ask_request_form_datatype
 
@@ -152,8 +140,6 @@ rules:
   - action: utter_ask_request_again
   - intent: affirm
   - action: utter_ask_request_form_service
-  #- action: request_form
-  #- active_loop: request_form
 
   
 - rule: ask for track change to policy track; request
@@ -169,23 +155,23 @@ rules:
   steps:
   - action: utter_ask_privacy_policy
   - intent: affirm
-  - action: utter_ask_this_service_privacy
+  - action: utter_ask_change_to_privacy_form_policy
   
 - rule: change to privacy track; another service
   steps:
-  - action: utter_ask_this_service_privacy
+  - action: utter_ask_change_to_privacy_form_policy
   - intent: another_service_privacy
   - action: utter_ask_privacy_form_service
 
 - rule: change to privacy track; this service
   steps:
-  - action: utter_ask_this_service_privacy
+  - action: utter_ask_change_to_privacy_form_policy
   - intent: this_service_privacy
   - action: utter_ask_privacy_form_datatype
 
 - rule: change to privacy track; no change
   steps: 
-  - action: utter_ask_this_service_privacy
+  - action: utter_ask_change_to_privacy_form_policy
   - intent: no_service_privacy
   - action: utter_goodbye
 

@@ -13,6 +13,10 @@ nlu:
     - information about the privacy policy
     - info about privacy policy of services
     - I am interested in a privacy policy
+    - I am interested in information about a privacy policy
+    - I am interested in privacy policies
+    - Hi, I am interested in privacy policies
+    - Hi, I am interested in information about a privacy policy
 
 - intent: request
   examples: |
@@ -33,35 +37,45 @@ nlu:
 
 - intent: another_service_privacy
   examples: |
-    - policy of a different service
-    - Policy of another service
+    - [policy of a different service](policy)
+    - [Policy of another service](policy)
+    - [Privacy Policy of another service](policy)
+    - [Another service](policy)
 
 
 - intent: this_service_privacy
   examples: |
-    - Policy of this service
-    - Policy of this service right now
+    - [Policy of this service](policy)
+    - [Policy of this service right now](policy)
+    - [Privacy Policy of this service](policy)
+    - [This service](policy)
 
 - intent: no_service_privacy
   examples: |
-    - I am not interested in a policy.
-    - no policy
-    - No policy at all
+    - [I am not interested in a policy](policy)
+    - [no policy](policy)
+    - [No policy at all](policy)
+    - [I am not interested in a privacy policy](policy)
+    - [No service](policy)
 
 - intent: another_service_request
   examples: |
-    - Requesting at another service
-    - Requesting information for Another Service
+    - [Requesting at another service](request)
+    - [Requesting information at another service](request)
+    - [I want to do a request at another service](request)
+    - [Another service](request)
     
 - intent: no_service_request
   examples: |
-    - No requesting at all
-    - Requesting at no service  
+    - [No requesting at all](request)
+    - [Requesting at no service](request) 
+    - [No service](request)
 
 - intent: this_service_request
   examples: |
-    - Requesting at this service
-    - Requesting information at this service
+    - [Requesting at this service](request)
+    - [Requesting information at this service](request)
+    - [This service](request)
 
 - intent: datatypes
   examples: |
@@ -99,10 +113,6 @@ nlu:
     - see you around
     - bye bye
     - see you later
-    - Auf Wiedersehen
-    - Ciao
-    - Tschüss
-    - Tschüssi
 
 - intent: affirm
   examples: |
@@ -112,11 +122,8 @@ nlu:
     - of course
     - that sounds good
     - correct
-    - Ja
-    - Genau
-    - Korrekt
-    - Richtig
-    - Natürlich
+    - yes, please
+    - yes, thank you
 
 - intent: deny
   examples: |
@@ -127,10 +134,8 @@ nlu:
     - don't like that
     - no way
     - not really
-    - Nein
-    - Falsch
-    - Ich glaube nicht
-    - Nicht ganz
+    - No, thank you
+    - No, thanks
 
 - intent: mood_great
   examples: |
@@ -148,10 +153,7 @@ nlu:
     - so so perfect
     - so good
     - so perfect
-    - Sehr gut 
-    - Es geht mir gut
-    - Toll
-    - Super
+
 
 - intent: mood_unhappy
   examples: |
@@ -169,12 +171,6 @@ nlu:
     - extremly sad
     - so saad
     - so sad
-    - traurig
-    - ich bin traurig
-    - unglücklich
-    - unzufrieden
-    - gestresst
-    - enttäuscht
 
 - intent: bot_challenge
   examples: |
@@ -182,6 +178,4 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
-    - Bist du ein Bot? 
-    - Hast du Gefühle?
-    - Bist du ein Mensch?
+
