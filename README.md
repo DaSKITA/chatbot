@@ -17,6 +17,9 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
 
 
 Nutzung:
+
 Neues Modell trainieren: "rasa train"
+
 Modell testen: Action Server starten: "rasa run actions" und "rasa shell" oder "rasa shell --debug"
+
 Bot auf Webseite nutzen: Action Server starten: "rasa run actions" und "rasa run -m models --enable-api --cors "*" --debug"
