@@ -12,7 +12,8 @@ intents:
   - privacy_policy
   - request
   - services
-  - datatypes
+  - datatypes_privacy
+  - datatypes_request
   - another_service_privacy
   - this_service_privacy
   - no_service_privacy
@@ -33,18 +34,39 @@ slots:
     - Google
     - Facebook
     - Amazon
-  datatype:
+    - Green Company
+    
+  datatype_privacy:
+    type: categorical
+    values:
+    - metadata
+    - countries
+    - third parties
+    - number of third parties
+    - personal data
+    - data protection officer
+    - access to data portability
+    - right to information
+    - right to deletion
+    - right to data portability
+    - right to withdraw consent
+    
+
+
+  datatype_request:
     type: categorical
     values:
     - metadata
     - countries to which your data is transferred
     - third parties to which your data is transferred
+    
   request:
     type: categorical
     values: 
     - Requesting at this service
     - Requesting at another service
     - No requesting at all
+    
   policy:
     type: categorical
     values:
@@ -84,17 +106,7 @@ responses:
       payload: '/no_service_privacy{"policy":"No service"}'
     
 
-#privacy path
-  utter_ask_service_privacy:
-  - text: "Which service are you interested in?"
-    buttons: 
-    - title: "Google"
-      payload: '/services{"service":"Google"}'
-    - title: "Amazon"
-      payload: '/services{"service":"Amazon"}'
-    - title: "Facebook"
-      payload: '/services{"service":"Facebook"}'
-  
+#privacy path  
   
   utter_ask_privacy_form_service:
     - text: "Which service are you interested in?"
@@ -105,31 +117,35 @@ responses:
         payload: '/services{"service":"Amazon"}'
       - title: "Facebook"
         payload: '/services{"service":"Facebook"}'
+      - title: "Green Company"
+        payload: '/services{"service":"Green Company"}'
   
 
   utter_ask_privacy_form_datatype:
   - text: "What data collected by this service are you interested in?"
     buttons: 
     - title: "Metadata"
-      payload: '/datatypes{"datatype":"metadata"}'
+      payload: '/datatypes_privacy{"datatype_privacy":"metadata"}'
     - title: "Countries to which my data is transferred"
-      payload: '/datatypes{"datatype":"countries to which your data is transferred"}'
+      payload: '/datatypes_privacy{"datatype_privacy":"countries"}'
     - title: "Third parties to which my data is transferred"
-      payload: '/datatypes{"datatype":"third parties to which your data is transferred"}'
-      
-      
-  utter_ask_datatype_privacy:
-  - text: "What data collected by this service are you interested in?"
-    buttons: 
-    - title: "Metadata"
-      payload: '/datatypes{"datatype":"metadata"}'
-    - title: "Countries to which my data is transferred"
-      payload: '/datatypes{"datatype":"countries to which your data is transferred"}'
-    - title: "Third parties to which my data is transferred"
-      payload: '/datatypes{"datatype":"third parties to which your data is transferred"}'
-  
-  utter_datatypes:
-  - text: "Soon I will be able to provide information about {datatype}."
+      payload: '/datatypes_privacy{"datatype_privacy":"third parties"}'
+    - title: "Number of third parties to which my data is transferred"
+      payload: '/datatypes_privacy{"datatype_privacy":"number of third parties"}'
+    - title: "Personal data that is stored"
+      payload: '/datatypes_privacy{"datatype_privacy":"personal data"}'
+    - title: "Data Protection Officer"
+      payload: '/datatypes_privacy{"datatype_privacy":"data protection officer"}'
+    - title: "Information about getting access to my data"
+      payload: '/datatypes_privacy{"datatype_privacy":"access to data portability"}'
+    - title: "Information about my right to information"
+      payload: '/datatypes_privacy{"datatype_privacy":"right to information"}'
+    - title: "Information about my right to deletion"
+      payload: '/datatypes_privacy{"datatype_privacy":"right to deletion"}'
+    - title: "Information about my right to data portability"
+      payload: '/datatypes_privacy{"datatype_privacy":"right to data portability"}'
+    - title: "Information about my right to withdraw consent"
+      payload: '/datatypes_privacy{"datatype_privacy":"right to withdraw consent"}'
   
   utter_datatypes_again:
   - text: "Are you interested in other datatypes?"
@@ -168,11 +184,11 @@ responses:
   - text: "What data collected by this service are you interested in?"
     buttons: 
     - title: "Metadata"
-      payload: '/datatypes{"datatype":"metadata"}'
+      payload: '/datatypes_request{"datatype_request":"metadata"}'
     - title: "Countries to which my data is transferred"
-      payload: '/datatypes{"datatype":"countries to which your data is transferred"}'
+      payload: '/datatypes_request{"datatype_request":"countries to which your data is transferred"}'
     - title: "Third parties to which my data is transferred"
-      payload: '/datatypes{"datatype":"third parties to which your data is transferred"}'
+      payload: '/datatypes_request{"datatype_request":"third parties to which your data is transferred"}'
   
   utter_ask_authentification:
   - text: "What is your authentification? The request has been send ... todo"
@@ -207,17 +223,17 @@ forms:
     service:
       - type: from_entity
         entity: service
-    datatype:
+    datatype_privacy:
       - type: from_entity
-        entity: datatype
+        entity: datatype_privay
         
   request_form:
     service:
       - type: from_entity
         entity: service
-    datatype:
+    datatype_request:
       - type: from_entity
-        entity: datatype
+        entity: datatype_request
         
   change_to_request_form:
     request:

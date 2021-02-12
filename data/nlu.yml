@@ -34,6 +34,7 @@ nlu:
     - [Whatsapp](service)
     - [WhatsApp](service)
     - [Whats App](service)
+    - [Green Company](service)
 
 - intent: another_service_privacy
   examples: |
@@ -77,12 +78,29 @@ nlu:
     - [Requesting information at this service](request)
     - [This service](request)
 
-- intent: datatypes
+- intent: datatypes_privacy
   examples: |
-    - [third parties](datatype)
-    - [countries into which data is transfered](datatype)
-    - [number of third parties](datatype)
-    - [metadata](datatype)
+    - [third parties] to which your data is transferred(datatype_privacy)
+    - [countries] into which data is transferred(datatype_privacy)
+    - [countries] where the data goes(datatype_privacy)
+    - [countries] into which the data is send(datatype_privacy)
+    - [countries] into which the data is sold to(datatype_privacy)
+    - [number of third parties](datatype_privacy)
+    - [metadata](datatype_privacy)
+    - [personal data] that is stored(datatype_privacy)
+    - [data protection officer](datatype_privacy)
+    - [access to data portability](datatype_privacy)
+    - [right to information](datatype_privacy)
+    - [right to deletion](datatype_privacy)
+    - [right to data portability](datatype_privacy)
+    - [right to withdraw consent](datatype_privacy)
+
+- intent: datatypes_request
+  examples: |
+    - [third parties](datatype_request)
+    - [countries into which data is transfered](datatype_request)
+    - [number of third parties](datatype_request)
+    - [metadata](datatype_request)
 
 - intent: greet
   examples: |

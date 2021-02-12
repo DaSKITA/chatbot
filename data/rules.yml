@@ -50,7 +50,7 @@ rules:
 - rule: give info if asked for datatype and ask for more datatypes; privacy
   steps:
   - action: utter_ask_privacy_form_datatype
-  - intent: datatypes
+  - intent: datatypes_privacy
   - action: action_give_privacy_info
   - action: utter_datatypes_again
 
@@ -130,7 +130,7 @@ rules:
 - rule: ask for authentification; request
   steps:
   - action: utter_ask_request_form_datatype
-  - intent: datatypes
+  - intent: datatypes_request
   - action: utter_ask_authentification
   - action: utter_ask_request_again
 
