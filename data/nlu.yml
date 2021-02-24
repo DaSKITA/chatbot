@@ -90,10 +90,10 @@ nlu:
     - [personal data] that is stored(datatype_privacy)
     - [data protection officer](datatype_privacy)
     - [access to data portability](datatype_privacy)
-    - [right to information](datatype_privacy)
-    - [right to deletion](datatype_privacy)
-    - [right to data portability](datatype_privacy)
-    - [right to withdraw consent](datatype_privacy)
+    - [right](datatype_privacy)
+    - Information about my [right] to the data(datatype_privacy)
+    - [right] to the data(datatype_privacy)
+    - info about [right] to the data(datatype_privacy)
 
 - intent: datatypes_request
   examples: |

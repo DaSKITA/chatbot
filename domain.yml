@@ -46,10 +46,7 @@ slots:
     - personal data
     - data protection officer
     - access to data portability
-    - right to information
-    - right to deletion
-    - right to data portability
-    - right to withdraw consent
+    - right
     
 
 
@@ -138,14 +135,11 @@ responses:
       payload: '/datatypes_privacy{"datatype_privacy":"data protection officer"}'
     - title: "Information about getting access to my data"
       payload: '/datatypes_privacy{"datatype_privacy":"access to data portability"}'
-    - title: "Information about my right to information"
-      payload: '/datatypes_privacy{"datatype_privacy":"right to information"}'
-    - title: "Information about my right to deletion"
-      payload: '/datatypes_privacy{"datatype_privacy":"right to deletion"}'
-    - title: "Information about my right to data portability"
-      payload: '/datatypes_privacy{"datatype_privacy":"right to data portability"}'
-    - title: "Information about my right to withdraw consent"
-      payload: '/datatypes_privacy{"datatype_privacy":"right to withdraw consent"}'
+    - title: "Information about my rights to the data"
+      payload: '/datatypes_privacy{"datatype_privacy":"right"}'
+  
+  #utter_address:
+  #- text: "Here is the address: {[address](link)}"
   
   utter_datatypes_again:
   - text: "Are you interested in other datatypes?"

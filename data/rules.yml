@@ -53,6 +53,8 @@ rules:
   - intent: datatypes_privacy
   - action: action_give_privacy_info
   - action: utter_datatypes_again
+  
+
 
 - rule: ask for more datatypes; privacy
   steps:
