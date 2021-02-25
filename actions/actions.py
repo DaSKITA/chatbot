@@ -47,6 +47,7 @@ class ActionGiveServiceInfo(Action):
         if service=="Green Company": 
             file = requests.get('https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json')
             #file_read = json.loads(file.content)
+            #
             instance = tilt.tilt_from_dict(json.loads(file.content))
             dispatcher.utter_message(text="Here is the information about the **{}** specified by the service {} in their privacy policy.".format(datatype_out, service))
             tilt_dict=instance.to_dict() #nötig? wandle es ja nur wieder zurück um, waum geht list nicht?
