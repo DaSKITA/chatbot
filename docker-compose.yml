@@ -10,5 +10,5 @@ services:
       - run
   # todo: build action server image
   app:
-    image: <image:tag>
+    image: docker_image_name:docker_image_tag
     expose: 5055
