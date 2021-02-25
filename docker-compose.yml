@@ -1,0 +1,14 @@
+version: '3.0'
+services:
+  rasa:
+    image: rasa/rasa:2.3.2-full
+    ports:
+      - 5005:5005
+    volumes:
+      - ./:/app
+    command:
+      - run
+  # todo: build action server image
+  app:
+    image: <image:tag>
+    expose: 5055
