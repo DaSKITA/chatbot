@@ -1,5 +1,5 @@
 # Extend the official Rasa SDK image
-FROM rasa/rasa-sdk:2.3.1
+FROM rasa/rasa:2.3.2-full
 
 # Use subdirectory as working directory
 WORKDIR /app
@@ -10,17 +10,13 @@ WORKDIR /app
 # Change back to root user to install dependencies
 USER root
 
-RUN pip install tilt
-RUN pip install pytz
 # Install extra requirements for actions code, if necessary (uncomment next line)
 #RUN pip install -r requirements-actions.txt
 
 # Copy actions folder to working directory
-COPY ./actions /app/actions
 RUN mkdir /etc/rasa
 COPY credentials.yml /etc/rasa/
-COPY credentials.yml /app/
-
+COPY credentials.yml /app
 #RUN cp /app/credentials.yml /etc/rasa/
 
 # By best practices, don't run the code with root user

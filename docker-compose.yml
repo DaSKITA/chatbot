@@ -1,14 +1,14 @@
 version: '3.0'
 services:
   rasa:
-    image: rasa/rasa:2.3.2-full
+    #image: rasa/rasa:2.3.2-full
+    image: floramarleen/rasa:test_image_rasa
     ports:
       - 5005:5005
     volumes:
       - ./:/app
-    command:
-      - run
-  # todo: build action server image
+    command: run --port 5005 --cors "*" --enable-api --debug
   app:
-    image: docker_image_name:docker_image_tag
-    expose: 5055
+    image: floramarleen/action:test_image_action
+    expose: 
+      - 5055
