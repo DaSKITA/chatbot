@@ -7,7 +7,7 @@ services:
       - 5005:5005
     volumes:
       - ./:/app
-    command: run --port 5005 --cors "*" --enable-api --debug
+    command: run -m models --port 5005 --cors "*" --enable-api --debug
   app:
     image: floramarleen/action:test_image_action
     expose: 
