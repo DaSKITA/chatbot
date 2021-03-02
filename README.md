@@ -15,6 +15,10 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
 
 (weitere Anwendungen möglich)
 
+![uebersicht](https://user-images.githubusercontent.com/33124461/109649763-a3c90500-7b5c-11eb-94fa-526d7496e016.png)
+
+
+Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt hub als Datenbank, um tilt-Dokumente auszulesen. Ausgespielt wird der Bot über eine Website und Messenger Dienste (Messenger Dienste sind noch nicht hinzugefügt).
 
 Nutzung:
 
