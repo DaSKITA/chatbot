@@ -13,7 +13,7 @@ USER root
 #RUN pip install tilt
 #RUN pip install pytz
 # Install extra requirements for actions code, if necessary (uncomment next line)
-RUN pip install -r requirements-actions.txt
+RUN pip install -r actions/requirements-actions.txt
 
 # Copy actions folder to working directory
 #COPY ./actions /app/actions

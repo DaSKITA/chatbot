@@ -10,6 +10,6 @@ services:
       - run
   
   app:
-    image: DaSKITA/chatbot
+    image: daskita/chatbot:3261832adf309c866cdb609544a8ce03b8121341
     ports:
       - 5055:5055
