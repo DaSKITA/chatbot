@@ -125,7 +125,7 @@ class ActionGiveServiceInfo(Action):
                                 dpo.append(key_value_string)
                             elif element=="phone":
                                 value=dpo_dict[element]
-                                key_value_string=str(element).capitalize()+ ":"+value
+                                key_value_string=str(element).capitalize()+ ": "+value
                                 dpo.append(key_value_string)
                             else:
                                 value="*"+str(dpo_dict[element])+"*"
