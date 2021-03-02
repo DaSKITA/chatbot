@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+        <title>Chatbot</title>
+
+
+            <!--head>
+                <link rel="stylesheet" href="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.css" />
+              </head>
+              <body>
+                <div class="chat-container"></div>
+              
+                <script src="https://npm-scalableminds.s3.eu-central-1.amazonaws.com/@scalableminds/chatroom@master/dist/Chatroom.js"/></script>
+                <script type="text/javascript">
+                  var chatroom = new window.Chatroom({
+                    host: "http://localhost:5005",
+                    title: "Chat with Mike",
+                    container: document.querySelector(".chat-container"),
+                    welcomeMessage: "Hi, I am Mike. How may I help you?",
+                    speechRecognition: "en-US",
+                    voiceLang: "en-US"
+                  });
+                  chatroom.openChat();
+                </script>
+              </body-->
+
+    </head>
+    <body>
+        <h1>Welcome.</h1>
+        <p>Use this cool chatbot.</p>
+
+
+
+
+        
+        <div id="webchat">
+            <script>!(function () {
+                let e = document.createElement("script"),
+                  t = document.head || document.getElementsByTagName("head")[0];
+                (e.src =
+                  "https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"),
+                  (e.async = !0),
+                  (e.onload = () => {
+                    window.WebChat.default(
+                      {
+                        customData: { language: "en" },
+                        // socketUrl: "https://bf-botfront.development.agents.botfront.cloud",
+                        socketUrl: "http://localhost:5005/socket.io/",
+                        initPayload: {"sender": "elias", "message" : "hello"}
+                        // add other props here
+                      },
+                      null
+                    );
+                  }),
+                  t.insertBefore(e, t.firstChild);
+              })();
+              </script>
+        </div>
+        
+        
+
+
+          <!--script src="https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.min.js"></script>
+            <script>
+                WebChat.default.init({
+                    selector: "#webchat",
+                    initPayload: "/get_started",
+                    customData: {
+                        "language": "en"
+                    },
+                    socketUrl: "http://localhost:5005",
+                    socketPath: "/socket.io/",
+                    inputTextFieldHint: "Type your message",
+                    showFullScreenButton: true,
+                    displayUnreadCount: true,
+                    showMessageDate: true,
+                    params: {
+                        "storage": "session"
+                    }
+                });
+            </script-->
+    </body>
+</html>
+

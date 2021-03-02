@@ -10,16 +10,16 @@ WORKDIR /app
 # Change back to root user to install dependencies
 USER root
 
-RUN pip install tilt
-RUN pip install pytz
+#RUN pip install tilt
+#RUN pip install pytz
 # Install extra requirements for actions code, if necessary (uncomment next line)
-#RUN pip install -r requirements-actions.txt
+RUN pip install -r requirements-actions.txt
 
 # Copy actions folder to working directory
-COPY ./actions /app/actions
-RUN mkdir /etc/rasa
-COPY credentials.yml /etc/rasa/
-COPY credentials.yml /app/
+#COPY ./actions /app/actions
+#RUN mkdir /etc/rasa
+#COPY credentials.yml /etc/rasa/
+#COPY credentials.yml /app/
 
 #RUN cp /app/credentials.yml /etc/rasa/
 

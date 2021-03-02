@@ -1,14 +1,15 @@
 version: '3.0'
 services:
   rasa:
-    #image: rasa/rasa:2.3.2-full
-    image: floramarleen/rasa:test_image_rasa
+    image: rasa/rasa:2.3.4-full
     ports:
       - 5005:5005
     volumes:
       - ./:/app
-    command: run -m models --port 5005 --cors "*" --enable-api --debug
+    command:
+      - run
+  
   app:
-    image: floramarleen/action:test_image_action
-    expose: 
-      - 5055
+    image: DaSKITA/chatbot
+    ports:
+      - 5055:5055
