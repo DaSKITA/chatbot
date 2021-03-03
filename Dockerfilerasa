@@ -18,6 +18,9 @@ RUN mkdir /etc/rasa
 COPY credentials.yml /etc/rasa/
 COPY credentials.yml /app
 #RUN cp /app/credentials.yml /etc/rasa/
+COPY config.yml /etc/rasa
+
+RUN rasa train
 
 # By best practices, don't run the code with root user
 USER 1001
