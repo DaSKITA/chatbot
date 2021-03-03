@@ -1,15 +1,17 @@
-version: '3.0'
+version: '3'
 services:
-  rasa:
-    image: rasa/rasa:2.3.4-full
-    ports:
-      - 5005:5005
-    volumes:
-      - ./:/app
-    command:
-      - run
-  
-  app:
-    image: daskita/chatbot:3261832adf309c866cdb609544a8ce03b8121341
-    ports:
-      - 5055:5055
+    rasa:
+      container_name: "rasa"
+      build: 
+        context: .
+      ports: 
+        - "5005:5005"
+
+    app:
+      container_name: "app"
+      build: 
+        context: actions
+      volumes:
+        - ./actions:/app/actions
+      ports:
+        - 5055:5055 

@@ -8,7 +8,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    name: Build Action Server image and upgrade Rasa X deployment
+    name: Build Action Server image
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
