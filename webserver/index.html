@@ -35,8 +35,8 @@
                         Bereitstellung von Informationen zu Datenschutzerklärungen
                     </h2>
                     <p class="hero-paragraph is-revealing">
-                        Dieser Chatbot hilft Ihnen Informationen zu Datenschutzerklärungen verschiedener Unternehmen zu erhalten. <br>
-                        Probieren Sie es aus, indem Sie auf das Ikon in der rechten unteren Ecke klicken und eine Konversation starten!
+                        Dieser Chatbot hilft Dir dabei, Informationen rund um den Datenschutz verschiedener Unternehmen zu entdecken.<br>
+                        Probiere es selbst, indem du eine Konversation startest: Sag' <span style="text-decoration: underline;">Hallo</span>!
                     </p>
                     <p class="hero-paragraph is-revealing" style="text-align: center;">
                         <a style="font-size: large;"
@@ -69,7 +69,6 @@
 
 
     <div id="webchat"></div>
-    <h1></h1>
     <script>!(function () {
       let e = document.createElement("script"),
         t = document.head || document.getElementsByTagName("head")[0];
@@ -82,7 +81,7 @@
               customData: { language: "en" },
               socketUrl: "http://localhost:5005",
               selector: "#webchat",
-              initPayload: "Hey!",
+              initPayload: null,//"Hey!",
               customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
               socketPath: "/socket.io/",
               title: "Privacy chatbot",
@@ -90,7 +89,10 @@
               params: {"storage": "session"}, // can be set to "local"  or "session". details in storage section.
               hideWhenNotConnected: false,
               docViewer: false,
-              // add other props here
+              showFullScreenButton: true,
+              displayUnreadCount: true,
+              showMessageDate: true,
+              // embedded: true
             },
             null
           );
