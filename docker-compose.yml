@@ -2,16 +2,23 @@ version: '3'
 services:
     rasa:
       container_name: "rasa"
-      build: 
+      build:
         context: .
-      ports: 
+      ports:
         - "5005:5005"
 
     app:
       container_name: "app"
-      build: 
+      build:
         context: actions
       volumes:
         - ./actions:/app/actions
       ports:
-        - 5055:5055 
+        - 5055:5055
+
+    webserver:
+      build: webserver/
+      container_name: webserver
+      hostname: webserver
+      ports:
+        - "8080:80"
