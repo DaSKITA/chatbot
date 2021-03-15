@@ -1,0 +1,246 @@
+version: "2.0"
+
+nlu:
+- intent: bot_usage
+  examples: |
+    - what can you be used for?
+    - how can you help me?
+    - what should I use you for?
+    
+- intent: privacy_policy
+  examples: |
+    - [privacy policy](privacy_policy)
+    - information about the [privacy policy](privacy_policy)
+    - info about [privacy policy](privacy_policy) of services
+    - I am interested in a [privacy policy](privacy_policy)
+    - I am interested in information about a [privacy policy](privacy_policy)
+    - I am interested in [privacy policies](privacy_policy)
+    - Hi, I am interested in [privacy policies](privacy_policy)
+    - Hi, I am interested in information about a [privacy policy](privacy_policy)
+
+- synonym: privacy policy
+  examples: |
+    - privacy policies
+    - privacypolicy
+    - privacypolicies
+    
+- intent: requesting
+  examples: |
+    - [request](requesting)
+    - [request](requesting) at a service
+    - [data a service collects about me](requesting)
+    - I am interested in making a [request](requesting) at a service
+
+    
+- intent: services
+  examples: |
+    - [Google](service)
+    - [Amazon](service)
+    - [Facebook](service)
+    - [Instagram](service)
+    - [Whatsapp](service)
+    - [WhatsApp](service)
+    - [Whats App](service)
+    - [Green Company](service)
+
+- intent: another_service_privacy
+  examples: |
+    - Policy of another service
+    - Privacy Policy of another service
+    - Another service
+    - another service
+    - I am interested in the policy of another service
+    - I am interested in the privacy policy of another service
+
+
+- intent: this_service_privacy
+  examples: |
+    - Policy of this service
+    - Policy of this service right now
+    - Privacy Policy of this service
+    - This service
+    - this service
+    - I am interested in the policy of this service
+    - I am interested in the privacy policy of this service
+
+- intent: no_service_privacy
+  examples: |
+    - No policy
+    - no policy
+    - No policy at all
+    - I am not interested in a privacy policy
+    - I am interested in a policy
+    - I am interested in no privacy policy
+    - I am interested in no policy
+
+- synonym: no policy
+  examples: |
+    - not interested in a policy   
+    - no service
+
+- intent: another_service_request
+  examples: |
+    - [Requesting at another service](request)
+    - [Requesting information at another service](request)
+    - [I want to do a request at another service](request)
+    - [Another service](request)
+    
+- intent: no_service_request
+  examples: |
+    - [No requesting at all](request)
+    - [Requesting at no service](request) 
+    - [No service](request)
+
+- intent: this_service_request
+  examples: |
+    - [Requesting at this service](request)
+    - [Requesting information at this service](request)
+    - [This service](request)
+
+- intent: datatypes
+  examples: |
+    - [third parties](datatype) to which your data is transferred
+    - [third parties](datatype)
+    - [third parties](datatype) to which they tranfer my data
+    - [third parties](datatype) to which the service gives my data
+    - [countries](datatype) into which data is transferred
+    - [countries](datatype) where the data goes
+    - [countries](datatype) into which the data is send
+    - [countries](datatype) into which the data is sold to
+    - [number of third parties](datatype)
+    - [number of third parties](datatype) to which my data is transferred
+    - [metadata](datatype)
+    - [metadata](datatype) about me that is stored
+    - information about [metadata](datatype) that is stored
+    - [personal data](datatype) that is stored
+    - my [personal data](datatype) that is stored
+    - [personal data](datatype)
+    - my [personal data](datatype)
+    - [data protection officer](datatype)
+    - the [data protection officer](datatype)
+    - I am interested in the [data protection officer](datatype)
+    - Give me information about the [data protection officer](datatype)
+    - [access to data portability](datatype)
+    - I am interested in my [access to data portability](datatype)
+    - [right](datatype)
+    - Information about my [right](datatype) to the data
+    - [right](datatype) to the data
+    - info about [right](datatype) to the data
+    - my [right](datatype)
+    - my [right](datatype) to the data 
+    - I am interested in my [right](datatype) to the data
+    - I am interested in information about my [right](datatype) to the data
+
+- synonym: metadata
+  examples: |
+    - meta data
+- synonym: data protection officer
+  examples: |
+    - dataprotectionofficer
+    - dataprotection officer
+- synonym: right
+  examples: |
+    - rights
+    - my rights
+    - my rights to the data
+    - my right to the data
+- synonym: data portability
+  examples: |
+    - dataportability
+
+
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - good afternoon
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+    - yes, please
+    - yes, thank you
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+    - No, thank you
+    - No, thanks
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+

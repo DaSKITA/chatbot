@@ -1,0 +1,276 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - bot_usage
+  - privacy_policy
+  - requesting
+  - services
+  - datatypes
+  - another_service_privacy
+  - this_service_privacy
+  - no_service_privacy
+  - another_service_request
+  - this_service_request
+  - no_service_request
+
+entities:
+  - service
+  - datatype
+  - request
+  - policy
+  - privacy_policy
+  - requesting
+
+slots:
+  service:
+    type: categorical
+    values:
+    - Google
+    - Facebook
+    - Amazon
+    - Green Company
+    
+  datatype:
+    type: categorical
+    values:
+    - metadata
+    - countries
+    - third parties
+    - number of third parties
+    - personal data
+    - data protection officer
+    - access to data portability
+    - right
+    
+  request:
+    type: categorical
+    values: 
+    - Requesting at this service
+    - Requesting at another service
+    - No requesting at all
+    
+  policy:
+    type: categorical
+    values:
+    - Policy of this service
+    - Policy of another service
+    - No policy at all
+  
+  privacy_policy:
+    type: any
+    
+  requesting:
+    type: any
+
+
+actions: 
+- action_give_privacy_info
+- action_change_to_request
+- action_change_to_privacy
+- action_this_service_privacy
+- action_another_service_privacy
+- action_no_service_privacy
+
+
+
+responses:
+
+#exception handling
+  utter_default:
+  - text: "I am sorry, I did not quite understand that. Could you rephrase, please?"
+
+# bot introduction
+  utter_bot_usage:
+  - text: "Welcome, I am a bot that helps you to get information about the data protection at different services."
+    channel: 'telegram'
+  - text: "Welcome, I am a bot that helps you to get information about the data protection at different services."
+
+#ask privacy policy
+  utter_ask_privacy_policy:
+  - text: "Are you interested in information about a privacy policy?"  
+  
+#ask request
+  utter_ask_requesting:
+  - text: "Or are you interested in making a data information request at a service?"  
+
+#change to privacy path
+  utter_ask_privacy_policy_path:
+  - text: "Are you interested in the privacy policy of this or another service?"
+
+  #utter_ask_this_service_privacy:
+  utter_ask_change_to_privacy_form_policy:
+  - text: "Are you interested in getting information about the privacy policy at this service or at another service?"
+    buttons: 
+    - title: "This service"
+      payload: '/this_service_privacy{"policy":"This service"}'
+    - title: "Another service"
+      payload: '/another_service_privacy{"policy":"Another service"}'
+    - title: "I am not interested"
+      payload: '/no_service_privacy{"policy":"No service"}'
+    
+
+#privacy path  
+  
+  utter_ask_privacy_form_service:
+    - text: "Which service are you interested in?"
+      buttons: 
+      - title: "Google"
+        payload: '/services{"service":"Google"}'
+      - title: "Amazon"
+        payload: '/services{"service":"Amazon"}'
+      - title: "Facebook"
+        payload: '/services{"service":"Facebook"}'
+      - title: "Green Company"
+        payload: '/services{"service":"Green Company"}'
+
+  
+
+  utter_ask_privacy_form_datatype:
+  - text: "What data collected by this service are you interested in? (e.g. your rights to the data or personal data that is stored)"
+    channel: 'telegram'
+  - text: "What data collected by this service are you interested in?"
+    buttons: 
+    - title: "Metadata"
+      payload: '/datatypes{"datatype":"metadata"}'
+    - title: "Countries to which my data is transferred"
+      payload: '/datatypes{"datatype":"countries"}'
+    - title: "Third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"third parties"}'
+    - title: "Number of third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"number of third parties"}'
+    - title: "Personal data that is stored"
+      payload: '/datatypes{"datatype":"personal data"}'
+    - title: "Data Protection Officer"
+      payload: '/datatypes{"datatype":"data protection officer"}'
+    - title: "Information about getting access to my data"
+      payload: '/datatypes{"datatype":"access to data portability"}'
+    - title: "Information about my rights to the data"
+      payload: '/datatypes{"datatype":"right"}'
+  
+  
+  utter_datatypes_again:
+  - text: "Are you interested in other datatypes?"
+  
+  utter_ask_service_again:
+  - text: "Are you interested in another service?"
+  
+#change to request path      
+  utter_ask_request_path:
+  - text: "Are you interested in making a request about the data this or another service collected about you?"
+  
+  #utter_ask_this_service_request:
+  utter_ask_change_to_request_form_request:
+  - text: "Are you interested in making a request at this service or at another service?"
+    buttons: 
+    - title: "This service"
+      payload: '/this_service_request{"request":"This service"}'
+    - title: "Another service"
+      payload: '/another_service_request{"request":"Another service"}'
+    - title: "I am not interested"
+      payload: '/no_service_request{"request":"No service"}'
+
+
+#request path
+  utter_ask_request_form_service:
+  - text: "Which service are you interested in?"
+    buttons: 
+    - title: "Google"
+      payload: '/services{"service":"Google"}'
+    - title: "Amazon"
+      payload: '/services{"service":"Amazon"}'
+    - title: "Facebook"
+      payload: '/services{"service":"Facebook"}'
+
+  utter_ask_request_form_datatype:
+  - text: "What data collected by this service are you interested in? (e.g. your right to the data or personal data that is stored)"
+    channel: 'telegram'
+  - text: "What data collected by this service are you interested in?"
+    buttons: 
+    - title: "Metadata"
+      payload: '/datatypes{"datatype":"metadata"}'
+    - title: "Countries to which my data is transferred"
+      payload: '/datatypes{"datatype":"countries"}'
+    - title: "Third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"third parties"}'
+    - title: "Number of third parties to which my data is transferred"
+      payload: '/datatypes{"datatype":"number of third parties"}'
+    - title: "Personal data that is stored"
+      payload: '/datatypes{"datatype":"personal data"}'
+    - title: "Data Protection Officer"
+      payload: '/datatypes{"datatype":"data protection officer"}'
+    - title: "Information about getting access to my data"
+      payload: '/datatypes{"datatype":"access to data portability"}'
+    - title: "Information about my rights to the data"
+      payload: '/datatypes{"datatype":"right"}'
+  
+  utter_ask_authentification:
+  - text: "What is your authentification? The request has been send ... todo"
+
+  utter_ask_request_again:
+  - text: "Are you interested in making a request for another service?"
+
+
+#greeting
+  utter_greet:
+  - text: "Hey!"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+#goodbye
+  utter_goodbye:
+  - text: "Bye, see you next time!"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+forms:
+  privacy_form:
+    privacy_policy:
+      - type: from_entity
+        entity: privacy_policy
+    service:
+      - type: from_entity
+        entity: service
+    datatype:
+      - type: from_entity
+        entity: datatype
+        
+  request_form:
+    requesting:
+      - type: from_entity
+        entity: requesting
+    service:
+      - type: from_entity
+        entity: service
+    datatype:
+      - type: from_entity
+        entity: datatype
+        
+  change_to_request_form:
+    request:
+      - type: from_entity
+        entity: request
+        
+  change_to_privacy_form:
+    policy:
+      - type: from_entity
+        entity: policy
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

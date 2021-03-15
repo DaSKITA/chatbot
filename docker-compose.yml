@@ -1,0 +1,25 @@
+version: '3'
+services:
+    rasa:
+      container_name: "rasa"
+      build:
+        context: .
+      ports:
+        - 5005:5005
+
+    app:
+      container_name: "app"
+      build:
+        context: actions/
+      volumes:
+        - ./actions:/app/actions
+      ports:
+        - 5055:5055
+
+    webserver:
+      container_name: webserver
+      build:
+        context: webserver/
+      hostname: webserver
+      ports:
+        - 8080:80
