@@ -41,33 +41,53 @@ class ActionSetSlotValuePrivacy(Action):
 #Set Slots for change to privacy path
 class ActionSetSlotThisServicePrivacy(Action):
     def name(self) -> Text:
-        return "action_this_service_privacy"
+        return "action_this_service"
 
     def run(self, 
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return [SlotSet("policy", "Policy of this service")]   
+        
+        slot_value_requesting = tracker.get_slot('requesting')
+        slot_value_privacy_policy = tracker.get_slot('privacy_policy')
+        
+        if slot_value_privacy_policy != None:
+            return [SlotSet("policy", "Policy of this service")] 
+        else:
+            return [SlotSet("request", "Requesting at this service")] 
 
 class ActionSetSlotAnotherServicePrivacy(Action):
     def name(self) -> Text:
-        return "action_another_service_privacy"
+        return "action_another_service"
 
     def run(self, 
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return [SlotSet("policy", "Policy of another service")]    
+        
+        slot_value_requesting = tracker.get_slot('requesting')
+        slot_value_privacy_policy = tracker.get_slot('privacy_policy')
+        
+        if slot_value_privacy_policy != None:
+            return [SlotSet("policy", "Policy of another service")] 
+        else:
+            return [SlotSet("request", "Requesting at another service")]   
     
 class ActionSetSlotNoServicePrivacy(Action):
     def name(self) -> Text:
-        return "action_no_service_privacy"
+        return "action_no_service"
 
     def run(self, 
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return [SlotSet("policy", "No policy at all")]     
+        slot_value_requesting = tracker.get_slot('requesting')
+        slot_value_privacy_policy = tracker.get_slot('privacy_policy')
+        
+        if slot_value_privacy_policy != None:
+            return [SlotSet("policy", "No policy at all")] 
+        else:
+            return [SlotSet("request", "No requesting at all")]   
     
     
 #give info about datatypes    
@@ -90,6 +110,10 @@ class ActionGiveServiceInfo(Action):
             datatype="right"
         elif datatype in ["access to dataportability"]:
             datatype="access to data portability"
+        elif datatype in ["number of 3rd parties"]:
+            datatype="number of third parties"
+        elif datatype in ["3rd parties"]:
+            datatype="third parties"
         
         
         datatypes_dict={
@@ -104,6 +128,7 @@ class ActionGiveServiceInfo(Action):
         }
         if datatype not in datatypes_dict.keys():
             dispatcher.utter_message(text="There is no information about the datatype '{}'.".format(datatype, service))
+            return[]
         else: 
             datatype_out=datatypes_dict[datatype]
         

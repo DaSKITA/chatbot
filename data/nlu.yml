@@ -43,59 +43,49 @@ nlu:
     - [Whats App](service)
     - [Green Company](service)
 
-- intent: another_service_privacy
+- intent: another_service
   examples: |
-    - Policy of another service
-    - Privacy Policy of another service
-    - Another service
     - another service
-    - I am interested in the policy of another service
-    - I am interested in the privacy policy of another service
+    - of another service
+    - at another service
+    - I am interested in another service
+    - I am interested in other services
 
+- synonym: another service
+  examples: | 
+    - Another service
+    - Another Service
+    - another Service
+    - other services
 
-- intent: this_service_privacy
+- intent: this_service
   examples: |
-    - Policy of this service
-    - Policy of this service right now
-    - Privacy Policy of this service
-    - This service
     - this service
-    - I am interested in the policy of this service
-    - I am interested in the privacy policy of this service
+    - service right now
+    - of this service
+    - I am interested in this service
+    - Give me information about this service
 
-- intent: no_service_privacy
-  examples: |
-    - No policy
-    - no policy
-    - No policy at all
-    - I am not interested in a privacy policy
-    - I am interested in a policy
-    - I am interested in no privacy policy
-    - I am interested in no policy
+- synonym: this service
+  examples: | 
+    - This service
+    - This Service
+    - this Service
 
-- synonym: no policy
+- intent: no_service
   examples: |
-    - not interested in a policy   
-    - no service
+    - no Service
+    - No service at all
+    - I am not interested in a service
+    - I am interested in no service
+    - I am interested in no service at all
 
-- intent: another_service_request
-  examples: |
-    - [Requesting at another service](request)
-    - [Requesting information at another service](request)
-    - [I want to do a request at another service](request)
-    - [Another service](request)
-    
-- intent: no_service_request
-  examples: |
-    - [No requesting at all](request)
-    - [Requesting at no service](request) 
-    - [No service](request)
+- synonym: no service
+  examples: | 
+    - No service
+    - No Service
+    - no Service
 
-- intent: this_service_request
-  examples: |
-    - [Requesting at this service](request)
-    - [Requesting information at this service](request)
-    - [This service](request)
 
 - intent: datatypes
   examples: |
@@ -147,6 +137,13 @@ nlu:
 - synonym: data portability
   examples: |
     - dataportability
+- synonym: number of third parties
+  examples: |
+    - number of 3rd parties
+- synonym: third parties
+  examples: |
+    - 3rd parties
+
 
 
 - intent: greet

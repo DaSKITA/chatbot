@@ -13,12 +13,9 @@ intents:
   - requesting
   - services
   - datatypes
-  - another_service_privacy
-  - this_service_privacy
-  - no_service_privacy
-  - another_service_request
-  - this_service_request
-  - no_service_request
+  - another_service
+  - this_service
+  - no_service
 
 entities:
   - service
@@ -74,9 +71,9 @@ actions:
 - action_give_privacy_info
 - action_change_to_request
 - action_change_to_privacy
-- action_this_service_privacy
-- action_another_service_privacy
-- action_no_service_privacy
+- action_this_service
+- action_another_service
+- action_no_service
 
 
 
@@ -89,8 +86,7 @@ responses:
 # bot introduction
   utter_bot_usage:
   - text: "Welcome, I am a bot that helps you to get information about the data protection at different services."
-    channel: 'telegram'
-  - text: "Welcome, I am a bot that helps you to get information about the data protection at different services."
+
 
 #ask privacy policy
   utter_ask_privacy_policy:
@@ -109,11 +105,11 @@ responses:
   - text: "Are you interested in getting information about the privacy policy at this service or at another service?"
     buttons: 
     - title: "This service"
-      payload: '/this_service_privacy{"policy":"This service"}'
+      payload: '/this_service{"policy":"This service"}'
     - title: "Another service"
-      payload: '/another_service_privacy{"policy":"Another service"}'
+      payload: '/another_service{"policy":"Another service"}'
     - title: "I am not interested"
-      payload: '/no_service_privacy{"policy":"No service"}'
+      payload: '/no_service{"policy":"No service"}'
     
 
 #privacy path  
@@ -133,6 +129,8 @@ responses:
   
 
   utter_ask_privacy_form_datatype:
+  - text: "What data collected by this service are you interested in? (e.g. your rights to the data or personal data that is stored)"
+    channel: 'alexa_assistant'
   - text: "What data collected by this service are you interested in? (e.g. your rights to the data or personal data that is stored)"
     channel: 'telegram'
   - text: "What data collected by this service are you interested in?"
@@ -170,11 +168,11 @@ responses:
   - text: "Are you interested in making a request at this service or at another service?"
     buttons: 
     - title: "This service"
-      payload: '/this_service_request{"request":"This service"}'
+      payload: '/this_service{"request":"This service"}'
     - title: "Another service"
-      payload: '/another_service_request{"request":"Another service"}'
+      payload: '/another_service{"request":"Another service"}'
     - title: "I am not interested"
-      payload: '/no_service_request{"request":"No service"}'
+      payload: '/no_service{"request":"No service"}'
 
 
 #request path
@@ -191,6 +189,8 @@ responses:
   utter_ask_request_form_datatype:
   - text: "What data collected by this service are you interested in? (e.g. your right to the data or personal data that is stored)"
     channel: 'telegram'
+  - text: "What data collected by this service are you interested in? (e.g. your right to the data or personal data that is stored)"
+    channel: 'alexa_assistant'
   - text: "What data collected by this service are you interested in?"
     buttons: 
     - title: "Metadata"
@@ -214,7 +214,7 @@ responses:
   - text: "What is your authentification? The request has been send ... todo"
 
   utter_ask_request_again:
-  - text: "Are you interested in making a request for another service?"
+  - text: "Are you interested in making a request at another service?"
 
 
 #greeting

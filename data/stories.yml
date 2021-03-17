@@ -44,7 +44,8 @@ stories:
   - intent: affirm
   - action: action_change_to_request
   - action: utter_ask_change_to_request_form_request
-  - intent: another_service_request
+  - intent: another_service
+  - action: action_another_service
   - action: utter_ask_request_form_service
   - intent: services
   - action: utter_ask_request_form_datatype
@@ -78,7 +79,8 @@ stories:
   - intent: affirm
   - action: action_change_to_request
   - action: utter_ask_change_to_request_form_request
-  - intent: this_service_request
+  - intent: this_service
+  - action: action_this_service
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -196,8 +198,8 @@ stories:
   - intent: affirm
   - action: action_change_to_privacy
   - action: utter_ask_change_to_privacy_form_policy
-  - intent: another_service_privacy
-  - action: action_another_service_privacy
+  - intent: another_service
+  - action: action_another_service
   - action: utter_ask_privacy_form_service
   - intent: services
   - action: utter_ask_privacy_form_datatype
@@ -238,8 +240,8 @@ stories:
   - intent: affirm
   - action: action_change_to_privacy
   - action: utter_ask_change_to_privacy_form_policy
-  - intent: this_service_privacy
-  - action: action_this_service_privacy
+  - intent: this_service
+  - action: action_this_service
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes
   - action: action_give_privacy_info
