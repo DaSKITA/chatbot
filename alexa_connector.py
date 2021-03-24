@@ -2,8 +2,11 @@ import logging
 import json
 from sanic import Blueprint, response
 from sanic.request import Request
-from typing import Text, Optional, List, Dict, Any
+from sanic.response import HTTPResponse
+#from typing import Text, Optional, List, Dict, Any
+from typing import Text, Dict, Any, Optional, Callable, Awaitable, NoReturn
 
+import rasa.utils.endpoints
 from rasa.core.channels.channel import UserMessage, OutputChannel
 from rasa.core.channels.channel import InputChannel
 from rasa.core.channels.channel import CollectingOutputChannel
@@ -18,7 +21,8 @@ class AlexaConnector(InputChannel):
     """
 
     @classmethod
-    def name(cls):
+    #def name(cls):
+    def name(cls) -> Text:
         return "alexa_assistant"
 
     # Sanic blueprint for handling input. The on_new_message

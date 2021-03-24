@@ -39,9 +39,14 @@ nlu:
     - [Facebook](service)
     - [Instagram](service)
     - [Whatsapp](service)
-    - [WhatsApp](service)
-    - [Whats App](service)
     - [Green Company](service)
+    
+- synonym: WhatsApp
+  examples: | 
+    - Whats App
+    - Whatsapp
+    - whatsapp
+    - whats app
 
 - intent: another_service
   examples: |
@@ -120,6 +125,8 @@ nlu:
     - my [right](datatype) to the data 
     - I am interested in my [right](datatype) to the data
     - I am interested in information about my [right](datatype) to the data
+    - [controller](datatype)
+    - I am interested in the [controller](datatype)
 
 - synonym: metadata
   examples: |
@@ -128,6 +135,7 @@ nlu:
   examples: |
     - dataprotectionofficer
     - dataprotection officer
+    - data protection office
 - synonym: right
   examples: |
     - rights
@@ -186,6 +194,7 @@ nlu:
     - correct
     - yes, please
     - yes, thank you
+    - okay
 
 - intent: deny
   examples: |

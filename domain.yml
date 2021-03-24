@@ -45,6 +45,7 @@ slots:
     - data protection officer
     - access to data portability
     - right
+    - controller
     
   request:
     type: categorical
@@ -85,6 +86,8 @@ responses:
 
 # bot introduction
   utter_bot_usage:
+  - text: "Test Welcome"
+    channel: "alexa_assistant"
   - text: "Welcome, I am a bot that helps you to get information about the data protection at different services."
 
 
@@ -129,11 +132,11 @@ responses:
   
 
   utter_ask_privacy_form_datatype:
-  - text: "What data collected by this service are you interested in? (e.g. your rights to the data or personal data that is stored)"
+  - text: "What data collected by the service {service} are you interested in? (e.g. your rights to the data or personal data that is stored)"
     channel: 'alexa_assistant'
-  - text: "What data collected by this service are you interested in? (e.g. your rights to the data or personal data that is stored)"
+  - text: "What data collected by the service {service} are you interested in? (e.g. your rights to the data or personal data that is stored)"
     channel: 'telegram'
-  - text: "What data collected by this service are you interested in?"
+  - text: "What data collected by the service {service} are you interested in?"
     buttons: 
     - title: "Metadata"
       payload: '/datatypes{"datatype":"metadata"}'
@@ -151,6 +154,8 @@ responses:
       payload: '/datatypes{"datatype":"access to data portability"}'
     - title: "Information about my rights to the data"
       payload: '/datatypes{"datatype":"right"}'
+    - title: "Controller"
+      payload: '/datatypes{"datatype":"controller"}'
   
   
   utter_datatypes_again:
@@ -187,11 +192,11 @@ responses:
       payload: '/services{"service":"Facebook"}'
 
   utter_ask_request_form_datatype:
-  - text: "What data collected by this service are you interested in? (e.g. your right to the data or personal data that is stored)"
+  - text: "What data collected by the service {service} are you interested in? (e.g. your right to the data or personal data that is stored)"
     channel: 'telegram'
-  - text: "What data collected by this service are you interested in? (e.g. your right to the data or personal data that is stored)"
+  - text: "What data collected by the service {service} are you interested in? (e.g. your right to the data or personal data that is stored)"
     channel: 'alexa_assistant'
-  - text: "What data collected by this service are you interested in?"
+  - text: "What data collected by the service {service} are you interested in?"
     buttons: 
     - title: "Metadata"
       payload: '/datatypes{"datatype":"metadata"}'

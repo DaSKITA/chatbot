@@ -125,6 +125,7 @@ class ActionGiveServiceInfo(Action):
             "data protection officer": "data protection officer",
             "access to data portability": "access to data portability",
             "right": "rights to the data",
+            "controller": "controller"
         }
         if datatype not in datatypes_dict.keys():
             dispatcher.utter_message(text="There is no information about the datatype '{}'.".format(datatype, service))
@@ -143,7 +144,7 @@ class ActionGiveServiceInfo(Action):
                 
                 if datatype=="countries": 
                     if not list(instance.third_country_transfers):
-                        dispatcher.utter_message(text="Your data is not transferred to any other countries")
+                        dispatcher.utter_message(text="Your data is not transferred to any other country.")
                     else:
                         countries=[]
                         for element in list(instance.third_country_transfers):
@@ -188,6 +189,43 @@ class ActionGiveServiceInfo(Action):
                             dispatcher.utter_message(text="Your personal data is transferred to one third party.")
                         else: 
                             dispatcher.utter_message(text="Your personal data is transferred to {} third parties.".format(number))
+                            
+                elif datatype=="controller":
+                    con_dict=tilt_dict["controller"]
+                    if not bool(con_dict):
+                        dispatcher.utter_message(text="Unfortunately there is no information about the {} of {}.".format(datatype, service))
+                    else:
+                        con=[]
+                        for element in con_dict.keys():
+                            if con_dict[element]:
+                                if element=="address":
+                                    address=str(con_dict[element]).replace(" ", "%20")
+                                    value_link= "https://maps.google.com/?q="+address
+                                    name_link=dpo_dict[element]
+                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
+                                elif element=="country":
+                                    country=str(dpo_dict[element])
+                                    value=pytz.country_names[country]
+                                    con.append(str(element).capitalize()+ ": " +value)
+                                elif element=="representative":
+                                    con.append("Representative:  \n")
+                                    for el in con_dict[element].keys():
+                                        if el=="email":
+                                            value=str(con_dict[element][el])
+                                            key_value_string=str(el).capitalize()+ ": " +value
+                                            con.append(key_value_string)
+                                        else:
+                                            value=con_dict[element][el]
+                                            key_value_string=str(el).capitalize()+ ": "+value
+                                            con.append(key_value_string)
+                                else:
+                                    value=str(con_dict[element])
+                                    key_value_string=str(element).capitalize()+ ": " +value
+                                    con.append(key_value_string)
+                        con_string = ',  \n'.join([str(elem) for elem in con])  
+                        dispatcher.utter_message(text="{}".format(con_string))
+
                     
                 elif datatype=="data protection officer":
     
@@ -259,15 +297,15 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="{}".format(info_access_string))
                 
                 elif datatype=="right":
-                    rights=["rightToInformation","rightToRectificationOrDeletion","rightToDataPortability","rightToWithdrawConsent"]
-                    right_names=["right to information", "right to rectificatiton or deletion", "right to data portability", "right to withdraw consent"]
+                    rights=["rightToInformation","rightToRectificationOrDeletion","rightToDataPortability","rightToWithdrawConsent", "rightToComplain"]
+                    right_names=["right to information", "right to rectificatiton or deletion", "right to data portability", "right to withdraw consent", "right to complain"]
                     
                     for dt in rights:
                         dt_dict=tilt_dict[dt]
+                        info=[]
                         if not bool(dt_dict):
                             dispatcher.utter_message(text="Unfortunately there is no information about {} of {}.".format(datatype_out, service))
-                        else:
-                            info=[]
+                        elif dt=="rightToComplain":
                             info.append("This is the information about your " + right_names[rights.index(dt)]+":")
                             if dt_dict["available"] and dt_dict["description"]==False:
                                 if dt_dict["available"]=="true":
@@ -287,8 +325,57 @@ class ActionGiveServiceInfo(Action):
                                     identification.append(el)
                                 identification_string=', '.join([elem for elem in identification])  
                                 info.append(identification_string)
-                            info_string = '  \n'.join([str(elem) for elem in info])  
-                            dispatcher.utter_message(text="{}".format(info_string))
+                            if dt_dict["supervisoryAuthority"]:
+                                info_tmp="Supervisory Authority:  \n"
+                                for element in dt_dict["supervisoryAuthority"].keys():
+                                    if dt_dict["supervisoryAuthority"][element]:
+                                        if element=="email":
+                                            value=str(dt_dict["supervisoryAuthority"][element])
+                                            key_value_string=str(element).capitalize()+ ": " +value
+                                            info_tmp= info_tmp +key_value_string + "  \n"
+                                        elif element=="phone":
+                                            value=dt_dict["supervisoryAuthority"][element]
+                                            key_value_string=str(element).capitalize()+ ": "+value
+                                            info_tmp = info_tmp +key_value_string+ "  \n"
+                                        elif element=="address":
+                                            address=str(dt_dict["supervisoryAuthority"][element]).replace(" ", "%20")
+                                            value_link= "https://maps.google.com/?q="+address
+                                            name_link=dt_dict["supervisoryAuthority"][element]
+                                            key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                            dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
+                                            #info_tmp.append(key_value_string)
+                                        elif element=="country":
+                                            country=str(dt_dict["supervisoryAuthority"][element])
+                                            value=pytz.country_names[country]
+                                            info_tmp  = info_tmp +(str(element).capitalize()+ ": " +value) + "  \n"
+                                        else:
+                                            value=str(dt_dict["supervisoryAuthority"][element])
+                                            key_value_string=str(element).capitalize()+ ": " +value
+                                            info_tmp  = info_tmp +key_value_string+ "  \n"
+                                        #info_tmp_string = ',  \n'.join([str(elem) for elem in info_tmp])  
+                                info.append(info_tmp)
+                        else:
+                            info.append("This is the information about your " + right_names[rights.index(dt)]+":")
+                            if dt_dict["available"] and dt_dict["description"]==False:
+                                if dt_dict["available"]=="true":
+                                    info.append("Data access is possible.")
+                                else:
+                                    info_access.append("Data access is not possible.")
+                            if dt_dict["description"]:
+                                info.append(str(dt_dict["description"]))
+                            if dt_dict["url"]:
+                                info.append("URL: "+str(dt_dict["url"]))
+                            if dt_dict["email"]:
+                                info.append("E-Mail: mailto:"+str(dt_dict["email"]))
+                            if dt_dict["identificationEvidences"]:
+                                identification=[]
+                                info.append("For your identification you would need: ")
+                                for el in dt_dict["identificationEvidences"]:
+                                    identification.append(el)
+                                identification_string=', '.join([elem for elem in identification])  
+                                info.append(identification_string)
+                        info_string = '  \n'.join([str(elem) for elem in info])  
+                        dispatcher.utter_message(text="{}".format(info_string))
                               
             else: #if channel is not telegram keep formating
                 dispatcher.utter_message(text="Here is the information about the **{}** specified by the service {} in their privacy policy.".format(datatype_out, service))
@@ -341,6 +428,76 @@ class ActionGiveServiceInfo(Action):
                         else: 
                             dispatcher.utter_message(text="Your personal data is transferred to {} third parties.".format(number))
                     
+                elif datatype=="controller":
+                    con_dict=tilt_dict["controller"]
+                    if not bool(con_dict):
+                        dispatcher.utter_message(text="Unfortunately there is no information about the {} of {}.".format(datatype, service))
+                    else:
+                        con=[]
+                        for element in con_dict.keys():
+                            if con_dict[element]:
+                                if element=="address":
+                                    address=str(con_dict[element]).replace(" ", "%20")
+                                    value_link= "https://maps.google.com/?q="+address
+                                    name_link=con_dict[element]
+                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    con.append(key_value_string)
+                                elif element=="country":
+                                    country=str(con_dict[element])
+                                    value=pytz.country_names[country]
+                                    con.append(str(element).capitalize()+ ": " +value)
+                                elif element=="representative":
+                                    con_tmp="Representative:  \n"
+                                    for el in con_dict[element].keys():
+                                        if el=="email":
+                                            value=str(con_dict[element][el])
+                                            key_value_string=str(el).capitalize()+ ": " +value
+                                            con_tmp=con_tmp+key_value_string+ "  \n"
+                                        else:
+                                            value=con_dict[element][el]
+                                            key_value_string=str(el).capitalize()+ ": "+value
+                                            con_tmp=con_tmp+key_value_string+"  \n"
+                                    con.append(con_tmp)
+                                else:
+                                    value=str(con_dict[element])
+                                    key_value_string=str(element).capitalize()+ ": " +value
+                                    con.append(key_value_string)
+                        con_string = ',  \n'.join([str(elem) for elem in con])  
+                        dispatcher.utter_message(text="{}".format(con_string))
+                
+                elif datatype=="supervisory authority":
+                    sup_dict=tilt_dict["supervisoryAuthority"]
+                    if not bool(sup_dict):
+                        dispatcher.utter_message(text="Unfortunately there is no information about the {} of {}.".format(datatype, service))
+                    else:
+                        sup=[]
+                        for element in sup_dict.keys():
+                            if sup_dict[element]:
+                                if element=="email":
+                                    value=str(sup_dict[element])
+                                    key_value_string=str(element).capitalize()+ ": " +value
+                                    sup.append(key_value_string)
+                                elif element=="phone":
+                                    value=sup_dict[element]
+                                    key_value_string=str(element).capitalize()+ ": "+value
+                                    sup.append(key_value_string)
+                                elif element=="address":
+                                    address=str(sup_dict[element]).replace(" ", "%20")
+                                    value_link= "https://maps.google.com/?q="+address
+                                    name_link=sup_dict[element]
+                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    sup.append(key_value_string)
+                                elif element=="country":
+                                    country=str(sup_dict[element])
+                                    value=pytz.country_names[country]
+                                    sup.append(str(element).capitalize()+ ": " +value)
+                                else:
+                                    value=str(sup_dict[element])
+                                    key_value_string=str(element).capitalize()+ ": " +value
+                                    dpo.append(key_value_string)
+                        sup_string = ',  \n'.join([str(elem) for elem in dpo])  
+                        dispatcher.utter_message(text="{}".format(sup_string))
+                
                 elif datatype=="data protection officer":
                     dpo_dict=tilt_dict["dataProtectionOfficer"]
                     if not bool(dpo_dict):
@@ -409,18 +566,65 @@ class ActionGiveServiceInfo(Action):
                             info_access.append(fee)
                         info_access_string = '  \n'.join([str(elem) for elem in info_access])  
                         dispatcher.utter_message(text="{}".format(info_access_string))
-                
+                        
                 elif datatype=="right":
-                    rights=["rightToInformation","rightToRectificationOrDeletion","rightToDataPortability","rightToWithdrawConsent"]
-                    right_names=["right to information", "right to rectificatiton or deletion", "right to data portability", "right to withdraw consent"]
-                    
+                    rights=["rightToInformation","rightToRectificationOrDeletion","rightToDataPortability","rightToWithdrawConsent", "rightToComplain"]
+                    right_names=["right to information", "right to rectificatiton or deletion", "right to data portability", "right to withdraw consent", "right to complain"]
                     for dt in rights:
                         dt_dict=tilt_dict[dt]
+                        info=[]
                         if not bool(dt_dict):
                             dispatcher.utter_message(text="Unfortunately there is no information about {} of {}.".format(datatype_out, service))
+                        elif dt=="rightToComplain":
+                            info.append("This is the information about your " + right_names[rights.index(dt)]+":")
+                            if dt_dict["available"] and dt_dict["description"]==False:
+                                if dt_dict["available"]=="true":
+                                    info.append("Data access is possible.")
+                                else:
+                                    info.append("Data access is not possible.")
+                            if dt_dict["description"]:
+                                info.append(str(dt_dict["description"]))
+                            if dt_dict["url"]:
+                                info.append("URL: "+str(dt_dict["url"]))
+                            if dt_dict["email"]:
+                                info.append("E-Mail: mailto:"+str(dt_dict["email"]))
+                            if dt_dict["identificationEvidences"]:
+                                identification=[]
+                                info.append("For your identification you would need: ")
+                                for el in dt_dict["identificationEvidences"]:
+                                    identification.append(el)
+                                identification_string=', '.join([elem for elem in identification])  
+                                info.append(identification_string)
+                            if dt_dict["supervisoryAuthority"]:
+                                info_tmp="Supervisory Authority:  \n"
+                                for element in dt_dict["supervisoryAuthority"].keys():
+                                    if dt_dict["supervisoryAuthority"][element]:
+                                        if element=="email":
+                                            value=str(dt_dict["supervisoryAuthority"][element])
+                                            key_value_string=str(element).capitalize()+ ": mailto:" +value
+                                            info_tmp= info_tmp +key_value_string + "  \n"
+                                        elif element=="phone":
+                                            value=dt_dict["supervisoryAuthority"][element]
+                                            key_value_string=str(element).capitalize()+ ": "+value
+                                            info_tmp = info_tmp +key_value_string+ "  \n"
+                                        elif element=="address":
+                                            address=str(dt_dict["supervisoryAuthority"][element]).replace(" ", "%20")
+                                            value_link= "https://maps.google.com/?q="+address
+                                            name_link=dt_dict["supervisoryAuthority"][element]
+                                            key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                            info_tmp = info_tmp +key_value_string+ "  \n"
+                                        elif element=="country":
+                                            country=str(dt_dict["supervisoryAuthority"][element])
+                                            value=pytz.country_names[country]
+                                            info_tmp  = info_tmp +(str(element).capitalize()+ ": " +value) + "  \n"
+                                        else:
+                                            value=str(dt_dict["supervisoryAuthority"][element])
+                                            key_value_string=str(element).capitalize()+ ": " +value
+                                            info_tmp  = info_tmp +key_value_string+ "  \n"
+                                info.append(info_tmp)
+
                         else:
-                            info=[]
-                            info.append("**This is the information about your " + right_names[rights.index(dt)]+":**")
+                            info.append("This is the information about your " + right_names[rights.index(dt)]+":")
                             if dt_dict["available"] and dt_dict["description"]==False:
                                 if dt_dict["available"]=="true":
                                     info.append("Data access is possible.")
@@ -429,19 +633,19 @@ class ActionGiveServiceInfo(Action):
                             if dt_dict["description"]:
                                 info.append(str(dt_dict["description"]))
                             if dt_dict["url"]:
-                                info.append("URL: "+ "*"+str(dt_dict["url"])+"*")
+                                info.append("URL: "+str(dt_dict["url"]))
                             if dt_dict["email"]:
-                                info.append("E-Mail: mailto:"+"*"+ str(dt_dict["email"])+"*")
+                                info.append("E-Mail: mailto:"+str(dt_dict["email"]))
                             if dt_dict["identificationEvidences"]:
                                 identification=[]
                                 info.append("For your identification you would need: ")
                                 for el in dt_dict["identificationEvidences"]:
-                                    identification.append("*"+el+"*")
+                                    identification.append(el)
                                 identification_string=', '.join([elem for elem in identification])  
                                 info.append(identification_string)
-                            info_string = '  \n'.join([str(elem) for elem in info])  
-                            dispatcher.utter_message(text="{}".format(info_string))
-                        
+                        info_string = '  \n'.join([str(elem) for elem in info])  
+                        dispatcher.utter_message(text="{}".format(info_string))
+                
         elif service!="Green Company":
             dispatcher.utter_message(text="Here is the information about {} by the service {}.".format(datatype_out, service))
 
