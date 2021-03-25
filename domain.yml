@@ -33,6 +33,15 @@ slots:
     - Facebook
     - Amazon
     - Green Company
+    - Green
+    - White
+    - Black
+    - Yellow
+    - Orange
+    - Blue
+    - Red
+  #service:
+    #type: any
     
   datatype:
     type: categorical
@@ -75,7 +84,7 @@ actions:
 - action_this_service
 - action_another_service
 - action_no_service
-
+- action_read_services
 
 
 responses:
@@ -119,16 +128,16 @@ responses:
   
   utter_ask_privacy_form_service:
     - text: "Which service are you interested in?"
-      buttons: 
-      - title: "Google"
-        payload: '/services{"service":"Google"}'
-      - title: "Amazon"
-        payload: '/services{"service":"Amazon"}'
-      - title: "Facebook"
-        payload: '/services{"service":"Facebook"}'
-      - title: "Green Company"
-        payload: '/services{"service":"Green Company"}'
-
+      #buttons: 
+      #- title: "Google"
+      #  payload: '/services{"service":"Google"}'
+      #- title: "Amazon"
+      #  payload: '/services{"service":"Amazon"}'
+      #- title: "Facebook"
+      #  payload: '/services{"service":"Facebook"}'
+      #- title: "Green Company"
+      #  payload: '/services{"service":"Green Company"}'
+#
   
 
   utter_ask_privacy_form_datatype:

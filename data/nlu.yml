@@ -40,6 +40,13 @@ nlu:
     - [Instagram](service)
     - [Whatsapp](service)
     - [Green Company](service)
+    - [Green](service)
+    - [Blue](service)
+    - [Yellow](service)
+    - [Orange](service)
+    - [Black](service)
+    - [White](service)
+    - [Red](service)
     
 - synonym: WhatsApp
   examples: | 
@@ -94,6 +101,7 @@ nlu:
 
 - intent: datatypes
   examples: |
+    - [third parties](datatype) to which your data are transferred
     - [third parties](datatype) to which your data is transferred
     - [third parties](datatype)
     - [third parties](datatype) to which they tranfer my data
@@ -148,6 +156,8 @@ nlu:
 - synonym: number of third parties
   examples: |
     - number of 3rd parties
+    - how many third parties
+    - how many 3rd parties
 - synonym: third parties
   examples: |
     - 3rd parties
