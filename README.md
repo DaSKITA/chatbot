@@ -23,6 +23,7 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 
 ## Setup 
 
+- Sicherstellen, dass alle Dokumente im tilt hub abrufbar sind: `python preprocessing.py`
 - Neues Modell trainieren: `rasa train`
 - Modell testen: Action Server starten mittels `rasa run actions` und `rasa shell` oder `rasa shell --debug`
 
