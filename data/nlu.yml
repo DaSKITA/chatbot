@@ -47,6 +47,7 @@ nlu:
     - [Black](service)
     - [White](service)
     - [Red](service)
+    - [Elias Company](service)
     
 - synonym: WhatsApp
   examples: | 
@@ -135,6 +136,8 @@ nlu:
     - I am interested in information about my [right](datatype) to the data
     - [controller](datatype)
     - I am interested in the [controller](datatype)
+    - what are my [rights](datatype)?
+    - what are my [rights] to the data?
 
 - synonym: metadata
   examples: |

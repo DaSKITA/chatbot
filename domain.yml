@@ -26,22 +26,22 @@ entities:
   - requesting
 
 slots:
-  service:
-    type: categorical
-    values:
-    - Google
-    - Facebook
-    - Amazon
-    - Green Company
-    - Green
-    - White
-    - Black
-    - Yellow
-    - Orange
-    - Blue
-    - Red
   #service:
-    #type: any
+  #  type: categorical
+  #  values:
+  #  - Google
+  #  - Facebook
+  #  - Amazon
+  #  - Green Company
+  #  - Green
+  #  - White
+  #  - Black
+  #  - Yellow
+  #  - Orange
+  #  - Blue
+  #  - Red
+  service:
+    type: list
     
   datatype:
     type: categorical
