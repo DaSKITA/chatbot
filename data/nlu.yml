@@ -1,4 +1,4 @@
-version: "2.0"
+version: '2.0'
 
 nlu:
 - intent: bot_usage
@@ -6,7 +6,7 @@ nlu:
     - what can you be used for?
     - how can you help me?
     - what should I use you for?
-    
+
 - intent: privacy_policy
   examples: |
     - [privacy policy](privacy_policy)
@@ -23,7 +23,7 @@ nlu:
     - privacy policies
     - privacypolicy
     - privacypolicies
-    
+
 - intent: requesting
   examples: |
     - [request](requesting)
@@ -31,26 +31,21 @@ nlu:
     - [data a service collects about me](requesting)
     - I am interested in making a [request](requesting) at a service
 
-    
+
 - intent: services
   examples: |
-    - [Google](service)
-    - [Amazon](service)
-    - [Facebook](service)
-    - [Instagram](service)
-    - [Whatsapp](service)
-    - [Green Company](service)
-    - [Green](service)
-    - [Blue](service)
-    - [Yellow](service)
+    - [Elias Company](service)
     - [Orange](service)
     - [Black](service)
     - [White](service)
+    - [Yellow](service)
+    - [Green](service)
     - [Red](service)
-    - [Elias Company](service)
-    
+    - [Blue](service)
+
+
 - synonym: WhatsApp
-  examples: | 
+  examples: |
     - Whats App
     - Whatsapp
     - whatsapp
@@ -65,7 +60,7 @@ nlu:
     - I am interested in other services
 
 - synonym: another service
-  examples: | 
+  examples: |
     - Another service
     - Another Service
     - another Service
@@ -80,7 +75,7 @@ nlu:
     - Give me information about this service
 
 - synonym: this service
-  examples: | 
+  examples: |
     - This service
     - This Service
     - this Service
@@ -94,7 +89,7 @@ nlu:
     - I am interested in no service at all
 
 - synonym: no service
-  examples: | 
+  examples: |
     - No service
     - No Service
     - no Service
@@ -262,4 +257,3 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
-
