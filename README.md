@@ -35,14 +35,14 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 ![](./docs/rest.png)
 
 ## Telegram
-1. 	https version der Website erstellen: z.B. 'ngrok http 5005'
+1. 	https version der Website erstellen: z.B. `ngrok http 5005`
 2.	In credentials.yml bei webhook the https url einfügen
-3.	Action server und rasa starten: 'rasa run actions' und 'rasa run -m models --enable-api --connector telegram --cors "*" --debug --credentials credentials.yml'
+3.	Action server und rasa starten: `rasa run actions` und `rasa run -m models --enable-api --connector telegram --cors "*" --debug --credentials credentials.yml`
 4. 	in telegram "daskita_bot" suchen und Konversation starten
 
 ## Alexa
-1.	https version der Website erstellen: z.B. 'ngrok http 5005'
-2.	Action server und rasa starten: 'rasa run actions' und 'rasa run -m models --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml'
-3.	auf der Amazon Alexa developer page: den endpoint mit der https url + '/webhooks/alexa_assistant/webhook' anpassen
+1.	https version der Website erstellen: z.B. `ngrok http 5005`
+2.	Action server und rasa starten: `rasa run actions` und `rasa run -m models --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml`
+3.	auf der Amazon Alexa developer page: den endpoint mit der https url + `/webhooks/alexa_assistant/webhook` anpassen
 4.	auf der Amazon Alexa developer page: Build klicken
-5.	Konversation starten mit: 'Alexa, start privacy bot'
+5.	Konversation starten mit: `Alexa, start privacy bot`
