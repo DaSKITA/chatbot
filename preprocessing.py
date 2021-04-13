@@ -32,5 +32,5 @@ with open(r'data\nlu.yml', 'w', encoding = "utf-8") as yaml_file:
     dump = ruamel.yaml.dump(code, default_flow_style = False, allow_unicode = True, encoding = None, Dumper=ruamel.yaml.RoundTripDumper)
     yaml_file.write( dump )
 
-# rasa train nlu ausführen
-os.system("rasa train nlu")
+# rasa train ausführen
+os.system("rasa train")
