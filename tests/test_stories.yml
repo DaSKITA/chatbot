@@ -2,79 +2,179 @@
 #### If you want to learn more, please see the docs: https://rasa.com/docs/rasa/testing-your-assistant
 
 stories:
-- story: happy path 1
+- story: privacy path 1
   steps:
   - user: |
-      hello there!
+      Hello!
     intent: greet
   - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_requesting
   - user: |
-      amazing
-    intent: mood_great
-  - action: utter_happy
-
-- story: happy path 2
-  steps:
+      I am interested in a [privacy policy](privacy_policy)
+    intent: privacy_policies
+  - action: action_change_to_privacy
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
   - user: |
-      hello there!
-    intent: greet
-  - action: utter_greet
+      I am interested in the service [Elias Company](service)
+    intent: services
+  - action: utter_ask_privacy_form_datatype
   - user: |
-      amazing
-    intent: mood_great
-  - action: utter_happy
+      I am interested in the [third parties](datatype) my data is transferred to
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
   - user: |
-      bye-bye!
-    intent: goodbye
+      No, thank you.
+    intent: deny
+  - action: utter_ask_service_again
+  - user: |
+      No
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      No
+    intent: deny
   - action: utter_goodbye
 
-- story: sad path 1
+- story: privacy path 2 more services
   steps:
   - user: |
-      hello
+      Hello!
     intent: greet
   - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_requesting
   - user: |
-      not good
-    intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+      I am interested in a [privacy policy](privacy_policy)
+    intent: privacy_policies
+  - action: action_change_to_privacy
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      I am interested in the services [Elias Company](service) and [Black](service)
+    intent: services
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      I am interested in the [third parties](datatype) my data is transferred to
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      No, thank you.
+    intent: deny
+  - action: utter_ask_service_again
+  - user: |
+      No
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      No
+    intent: deny
+  - action: utter_goodbye      
+
+- story: privacy path 3 loop datatype
+  steps:
+  - user: |
+      Hello!
+    intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_requesting
+  - user: |
+      Give me information about [privacy policies](privacy_policy)
+    intent: privacy_policies
+  - action: action_change_to_privacy
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      I am interested in the service [Elias Company](service)
+    intent: services
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      I am interested in the [third parties](datatype) my data is transferred to
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Yes, please.
+    intent: affirm
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      I am interested in the [countries](datatype) my data is transferred to
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      No, thanks.
+    intent: deny  
+  - action: utter_ask_service_again
+  - user: |
+      No
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      No
+    intent: deny
+  - action: utter_goodbye
+  
+- story: privacy path 4 loop service
+  steps:
+  - user: |
+      Hello!
+    intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_requesting
+  - user: |
+      I am interested in a [privacy policy](privacy_policy)
+    intent: privacy_policies
+  - action: action_change_to_privacy
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      I am interested in the service [Elias Company](service)
+    intent: services
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      I am interested in the [third parties](datatype) my data is transferred to
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      No, thank you.
+    intent: deny
+  - action: utter_ask_service_again
   - user: |
       yes
     intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
   - user: |
-      hello
-    intent: greet
-  - action: utter_greet
+      I am interested in the service [Black](service)
+    intent: services
+  - action: utter_ask_privacy_form_datatype
   - user: |
-      not good
-    intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+      I am interested in the [data protection officer](datatype).
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
   - user: |
-      not really
+      No, thank you.
     intent: deny
-  - action: utter_goodbye
-
-- story: sad path 3
-  steps:
+  - action: utter_ask_service_again
   - user: |
-      hi
-    intent: greet
-  - action: utter_greet
+      No.
+  - action: utter_ask_request_path
   - user: |
-      very terrible
-    intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - user: |
-      no
+      No
     intent: deny
-  - action: utter_goodbye
+  - action: utter_goodbye  
 
 - story: say goodbye
   steps:

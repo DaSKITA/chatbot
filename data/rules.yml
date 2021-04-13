@@ -5,7 +5,7 @@ rules:
 #activate privacy form
 - rule: Activate privacy form
   steps:
-  - intent: privacy_policy
+  - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
 
@@ -39,7 +39,7 @@ rules:
 #privacy path
 - rule: start privacy track 
   steps: 
-  - intent: privacy_policy
+  - intent: privacy_policies 
   - action: utter_ask_privacy_form_service
   - action: action_read_services
 
@@ -212,7 +212,7 @@ rules:
   steps:
   - intent: bot_usage
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
   
 - rule: Introduce yourself after user greets
@@ -220,7 +220,7 @@ rules:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
   
 

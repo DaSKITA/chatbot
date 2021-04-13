@@ -47,8 +47,6 @@ class ActionReadServices(Action):
         message=message[:-2]
         dispatcher.utter_message(text=message)
         #dispatcher.utter_message(text= None, buttons=buttons)
-        
-        
         return []
 
 
@@ -63,6 +61,7 @@ class ActionSetSlotValueRequest(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         return [SlotSet("requesting", "requesting"), SlotSet("privacy_policy", None)]
 
+
 class ActionSetSlotValuePrivacy(Action):
     def name(self) -> Text:
         return "action_change_to_privacy"
@@ -71,7 +70,7 @@ class ActionSetSlotValuePrivacy(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return [SlotSet("requesting", None), SlotSet("privacy_policy", "privacy")]   
+        return [SlotSet("requesting", None), SlotSet("privacy_policy", "privacy")]
     
     
     
@@ -761,7 +760,7 @@ class ActionGiveServiceInfo(Action):
                     if el in EUROPEAN_UNION.names:                        
                         EU=EU+1
                 if len(countries_dict[key])>1:
-                    countries_string=countries_string +"The service "+ key.capitalize() + " transferres your data to " + str(len(countries_dict[key])) + " different countries. " + str(EU)+ " are part of the European Union. The countries are " + countries + ".   \n"
+                    countries_string=countries_string +"The service "+ key.capitalize() + " transferres your data to " + str(len(countries_dict[key])) + " different countries. " + str(EU)+ "of them are part of the European Union. The countries are " + countries + ".   \n"
                 elif len(countries_dict[key])==1 and EU==1:
                     countries_string=countries_string +"The service "+ key.capitalize() + " transferres your data to one other country: " + countries +  " It is part of the European Union.  \n"
                 else:

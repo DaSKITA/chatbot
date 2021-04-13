@@ -7,15 +7,16 @@ nlu:
     - how can you help me?
     - what should I use you for?
 
-- intent: privacy_policy
+- intent: privacy_policies
   examples: |
     - [privacy policy](privacy_policy)
+    - Give me information about a [privacy policy](privacy_policy)
     - information about the [privacy policy](privacy_policy)
     - info about [privacy policy](privacy_policy) of services
     - I am interested in a [privacy policy](privacy_policy)
     - I am interested in information about a [privacy policy](privacy_policy)
-    - I am interested in [privacy policies](privacy_policy)
-    - Hi, I am interested in [privacy policies](privacy_policy)
+    - I am interested in [privacy policy](privacy_policy)
+    - Hi, I am interested in [privacy policy](privacy_policy)
     - Hi, I am interested in information about a [privacy policy](privacy_policy)
 
 - synonym: privacy policy
@@ -102,10 +103,16 @@ nlu:
     - [third parties](datatype)
     - [third parties](datatype) to which they tranfer my data
     - [third parties](datatype) to which the service gives my data
+    - To which [third parties](datatype) is my data transferred to?
     - [countries](datatype) into which data is transferred
     - [countries](datatype) where the data goes
     - [countries](datatype) into which the data is send
     - [countries](datatype) into which the data is sold to
+    - To which [countries](datatype) is my data given to?
+    - To which [countries](datatype) is my data tranferred?
+    - To which [countries](datatype) is my data transferred to?
+    - To how many [number of third parties](datatype) is my data tranferred to?
+    - To how many [number of third parties](datatype) is my data given to?   
     - [number of third parties](datatype)
     - [number of third parties](datatype) to which my data is transferred
     - [metadata](datatype)
@@ -203,6 +210,9 @@ nlu:
     - yes, please
     - yes, thank you
     - okay
+    - perfect
+    - great
+    - wonderful
 
 - intent: deny
   examples: |
@@ -215,41 +225,6 @@ nlu:
     - not really
     - No, thank you
     - No, thanks
-
-- intent: mood_great
-  examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
-
-
-- intent: mood_unhappy
-  examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
 
 - intent: bot_challenge
   examples: |

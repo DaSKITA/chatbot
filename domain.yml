@@ -26,20 +26,6 @@ entities:
   - requesting
 
 slots:
-  #service:
-  #  type: categorical
-  #  values:
-  #  - Google
-  #  - Facebook
-  #  - Amazon
-  #  - Green Company
-  #  - Green
-  #  - White
-  #  - Black
-  #  - Yellow
-  #  - Orange
-  #  - Blue
-  #  - Red
   service:
     type: list
     
@@ -101,7 +87,7 @@ responses:
 
 
 #ask privacy policy
-  utter_ask_privacy_policy:
+  utter_ask_privacy_form_privacy_policy:
   - text: "Are you interested in information about a privacy policy?"  
   
 #ask request
@@ -141,11 +127,11 @@ responses:
   
 
   utter_ask_privacy_form_datatype:
-  - text: "What data collected by the service {service} are you interested in? (e.g. your rights to the data or personal data that is stored)"
+  - text: "What data are you interested in? (e.g. your rights to the data or personal data that is stored)"
     channel: 'alexa_assistant'
-  - text: "What data collected by the service {service} are you interested in? (e.g. your rights to the data or personal data that is stored)"
+  - text: "What data are you interested in? (e.g. your rights to the data or personal data that is stored)"
     channel: 'telegram'
-  - text: "What data collected by the service {service} are you interested in?"
+  - text: "What data are you interested in?"
     buttons: 
     - title: "Metadata"
       payload: '/datatypes{"datatype":"metadata"}'

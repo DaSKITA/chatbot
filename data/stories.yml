@@ -7,9 +7,9 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
-  - intent: privacy_policy
+  - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
@@ -29,9 +29,9 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
-  - intent: privacy_policy
+  - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
@@ -65,9 +65,9 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
-  - intent: privacy_policy
+  - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
@@ -135,7 +135,7 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
@@ -154,7 +154,7 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
@@ -181,7 +181,7 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
@@ -224,7 +224,7 @@ stories:
   - intent: greet
   - action: utter_greet
   - action: utter_bot_usage
-  - action: utter_ask_privacy_policy
+  - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
