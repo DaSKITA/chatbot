@@ -16,6 +16,10 @@ intents:
   - another_service
   - this_service
   - no_service
+  - comparison
+  - comparison_types
+  - privacy_policies
+  - country
 
 entities:
   - service
@@ -24,8 +28,17 @@ entities:
   - policy
   - privacy_policy
   - requesting
+  - comparison
+  - comparison_types
+  - country
+  - company
+  
+  
 
 slots:
+  service_company:
+    type: list
+
   service:
     type: list
     
@@ -62,6 +75,23 @@ slots:
   requesting:
     type: any
 
+  comparison:
+    type: any
+
+  comparison_types:
+    type: categorical
+    values:
+    - data transfer to a specific country
+    - data transfer to a specific company
+    - data sharing between these services
+    influence_conversation: true
+    
+  country:
+    type: any
+    
+  company:
+    type: any
+    
 
 actions: 
 - action_give_privacy_info
@@ -71,6 +101,11 @@ actions:
 - action_another_service
 - action_no_service
 - action_read_services
+- action_give_comparison_info_country
+- action_give_comparison_info_company
+- action_fill_company_slot
+- action_fill_service_slot
+- action_give_comparison_info_sharing_between
 
 
 responses:
@@ -93,6 +128,10 @@ responses:
 #ask request
   utter_ask_requesting:
   - text: "Or are you interested in making a data information request at a service?"  
+  
+#ask comparison
+  utter_ask_comparison_form_comparison:
+  - text: "Or are you interested in comparing the privacy policies of different services?"
 
 #change to privacy path
   utter_ask_privacy_policy_path:
@@ -113,18 +152,7 @@ responses:
 #privacy path  
   
   utter_ask_privacy_form_service:
-    - text: "Which service are you interested in?"
-      #buttons: 
-      #- title: "Google"
-      #  payload: '/services{"service":"Google"}'
-      #- title: "Amazon"
-      #  payload: '/services{"service":"Amazon"}'
-      #- title: "Facebook"
-      #  payload: '/services{"service":"Facebook"}'
-      #- title: "Green Company"
-      #  payload: '/services{"service":"Green Company"}'
-#
-  
+    - text: "Which services are you interested in?"
 
   utter_ask_privacy_form_datatype:
   - text: "What data are you interested in? (e.g. your rights to the data or personal data that is stored)"
@@ -174,6 +202,35 @@ responses:
     - title: "I am not interested"
       payload: '/no_service{"request":"No service"}'
 
+#comparison path
+  utter_ask_comparison_form_service:
+  - text: "Which services are you interested in?"
+  
+  utter_ask_comparison_form_comparison_types:
+  - text: "What are you interested in?"
+    buttons: 
+    - title: "Which of these services transfer my data to a specific country?"
+      payload: '/comparison_types{"comparison_types":"data transfer to a specific country"}'
+    - title: "Which of these services transfer my data to a specific company?"
+      payload: '/comparison_types{"comparison_types":"data transfer to a specific company"}'
+    - title: "Is my personal data shared between these services?"
+      payload: '/comparison_types{"comparison_types":"data sharing between these services"}'
+      
+  utter_give_comparison_info:
+  - text: "Here is your info"
+  
+  utter_ask_comparison_country:
+  - text: "Which country are you interested in?"
+  
+  utter_ask_comparison_company:
+  - text: "Which company are you interested in?"
+  
+  utter_ask_comparison_types_again:
+  - text: "Are you interested in other comparisons?"
+  
+  utter_ask_service_again_comparison:
+  - text: "Are you interested in a comparison of other services?"
+  
 
 #request path
   utter_ask_request_form_service:
@@ -243,18 +300,38 @@ forms:
     privacy_policy:
       - type: from_entity
         entity: privacy_policy
-    service:
+    services:
       - type: from_entity
         entity: service
     datatype:
       - type: from_entity
         entity: datatype
         
+  comparison_form:
+    comparison:
+      - type: from_entity
+        entity: comparison
+    service_company:
+      - type: from_entity
+        entity: service_company
+    service:
+      - type: from_entity
+        entity: service
+    comparison_types:
+      - type: from_entity
+        entity: comparison_types
+    country:
+      - type: from_entity
+        entity: country
+    company:
+      - type: from_entity
+        entity: company
+        
   request_form:
     requesting:
       - type: from_entity
         entity: requesting
-    service:
+    services:
       - type: from_entity
         entity: service
     datatype:

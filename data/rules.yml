@@ -25,6 +25,13 @@ rules:
   - intent: requesting
   - action: utter_ask_request_form_service
   
+#activate comparison form
+- rule: Activate comparison form
+  steps:
+  - intent: comparison
+  - action: utter_ask_comparison_form_service
+  - action: action_read_services
+  
 #- rule: Activate request form; another service
 #  steps:
 #  - intent: another_service_request
@@ -35,6 +42,89 @@ rules:
 #  steps:
 #  - intent: this_service_request
 #  - action: utter_ask_request_form_datatype
+
+#comparison path
+- rule: start comparison track
+  steps:
+  - intent: comparison
+  - action: utter_ask_comparison_form_service
+  - action: action_read_services
+
+- rule: ask for comparison type
+  steps:
+  - action: utter_ask_comparison_form_service
+  - action: action_read_services
+  - intent: services
+  - action: action_fill_service_slot
+  - action: utter_ask_comparison_form_comparison_types
+  
+- rule: give info and ask for more comparison types
+  steps:
+  - action: utter_ask_comparison_form_comparison_types
+  - intent: comparison_types
+  - action: utter_give_comparison_info
+  - action: utter_ask_comparison_types_again
+  
+- rule: give info and ask for more comparison types; country
+  steps:
+  - action: utter_ask_comparison_form_comparison_types
+  - intent: comparison_types
+  - slot_was_set:
+        - comparison_types: data transfer to a specific country
+  - action: utter_ask_comparison_country
+  
+- rule: give info and ask for more comparison types; company
+  steps:
+  - action: utter_ask_comparison_form_comparison_types
+  - intent: comparison_types
+  - slot_was_set:
+        - comparison_types: data transfer to a specific company
+  - action: utter_ask_comparison_company
+  
+- rule: give info and ask for more comparison types; sharing between
+  steps:
+  - action: utter_ask_comparison_form_comparison_types
+  - intent: comparison_types
+  - slot_was_set:
+        - comparison_types: data sharing between these services
+  - action: action_give_comparison_info_sharing_between
+  - action: utter_ask_comparison_types_again 
+  
+- rule: ask for company, give info and ask for more comparison types
+  steps:
+  - action: utter_ask_comparison_company
+  - intent: services
+  - action: action_fill_company_slot
+  - action: action_give_comparison_info_company
+  - action: utter_ask_comparison_types_again  
+
+  
+- rule: give option to more comparison types 
+  steps:
+  - action: utter_ask_comparison_types_again
+  - intent: affirm
+  - action: utter_ask_comparison_form_comparison_types
+  
+- rule: ask for other services, comparison
+  steps:
+  - action: utter_ask_comparison_types_again
+  - intent: deny
+  - action: utter_ask_service_again_comparison
+  
+- rule: loop more services, comparison
+  steps:
+  - action: utter_ask_service_again_comparison
+  - intent: affirm
+  - action: utter_ask_comparison_form_service
+  - action: action_read_services
+  
+- rule: no more services and ask for track change to other path, comparison
+  steps:
+  - action: utter_ask_service_again_comparison
+  - intent: deny
+  - action: utter_ask_privacy_policy_path
+  - action: utter_ask_request_path
+
 
 #privacy path
 - rule: start privacy track 
@@ -48,8 +138,8 @@ rules:
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
-
 
 - rule: give info if asked for datatype and ask for more datatypes; privacy
   steps:
@@ -134,6 +224,7 @@ rules:
   steps:
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
 
 - rule: ask for authentification; request
@@ -221,6 +312,8 @@ rules:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
+  
   
 

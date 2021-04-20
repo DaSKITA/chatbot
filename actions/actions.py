@@ -21,6 +21,32 @@ from countrygroups import EUROPEAN_UNION
 from graphqlclient import GraphQLClient
 url='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8082/'
 
+#fill services slot 
+class ActionSetSlotValueRequest(Action):
+    def name(self) -> Text:
+        return "action_fill_service_slot"
+
+    def run(self, 
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        slot_value_service_company = tracker.get_slot('service_company')
+        return [SlotSet("service", slot_value_service_company)]
+
+#fill company slot
+class ActionSetSlotValueRequest(Action):
+    def name(self) -> Text:
+        return "action_fill_company_slot"
+
+    def run(self, 
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        slot_value_service_company = tracker.get_slot('service_company')
+        slot_value_company=slot_value_service_company[0]
+        return [SlotSet("company", slot_value_company)]
+
+
 #read possible services from tilt hub and give options as buttons
 class ActionReadServices(Action):
     def name(self) -> Text:
@@ -123,12 +149,183 @@ class ActionSetSlotNoServicePrivacy(Action):
         if slot_value_privacy_policy != None:
             return [SlotSet("policy", "No policy at all")] 
         else:
-            return [SlotSet("request", "No requesting at all")]   
+            return [SlotSet("request", "No requesting at all")]  
+
+        
+#give comparison info about personal data
+class ActionGiveComparisonInfoCountry(Action):
+    def name(self) -> Text:
+        return "action_give_comparison_info_sharing_between"
+    def run(self, 
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #get slot value
+        service_list=tracker.get_slot("service")
+        #company=tracker.get_slot("company")
+        #company=str(company).title()
+        
+        #check if service name is possible, else return
+        client = GraphQLClient(url)
+        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result_dict=ast.literal_eval(result)
+        result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        
+        #loop through all given services and give info
+        for service in service_list:
+            service_upper=str(service).title()
+            #check if service name is possible, else return
+            contains=0
+            for r in result_dict:
+                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
+                    contains=1
+                    meta_name=service_upper
+            if contains==0:
+                dispatcher.utter_message(text="Unfortunately there is no information about the service {}.".format(service))
+                if service==service_list[-1]:
+                    return []
+                else: 
+                    service_list.remove(service)
+                
+            #get tilt of service
+            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            file= requests.get(address, auth=('admin', 'secret'))
+            file_read = json.loads(file.text[1:-1])
+            instance = tilt.tilt_from_dict(file_read)
+            
+            #check if service transferres data to company
+            #string_list=[]
+            part_yes="The service " + str(service) + " shares your data with "
+            yes_list=[]
+            for element in list(instance.data_disclosed):
+                for recipient in list(element.recipients):
+                    if str(recipient.name).title() in service_list:
+                        yes_list.append(str(recipient.name).title())
+            if yes_list!=[]:
+                string_service=part_yes+ ', '.join([str(elem) for elem in yes_list]) + "."
+                #string_list.append(string_service)
+            else:
+                string_service="The service " + str(service) + " shares your data with none of the other services."
+                #string_list.append(string_service)
+            dispatcher.utter_message(text=string_service)
+        
+                                             
+        return[]
+    
+        
+#give comparison info about country
+class ActionGiveComparisonInfoCountry(Action):
+    def name(self) -> Text:
+        return "action_give_comparison_info_country"
+    def run(self, 
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #get slot values
+        service_list=tracker.get_slot("service")
+        country=tracker.get_slot("country")
+        
+        #check if service name is possible, else return
+        client = GraphQLClient(url)
+        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result_dict=ast.literal_eval(result)
+        result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        
+        #loop through all given services and give info
+        for service in service_list:
+            service_upper=service.title()
+            #check if service name is possible, else return
+            contains=0
+            for r in result_dict:
+                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
+                    contains=1
+                    meta_name=service_upper
+            if contains==0:
+                dispatcher.utter_message(text="Unfortunately there is no information about the service {}.".format(service))
+                if service==service_list[-1]:
+                    return []
+                else: 
+                    service_list.remove(service)
+                
+            #get tilt of service
+            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            file= requests.get(address, auth=('admin', 'secret'))
+            file_read = json.loads(file.text[1:-1])
+            instance = tilt.tilt_from_dict(file_read)
+            
+            #check if service transferres data to country
+            if not list(instance.third_country_transfers):
+                dispatcher.utter_message(text="The service {} does not transfer your data to the country {}.".format(service, country))
+            else:
+                transfer=0
+                for element in list(instance.third_country_transfers):
+                    country_name=pytz.country_names[element.country]
+                    if country_name==country:
+                        dispatcher.utter_message(text="The service {} transfers you data to the country {}.".format(service, country))
+                        transfer=1
+                if transfer==0:
+                    dispatcher.utter_message(text="The service {} does not transfer your data to the country {}.".format(service, country))
+                                             
+        return[]        
+
+    
+#give comparison info about company
+class ActionGiveComparisonInfoCountry(Action):
+    def name(self) -> Text:
+        return "action_give_comparison_info_company"
+    def run(self, 
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        #get slot values
+        service_list=tracker.get_slot("service")
+        company=tracker.get_slot("company")
+        company=str(company).title()
+        
+        #check if service name is possible, else return
+        client = GraphQLClient(url)
+        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result_dict=ast.literal_eval(result)
+        result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        
+        #loop through all given services and give info
+        for service in service_list:
+            service_upper=service.title()
+            #check if service name is possible, else return
+            contains=0
+            for r in result_dict:
+                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
+                    contains=1
+                    meta_name=service_upper
+            if contains==0:
+                dispatcher.utter_message(text="Unfortunately there is no information about the service {}.".format(service))
+                if service==service_list[-1]:
+                    return []
+                else: 
+                    service_list.remove(service)
+                
+            #get tilt of service
+            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            file= requests.get(address, auth=('admin', 'secret'))
+            file_read = json.loads(file.text[1:-1])
+            instance = tilt.tilt_from_dict(file_read)
+            
+            #check if service transferres data to company
+            for element in list(instance.data_disclosed):
+                transfer=0
+                for recipient in list(element.recipients):
+                    if str(recipient.name).title()==company:
+                        transfer=1
+                        dispatcher.utter_message(text="The service {} transfers your data to the company {}.".format(service, company))
+                if transfer==0:
+                    dispatcher.utter_message(text="The service {} does not transfer your data to the company {}.".format(service, company))
+                                             
+        return[]        
+    
     
     
 #give info about datatypes    
 class ActionGiveServiceInfo(Action):
-
     def name(self) -> Text:
         return "action_give_privacy_info"
 

@@ -8,11 +8,13 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes
   - action: action_give_privacy_info
@@ -30,11 +32,13 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes
   - action: action_give_privacy_info
@@ -50,6 +54,7 @@ stories:
   - action: action_another_service
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -66,11 +71,13 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes
   - action: action_give_privacy_info
@@ -96,6 +103,7 @@ stories:
 - story: privacy path; start with services
   steps: 
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes
   - action: action_give_privacy_info
@@ -128,6 +136,7 @@ stories:
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
 
 - story: request; no more services; no privacy policy
@@ -136,10 +145,12 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -155,10 +166,12 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -166,6 +179,7 @@ stories:
   - intent: affirm
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -182,10 +196,12 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -193,6 +209,7 @@ stories:
   - intent: affirm
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -207,6 +224,7 @@ stories:
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
   - intent: datatypes
   - action: action_give_privacy_info
@@ -225,10 +243,12 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   - intent: requesting
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -236,6 +256,7 @@ stories:
   - intent: affirm
   - action: utter_ask_request_form_service
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
@@ -262,6 +283,7 @@ stories:
 - story: request path; start with services
   steps:
   - intent: services
+  - action: action_fill_service_slot
   - action: utter_ask_request_form_datatype
   - intent: datatypes
   - action: utter_ask_authentification
