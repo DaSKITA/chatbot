@@ -194,7 +194,6 @@ class ActionGiveComparisonInfoCountry(Action):
             instance = tilt.tilt_from_dict(file_read)
             
             #check if service transferres data to company
-            #string_list=[]
             part_yes="The service " + str(service) + " shares your data with "
             yes_list=[]
             for element in list(instance.data_disclosed):
@@ -447,7 +446,7 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="There is no personal data stored about you by {}.".format(service_upper))
                     else:
                         categories_string = ', '.join([str(elem) for elem in categories])    
-                        dispatcher.utter_message(text="Your {}".format(categories_string))
+                        dispatcher.utter_message(text="The service {} stores the following personal data about you: ".format(service_upper, categories_string))
                     
                 elif datatype=="third parties":
                     third_parties=[]

@@ -183,12 +183,33 @@ nlu:
   examples: |
     - 3rd parties
 
-- intent: comparison_types
+- intent: data transfer to a specific country
   examples: |
-    - [data transfer to a specific country](comparison_types)
-    - [data transfer to a specific company](comparison_types)
-    - [data sharing between these services](comparison_types)
+    - data transfer to a specific country
+    - I am interested in the data transfer to a specific country
+    - data transfer to a country
+    - transfer to a country
+    
+- intent: data transfer to a specific company
+  examples: |
+    - data transfer to a specific company
+    - data transfer to a company
+    - data transfer to another service
+    - data transfer to a specific service
+    
+- intent: data sharing between these services
+  examples: |
+    - data sharing between these services
+    - data sharing
+    - data sharing between the services
+    - sharing between these services
 
+#- intent: comparison_types
+#  examples: |
+#    - [data transfer to a specific country](comparison_types)
+#    - [data transfer to a specific company](comparison_types)
+#    - [data sharing between these services](comparison_types)
+#
 
 - intent: greet
   examples: |
@@ -256,7 +277,7 @@ nlu:
     - am I talking to a human?
 
 - intent: country
-  examples: |-
+  examples: |
     - [EU](country)
     - [European Union](country)
     - [Aruba](country)
@@ -303,7 +324,6 @@ nlu:
     - [Switzerland](country)
     - [Chile](country)
     - [China](country)
-    - [Côte d'Ivoire](country)
     - [Cameroon](country)
     - [Congo](country)
     - [Cook Islands](country)

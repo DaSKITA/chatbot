@@ -1,0 +1,567 @@
+version: '2.0'
+
+nlu:
+- intent: bot_usage
+  examples: |
+    - Wofür kann man diesen Bot verwenden?
+    - Wie kann dieser Bot mir helfen?
+    - Wie kannst du mir helfen?
+    - Wofür bist du da?
+    - Wofür soll ich dich verwenden?
+    - Wofür kann ich dich verwenden?
+    - Welche Informationen kannst du mir geben?
+
+
+- intent: privacy_policies
+  examples: |
+    - [Datenschutzerklärung](privacy_policy)
+    - Gib mir Informationen über eine [Datenschutzerklärung](privacy_policy)
+    - Geben Sie mir Informationen zu einer [Datenschutzerklärung]](privacy_policy)
+    - Ich interessiere mich für eine [Datenschutzerklärung](privacy_policy)
+    - Informationen über [Datenschutzerklärungen](privacy_policy) von Diensten
+    - Ich interessiere mich für [Datenschutzerklärungen](privacy_policy) von Diensten
+    - Informationen zu [Datenschutzerklärungen](privacy_policy)
+    - Hallo, ich interessiere mich für [Datenschutzerklärungen](privacy_policy) von Firmen
+    - Hi, gib mir Infos zu [Datenschutzerklärungen](privacy_policy)
+    - Hey, ich habe Interesse an einer [Datenschutzerklärung](privacy_policy)
+
+- synonym: Datenschutzerklärung
+  examples: |
+    - Datenschutzbestimmung
+    - Datenschutzerklärungen
+    - Datenschutzbestimmungen
+    - Datenschutz Erklärung
+    - Datenschutz Bestimmung
+    - Datenschutz-Bestimmung
+    - Datenschutz-Erklärung
+
+- synonym: Dienst
+  examples: |
+    - Firmen
+    - Unternehmen
+    - Diensten
+    - Dienste
+    - Service
+    - Services
+
+- intent: comparison
+  examples: |
+    - [vergleich](comparison)
+    - [vergleichen](comparison)
+    - Ich interessiere mich für einen [Vergleich](comparison) von verschiedenen Datenschutzerklärungen.
+    - [vergleichen](comparison) von Datenschutzerklärungen 
+    - [Vergleich](comparison) von Diensten
+    - [vergleichen](comparison) von verschiedenen Diensten
+    - [vergleichen](comparison) der Datenschutzerklärungen von verschiedenen Diensten
+    - [Vergleich](comparison) der Datenschutzerklärungen von Diensten
+    - Ich interessiere mich für einen [Vergleich](comparison)
+    - Hi, ich interessiere mich für einen [Vergleich](comparison) von Datenschutzerklärungen
+    - Hallo, ich möchte Informationen zu einem [vergleich](comparison) von verschiedenen Diensten
+    - Hey, ich interessiere mich für [Vergleiche](comparison) von verschiedenen Datenschutzerklärungen
+    - Ich möchte verschiedene Datenschutzerklärungen [vergleichen](comparison)
+    - Ich möchte die Datenschutzerklärungen von verschiedenen Diensten [vergleichen](comparison)
+
+
+- intent: requesting
+  examples: |
+    - [Anfrage](requesting)
+    - [Auskunftsanfrage](requesting) 
+    - [Auskunftsanfrage](requesting) bei einem Dienst
+    - [Auskunft](requesting) von einem Dienst
+    - Ich interessiere mich für eine [Auskunftsanfrage](requesting) bei einem Dienst
+    - Ich möchte eine [Auskunftsanfrage](requesting) stellen
+    - Ich möchte eine [Anfrage](requesting) zu meinen Daten bei einem Dienst stellen
+
+
+- intent: services
+  examples: |
+    - [Elias Company](service_company)
+    - [Orange](service_company)
+    - [Black](service_company)
+    - [White](service_company)
+    - [Yellow](service_company)
+    - [Green](service_company)
+    - [Red](service_company)
+    - [Blue](service_company)
+    - [Yellow Company AG](service_company)
+    - [Purple](service_company)
+
+- synonym: WhatsApp
+  examples: |
+    - Whats App
+    - Whatsapp
+    - whatsapp
+    - whats app
+
+- intent: another_service
+  examples: |
+    - ein anderer Dienst
+    - bei einem anderen Dienst
+    - von einem anderen Dienst
+    - anderer Dienst
+    - Ich interessiere mich für einen anderen Dienst
+    - Ich interessiere mich für andere Dienste
+    - andere Dienste
+    - bei anderen Diensten
+
+
+- intent: this_service
+  examples: |
+    - dieser Dienst
+    - genau dieser Dienst
+    - von diesem Dienst
+    - der jetzige Dienst
+    - Ich habe interesse am jetzigen Dienst
+    - ich habe Interesse an diesem Dienst
+    - Gib mir Informationen zu diesem Dienst
+
+
+- intent: no_service
+  examples: |
+    - kein Dienst
+    - Gar kein Dienst
+    - Ich interessiere mich für keinen Dienst
+    - Ich interessiere mich für gar keinen Dienst
+    - Ich habe doch an keinem Dienst Interesse
+
+
+- intent: datatypes
+  examples: |
+    - [Drittparteien](datatype) zu denen meine Daten weitergeleitet werden
+    - [Drittparteien](datatype) an die meine Daten weitergegeben werden
+    - [Drittparteien](datatype)
+    - [Drittparteien](datatype) an die sie meine Daten geben
+    - [Drittparteien](datatype) zu denen sie meine Daten weiterleiten
+    - Zu welchen [Drittparteien](datatype) werden meine Daten weitergegeben?
+    - [Länder](datatype) in die meine Daten weitergegeben werden
+    - [Länder](datatype) in die meine Daten gehen
+    - [Länder](datatype) an die meine Daten gesendet werden
+    - [Länder](datatype) an die die Daten gegeben werden
+    - Zu welchen [Länder](datatype) werden meine Daten weitergegeben?
+    - An welche [Länder](datatype) werden meine Daten gegeben?
+    - An welche [Länder](datatype) werden die Daten weitergeleitet?
+    - Zu welcher [Anzahl von Drittparteien](datatype) werden meine Daten gegeben?
+    - Zu wievielen [Anzahl von Drittparteien](datatype) werden meine Daten weitergeleitet?   
+    - [Anzahl von Drittparteien](datatype)
+    - [Anzahl von Drittparteien](datatype) zu denen meine Daten weitergegeben werden.
+    - [Metadaten](datatype)
+    - [Metadaten](datatype) der Datenschutzerklärung
+    - Informationen über [Metadaten](datatype)
+    - [persönliche Daten](datatype) die gespeichert werden
+    - meine [persönliche Daten](datatype) die gesammelt werden
+    - [persönliche Daten](datatype)
+    - meine [persönliche Daten](datatype)
+    - [persönliche Daten](datatype) über mich
+    - [Datenschutzbeauftragter](datatype)
+    - der [Datenschutzbeauftragte](datatype)
+    - die [Datenschutzbeauftragte](datatype)
+    - Ich interessiere mich für die [Datenschutzbeauftrage](datatype)
+    - Wer ist der [Datenschutzbeauftrage](datatype)
+    - [Datenportabilität](datatype)
+    - ich interessiere mich für meine Optionen für [Datenportabilität](datatype)
+    - Was sind die Optionen der [Datenportabilität](datatype)
+    - [Rechte](datatype)
+    - Information zu meinen [Rechte](datatype) an den Daten
+    - [Rechte](datatype) zu meinen Daten
+    - informationen zu den [Rechte](datatype) an den Daten
+    - meine [Rechte](datatype)
+    - meine [Rechte](datatype) an den Daten
+    - meine [Rechte](datatype) an meinen Daten
+    - Ich interessiere mich für meine [Rechte](datatype) an meinen Daten
+    - I am interested in information about my [Rechte](datatype) to the data
+    - was sind meine [Rechte](datatype)?
+    - Was sind meine [Rechte](datatype) an den Daten?
+    - [Controller](datatype)
+    - Ich interessiere mich für den [Controller](datatype)
+
+- synonym: Metadaten
+  examples: |
+    - Meta Daten
+    - meta daten
+    - meta Daten
+    - Meta daten
+- synonym: Datenschutzbeauftragter
+  examples: |
+    - Datenschutzbeauftragte
+- synonym: Rechte
+  examples: |
+    - Recht
+    - meine Rechte
+    - Rechten
+    - mein Recht
+- synonym: Datenportabilität
+  examples: |
+    - Daten Portabilität
+    - Daten-Portabilität
+- synonym: Anzahl der Drittparteien
+  examples: |
+    - Wieviele Drittparteien
+
+- synonym: Drittparteien
+  examples: |
+    - Dritt-Parteien
+    - Dritt Parteien
+    - dritt Parteien
+
+- intent: data transfer to a specific country
+  examples: |
+    - Datenweitergabe an ein bestimmtes Land
+    - Weitergabe an ein Land
+    - Weitergabe an ein bestimmtes Land
+    - Ich interessiere mich für ein bestimmtes Land
+    
+- intent: data transfer to a specific company
+  examples: |
+    - Datenweitergabe an einen bestimmten Dienst
+    - Weitergabe an einen Dienst
+    - Weitergabe an einen bestimmten Dienst
+    - Ich interessiere mich für einen bestimmten Dienst
+    
+- intent: data sharing between these services
+  examples: |
+    - Datenaustausch
+    - Austausch der Daten zwischen den Diensten
+    - Datenaustausch zwischen den Diensten
+    - Datenaustausch untereinander
+    
+#- intent: comparison_types
+#  examples: |
+#    - [Datenweitergabe an ein bestimmtes Land](comparison_types)
+#    - [Datenweitergabe an einen bestimmten Dienst](comparison_types)
+#    - [Datenaustausch](comparison_types)
+#    - [Datenaustausch](comparison_types) zwischen den Diensten
+#    - [Datenaustausch](comparison_types) zwischen Diensten
+#    - [Datenaustausch](comparison_types) untereinander
+
+
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - hallo
+    - Guten Morgen
+    - Guten Abend
+    - Guten Mittag
+    - moin
+    - hey there
+    - Heyhey
+    - Guten Tag
+
+- intent: goodbye
+  examples: |
+    - Tschüss
+    - Bye
+    - Byebye
+    - Gute Nacht
+    - Auf Wiedersehen
+    - Bis zum nächsten Mal
+    - Ciao
+    - Tschau
+    - bye bye
+    - Bis später
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - Ja
+    - Genau
+    - Richtig
+    - Natürlich
+    - Exakt
+    - Ja, bitte
+    - Ja, danke
+    - Korrekt
+    - Okay
+    - Perfekt
+    - Super
+    - Wunderbar
+    - indeed
+    - of course
+    - correct
+    - okay
+    - perfect
+    - great
+    - wonderful
+    - yeah
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - nein
+    - niemals
+    - nie
+    - never
+    - ich glaube nicht
+    - falsch
+    - nicht wirklich
+    - eigentlich nicht
+    - nein, danke
+    - bitte nicht
+    - nein, danke sehr
+
+- intent: bot_challenge
+  examples: |
+    - Bist du ein Bot?
+    - Bist du ein Mensch?
+    - Sind Sie ein Bot?
+    - Was bist du?
+
+- intent: country
+  examples: |
+    - [EU](country)
+    - [Europäische Union](country)
+    - [USA](country)
+    - [Aruba](country)
+    - [Afghanistan](country)
+    - [Angola](country)
+    - [Anguilla](country)
+    - [Ålandinseln](country)
+    - [Albanien](country)
+    - [Andorra](country)
+    - [Vereinigte Arabische Emirate](country)
+    - [VAE](country)
+    - [Argentinien](country)
+    - [Armenien](country)
+    - [Amerikanischen Samoa-Inseln](country)
+    - [Antarktis](country)
+    - [Südfranzösische Territorien](country)
+    - [Antigua und Barbuda](country)
+    - [Australien](country)
+    - [Österreich](country)
+    - [Aserbaidschan](country)
+    - [Burundi](country)
+    - [Belgien](country)
+    - [Benin](country)
+    - [Bonaire, Sint Eustatius und Saba](country)
+    - [Burkina Faso](country)
+    - [Bangladesch](country)
+    - [Bulgarien](country)
+    - [Bahrain](country)
+    - [Bahamas](country)
+    - [Bosnien und Herzegowina](country)
+    - [Heiliger Bartholomäus](country)
+    - [Weißrussland](country)
+    - [Belize](country)
+    - [Bermuda](country)
+    - [Bolivien](country)
+    - [Brasilien](country)
+    - [Barbados](country)
+    - [Brunei Darussalam](country)
+    - [Bhutan](country)
+    - [Bouvet Island](country)
+    - [Botswana](country)
+    - [Zentralafrikanische Republik](country)
+    - [Kanada](country)
+    - [Kokosinseln](country)
+    - [Schweiz](country)
+    - [Chile](country)
+    - [China](country)
+    - [Elfenbeinküste](country)
+    - [Kamerun](country)
+    - [Kongo](country)
+    - [Cookinseln](country)
+    - [Kolumbien](country)
+    - [Komoren](country)
+    - [Kap Verde](country)
+    - [Costa Rica](country)
+    - [Kuba](country)
+    - [Curacao](country)
+    - [Weihnachtsinsel](country)
+    - [Cayman Inseln](country)
+    - [Zypern](country)
+    - [Tschechien](country)
+    - [Deutschland](country)
+    - [Dschibuti](country)
+    - [Dominica](country)
+    - [Dänemark](country)
+    - [Dominikanische Republik](country)
+    - [Algerien](country)
+    - [Ecuador](country)
+    - [Ägypten](country)
+    - [Eritrea](country)
+    - [Westsahara](country)
+    - [Spanien](country)
+    - [Estland](country)
+    - [Äthiopien](country)
+    - [Finnland](country)
+    - [Fidschi](country)
+    - [Falklandinseln](country)
+    - [Frankreich](country)
+    - [Färöer Inseln](country)
+    - [Mikronesien](country)
+    - [Gabun](country)
+    - [Vereinigtes Königreich](country)
+    - [Georgien](country)
+    - [Guernsey](country)
+    - [Ghana](country)
+    - [Gibraltar](country)
+    - [Guinea](country)
+    - [Guadeloupe](country)
+    - [Gambia](country)
+    - [Guinea-Bissau](country)
+    - [Äquatorialguinea](country)
+    - [Griechenland](country)
+    - [Grenada](country)
+    - [Grönland](country)
+    - [Guatemala](country)
+    - [Französisch-Guayana](country)
+    - [Guam](country)
+    - [Guyana](country)
+    - [Hongkong](country)
+    - [Heard Island und McDonald Islands](country)
+    - [Honduras](country)
+    - [Kroatien](country)
+    - [Haiti](country)
+    - [Ungarn](country)
+    - [Indonesien](country)
+    - [Isle of Man](country)
+    - [Indien](country)
+    - [Britisches Territorium des Indischen Ozeans](country)
+    - [Irland](country)
+    - [Iran](country)
+    - [Irak](country)
+    - [Island](country)
+    - [Israel](country)
+    - [Italien](country)
+    - [Jamaika](country)
+    - [Jersey](country)
+    - [Jordanien](country)
+    - [Japan](country)
+    - [Kasachstan](country)
+    - [Kenia](country)
+    - [Kirgisistan](country)
+    - [Kambodscha](country)
+    - [Kiribati](country)
+    - [St. Kitts und Nevis](country)
+    - [Korea](country)
+    - [Kuwait](country)
+    - [Laos](country)
+    - [Libanon](country)
+    - [Liberia](country)
+    - [Libyen](country)
+    - [St. Lucia](country)
+    - [Liechtenstein](country)
+    - [Sri Lanka](country)
+    - [Lesotho](country)
+    - [Litauen](country)
+    - [Luxemburg](country)
+    - [Lettland](country)
+    - [Macao](country)
+    - [Saint Martin](country)
+    - [Marokko](country)
+    - [Monaco](country)
+    - [Moldawien](country)
+    - [Madagaskar](country)
+    - [Malediven](country)
+    - [Mexiko](country)
+    - [Marshallinseln](country)
+    - [Nordmazedonien](country)
+    - [Mali](country)
+    - [Malta](country)
+    - [Myanmar](country)
+    - [Montenegro](country)
+    - [Mongolei](country)
+    - [Nördliche Marianneninseln](country)
+    - [Mosambik](country)
+    - [Mauretanien](country)
+    - [Montserrat](country)
+    - [Martinique](country)
+    - [Mauritius](country)
+    - [Malawi](country)
+    - [Malaysia](country)
+    - [Mayotte](country)
+    - [Namibia](country)
+    - [Neu-Kaledonien](country)
+    - [Niger](country)
+    - [Norfolkinsel](country)
+    - [Nigeria](country)
+    - [Nicaragua](country)
+    - [Niue](country)
+    - [Niederlande](country)
+    - [Norwegen](country)
+    - [Nepal](country)
+    - [Nauru](country)
+    - [Neuseeland](country)
+    - [Oman](country)
+    - [Pakistan](country)
+    - [Panama](country)
+    - [Pitcairn](country)
+    - [Peru](country)
+    - [Philippinen](country)
+    - [Palau](country)
+    - [Papua Neu-Guinea](country)
+    - [Polen](country)
+    - [Puerto Rico](country)
+    - [Korea](country)
+    - [Portugal](country)
+    - [Paraguay](country)
+    - [Palästina](country)
+    - [Französisch Polynesien](country)
+    - [Katar](country)
+    - [Treffen](country)
+    - [Rumänien](country)
+    - [Russische Föderation](country)
+    - [Russland](country)
+    - [Ruanda](country)
+    - [Saudi-Arabien](country)
+    - [Sudan](country)
+    - [Senegal](country)
+    - [Singapur](country)
+    - [Süd-Georgien und die südlichen Sandwich-Inseln](country)
+    - [St. Helena](country)
+    - [Spitzbergen und Jan Mayen](country)
+    - [Salomon-Inseln](country)
+    - [Sierra Leone](country)
+    - [Der Retter](country)
+    - [San Marino](country)
+    - [Somalia](country)
+    - [Saint Pierre und Miquelon](country)
+    - [Serbien](country)
+    - [Südsudan](country)
+    - [Sao Tome und Principe](country)
+    - [Suriname](country)
+    - [Slowakei](country)
+    - [Slowenien](country)
+    - [Schweden](country)
+    - [In Swasiland](country)
+    - [Sint Maarten](country)
+    - [Seychellen](country)
+    - [Syrische Arabische Republik](country)
+    - [Turks- und Caicosinseln](country)
+    - [Tschad](country)
+    - [Gehen](country)
+    - [Thailand](country)
+    - [Tadschikistan](country)
+    - [Tokelau](country)
+    - [Turkmenistan](country)
+    - [Timor-Leste](country)
+    - [Tonga](country)
+    - [Trinidad und Tobago](country)
+    - [Tunesien](country)
+    - [Truthahn](country)
+    - [Tuvalu](country)
+    - [Taiwan](country)
+    - [Tansania](country)
+    - [Uganda](country)
+    - [Ukraine](country)
+    - [Kleinere abgelegene Inseln der Vereinigten Staaten](country)
+    - [Uruguay](country)
+    - [Vereinigte Staaten](country)
+    - [Usbekistan](country)
+    - [Vatikanstadt](country)
+    - [St. Vincent und die Grenadinen](country)
+    - [Venezuela](country)
+    - [Virgin Inseln](country)
+    - [Jungferninseln](country)
+    - [Vietnam](country)
+    - [Vanuatu](country)
+    - [Wallis und Futuna](country)
+    - [Samoa](country)
+    - [Jemen](country)
+    - [Südafrika](country)
+    - [Sambia](country)
+    - [Zimbabwe](country)

@@ -17,9 +17,12 @@ intents:
   - this_service
   - no_service
   - comparison
-  - comparison_types
+  #- comparison_types
   - privacy_policies
   - country
+  - data transfer to a specific country
+  - data transfer to a specific company
+  - data sharing between these services
 
 entities:
   - service
@@ -29,7 +32,7 @@ entities:
   - privacy_policy
   - requesting
   - comparison
-  - comparison_types
+  #- comparison_types
   - country
   - company
   
@@ -78,13 +81,13 @@ slots:
   comparison:
     type: any
 
-  comparison_types:
-    type: categorical
-    values:
-    - data transfer to a specific country
-    - data transfer to a specific company
-    - data sharing between these services
-    influence_conversation: true
+#  comparison_types:
+#    type: categorical
+#    values:
+#    - data transfer to a specific country
+#    - data transfer to a specific company
+#    - data sharing between these services
+#    influence_conversation: true
     
   country:
     type: any
@@ -106,6 +109,7 @@ actions:
 - action_fill_company_slot
 - action_fill_service_slot
 - action_give_comparison_info_sharing_between
+
 
 
 responses:
@@ -210,11 +214,11 @@ responses:
   - text: "What are you interested in?"
     buttons: 
     - title: "Which of these services transfer my data to a specific country?"
-      payload: '/comparison_types{"comparison_types":"data transfer to a specific country"}'
+      payload: "data transfer to a specific country"
     - title: "Which of these services transfer my data to a specific company?"
-      payload: '/comparison_types{"comparison_types":"data transfer to a specific company"}'
+      payload: "data transfer to a specific company"
     - title: "Is my personal data shared between these services?"
-      payload: '/comparison_types{"comparison_types":"data sharing between these services"}'
+      payload: "data sharing between these services"
       
   utter_give_comparison_info:
   - text: "Here is your info"
@@ -317,9 +321,9 @@ forms:
     service:
       - type: from_entity
         entity: service
-    comparison_types:
-      - type: from_entity
-        entity: comparison_types
+    #comparison_types:
+    #  - type: from_entity
+    #    entity: comparison_types
     country:
       - type: from_entity
         entity: country
