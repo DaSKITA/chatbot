@@ -12,6 +12,7 @@ nlu:
     - Welche Informationen kannst du mir geben?
 
 
+
 - intent: privacy_policies
   examples: |
     - [Datenschutzerklärung](privacy_policy)
