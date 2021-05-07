@@ -39,9 +39,10 @@ for r in result_dict_company:
             list_services.append(companies)
 list_services = list(dict.fromkeys(list_services))
 list_services.remove("null")
+
 #combine services and third parties in string
 for name in list_services:
-    string_services= string_services+ "- [" + str(name) + "](service)\n"
+    string_services= string_services+ "- [" + str(name) + "](service_company)\n"
 
 
 
