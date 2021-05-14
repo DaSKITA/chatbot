@@ -17,12 +17,12 @@ intents:
   - this_service
   - no_service
   - comparison
-  #- comparison_types
   - privacy_policies
   - country
   - data transfer to a specific country
   - data transfer to a specific company
   - data sharing between these services
+  - start_again
   
   
 

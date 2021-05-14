@@ -2,6 +2,7 @@ version: "2.0"
 
 rules:
 
+
 #activate privacy form
 - rule: Activate privacy form
   steps:
@@ -337,12 +338,22 @@ rules:
   - intent: bot_usage
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
   - action: utter_ask_requesting
   
 - rule: Introduce yourself after user greets
   steps:
   - intent: greet
   - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
+  - action: utter_ask_requesting
+  
+#go back to start 
+- rule: Go back to start
+  steps:
+  - intent: start_again
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_comparison_form_comparison

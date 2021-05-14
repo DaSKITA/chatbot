@@ -10,6 +10,36 @@ nlu:
     - Wofür soll ich dich verwenden?
     - Wofür kann ich dich verwenden?
     - Welche Informationen kannst du mir geben?
+    - Wie kann der Bot verwendet werden?
+    - Was soll ich tun?
+    - Hilfe
+    - Was kann ich tun?
+    - Was soll ich machen?
+    - Was kann ich machen?
+    - Was passiert hier?
+    - Welche Fragen kann ich stellen?
+    
+- intent: start_again
+  examples: |
+    - Bitte wieder zum Anfang
+    - Starte von vorne
+    - Wieder zurück zum Anfang
+    - Zur Anfangsauswahl
+    - Wieder zurück zum Start
+    - Start
+    - Anfang
+    - Wieder von Anfang an
+    - Wieder vom Start
+    - Neustarten
+    - Neustart
+    - Neuanfang
+    - Von vorne anfangen
+    - Zur Erstauswahl
+    - Gehe zur Erstauswahl
+    - Gehe zur Anfangsauswahl
+    - Gehe zum Anfang
+    - Gehe zurück zum Start
+    - Gehe zum Start
 
 
 
@@ -25,6 +55,13 @@ nlu:
     - Hallo, ich interessiere mich für [Datenschutzerklärungen](privacy_policy) von Firmen
     - Hi, gib mir Infos zu [Datenschutzerklärungen](privacy_policy)
     - Hey, ich habe Interesse an einer [Datenschutzerklärung](privacy_policy)
+    - Ich interessiere mich für Informationen über [Datenschutzerklärungen](privacy_policy) von Diensten
+    - Ich interessiere mich für Informationen zu [Datenschutzerklärungen](privacy_policy)
+    - Ich möchte Informationen zu [Datenschutzerklärungen](privacy_policy)
+    - Infos zu [Datenschutzerklärungen](privacy_policy)
+    - Informationen zu [Datenschutzerklärungen](privacy_policy)
+    - Informationen zu einer [Datenschutzerklärung](privacy_policy)
+    - Infos zu einer [Datenschutzerklärung](privacy_policy)
 
 - synonym: Datenschutzerklärung
   examples: |
@@ -61,6 +98,8 @@ nlu:
     - Hey, ich interessiere mich für [Vergleiche](comparison) von verschiedenen Datenschutzerklärungen
     - Ich möchte verschiedene Datenschutzerklärungen [vergleichen](comparison)
     - Ich möchte die Datenschutzerklärungen von verschiedenen Diensten [vergleichen](comparison)
+    - Ich interessiere mich dafür Datenschutzerklärungen von verschiedenen Diensten zu [vergleichen](comparison)
+    - Ich interessiere mich dafür Datenschutzerklärungen zu [vergleichen](comparison)
 
 
 - intent: requesting
@@ -72,10 +111,14 @@ nlu:
     - Ich interessiere mich für eine [Auskunftsanfrage](requesting) bei einem Dienst
     - Ich möchte eine [Auskunftsanfrage](requesting) stellen
     - Ich möchte eine [Anfrage](requesting) zu meinen Daten bei einem Dienst stellen
+    - Ich möchte eine [Auskunft](requesting) erhalten
+    - Ich interessiere mich dafür eine [Auskunft](requesting) zu bekommen
+    - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
 
 
 - intent: services
   examples: |
+    - [Bundesministerium der Justiz und für Verbraucherschutz](service_company)
     - [Elias Company](service_company)
     - [Orange](service_company)
     - [Black](service_company)
@@ -83,7 +126,8 @@ nlu:
     - [Yellow](service_company)
     - [Green](service_company)
     - [Red](service_company)
-    - [Blue](service_company)
+    - [InformationsTechnikZentrum Bund (ITZBund)](service_company)
+    - [Matomo](service_company)
     - [Yellow Company AG](service_company)
     - [Purple](service_company)
 
@@ -210,21 +254,21 @@ nlu:
     - Weitergabe an ein Land
     - Weitergabe an ein bestimmtes Land
     - Ich interessiere mich für ein bestimmtes Land
-    
+
 - intent: data transfer to a specific company
   examples: |
     - Datenweitergabe an einen bestimmten Dienst
     - Weitergabe an einen Dienst
     - Weitergabe an einen bestimmten Dienst
     - Ich interessiere mich für einen bestimmten Dienst
-    
+
 - intent: data sharing between these services
   examples: |
     - Datenaustausch
     - Austausch der Daten zwischen den Diensten
     - Datenaustausch zwischen den Diensten
     - Datenaustausch untereinander
-    
+
 #- intent: comparison_types
 #  examples: |
 #    - [Datenweitergabe an ein bestimmtes Land](comparison_types)
@@ -273,7 +317,9 @@ nlu:
     - Natürlich
     - Exakt
     - Ja, bitte
+    - ja bitte
     - Ja, danke
+    - ja danke
     - Korrekt
     - Okay
     - Perfekt
