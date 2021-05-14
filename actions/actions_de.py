@@ -21,34 +21,6 @@ from countrygroups import EUROPEAN_UNION
 from graphqlclient import GraphQLClient
 url='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8082/'
 
-#make sure only one of the comparison slots is set
-#class ActionSetOneComparisonSlotCountry(Action):
-#    def name(self) -> Text:
-#        return "action_fill_one_comparison_slot_country"
-#    def run(self, 
-#            dispatcher: CollectingDispatcher,
-#            tracker: Tracker,
-#            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#        return [SlotSet("comparison_type_company", None), SlotSet("comparison_type_sharing", None)]
-#
-#class ActionSetOneComparisonSlotCompany(Action):
-#    def name(self) -> Text:
-#        return "action_fill_one_comparison_slot_company"
-#    def run(self, 
-#            dispatcher: CollectingDispatcher,
-#            tracker: Tracker,
-#            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#        return [SlotSet("comparison_type_country", None), SlotSet("comparison_type_sharing", None)]
-#
-#class ActionSetOneComparisonSlotCountry(Action):
-#    def name(self) -> Text:
-#        return "action_fill_one_comparison_slot_sharing"
-#    def run(self, 
-#            dispatcher: CollectingDispatcher,
-#            tracker: Tracker,
-#            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-#        return [SlotSet("comparison_type_company", None), SlotSet("comparison_type_country", None)]
-
 #fill services slot 
 class ActionSetSlotValueRequest(Action):
     def name(self) -> Text:
@@ -85,14 +57,16 @@ class ActionReadServices(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result = client.execute('''query { TiltNodes { edges { node { meta { name language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        
         buttons = []
         message="Mögliche Dienste sind: "
         for r in result_dict:
-            name=r["node"]["meta"]["name"]
-            message = message + name + ", "
+            if r["node"]["meta"]["language"]=="de":
+                name=r["node"]["meta"]["name"]
+                message = message + name + ", "
         
         message=message[:-2]
         dispatcher.utter_message(text=message)

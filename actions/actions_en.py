@@ -57,17 +57,16 @@ class ActionReadServices(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result = client.execute('''query { TiltNodes { edges { node { meta { name language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        
         buttons = []
-        message="Possible services are: "
+        message="Mögliche Dienste sind: "
         for r in result_dict:
-            name=r["node"]["meta"]["name"]
-            #payload= "/services{\"service\":\"" + name + "\"}"
-            #buttons.append(
-                #{"title": "{}".format(name), "payload": payload})
-            message = message + name + ", "
+            if r["node"]["meta"]["language"]=="en":
+                name=r["node"]["meta"]["name"]
+                message = message + name + ", "
         
         #message="Which service are you interested in?"
         message=message[:-2]
