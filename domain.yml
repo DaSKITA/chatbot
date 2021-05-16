@@ -1,0 +1,383 @@
+version: "2.0"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - bot_usage
+  - privacy_policy
+  - requesting
+  - services
+  - datatypes
+  - another_service
+  - this_service
+  - no_service
+  - comparison
+  - privacy_policies
+  - country
+  - data transfer to a specific country
+  - data transfer to a specific company
+  - data sharing between these services
+  - start_again
+  
+  
+
+entities:
+  - service_company
+  - datatype
+  - request
+  - policy
+  - privacy_policy
+  - requesting
+  - comparison
+  #- comparison_types
+  - country
+
+  
+  
+
+slots:
+  service_company:
+    type: list
+
+  service:
+    type: list
+    
+  datatype:
+    type: categorical
+    values:
+    - Metadaten
+    - Länder
+    - Drittparteien
+    - Anzahl von Drittparteien
+    - persönliche Daten
+    - Datenschutzbeauftragter
+    - Datenportabilität
+    - Rechte
+    - Controller
+    
+  request:
+    type: categorical
+    values: 
+    - Requesting at this service
+    - Requesting at another service
+    - No requesting at all
+    
+  policy:
+    type: categorical
+    values:
+    - Policy of this service
+    - Policy of another service
+    - No policy at all
+  
+  privacy_policy:
+    type: any
+    
+  requesting:
+    type: any
+
+  comparison:
+    type: any
+
+  #comparison_type_country:
+  #  type: any
+  #  
+  #comparison_type_company:
+  #  type: any
+  #  
+  #comparison_type_sharing:
+  #  type: any
+#  comparison_types:
+#    type: categorical
+#    values:
+#    - Datenweitergabe an ein bestimmtes Land
+#    - Datenweitergabe an einen bestimmten Dienst
+#    - Datenaustausch
+#    influence_conversation: true
+    
+  country:
+    type: any
+    
+  company:
+    type: any
+    
+
+actions: 
+- action_give_privacy_info
+- action_change_to_request
+- action_change_to_privacy
+- action_this_service
+- action_another_service
+- action_no_service
+- action_read_services
+- action_give_comparison_info_country
+- action_give_comparison_info_company
+- action_fill_company_slot
+- action_fill_service_slot
+- action_give_comparison_info_sharing_between
+#- action_fill_one_comparison_slot_company
+#- action_fill_one_comparison_slot_country
+#- action_fill_one_comparison_slot_sharing
+
+
+responses:
+
+#exception handling
+  utter_default:
+  - text: "Tut mir Leid, das habe ich nicht verstanden. Könntest du deine Eingabe bitte umformulieren?"
+
+# bot introduction
+  utter_bot_usage:
+  - text: "Test Welcome"
+    channel: "alexa_assistant"
+  - text: "Willkommen, ich bin ein Bot, der dir hilft Informationen über den Datenschutz verschiedener Dienste zu erhalten. Wofür interessierst du dich?"
+
+
+#ask privacy policy
+  utter_ask_privacy_form_privacy_policy:
+  - text: "Interessierst du dich für Informationen über die Datenschutzerklärungen von Diensten?"  
+  
+#ask request
+  utter_ask_requesting:
+  - text: "Oder hast du Interesse daran eine Auskunftsanfrage zu deinen Daten an einen Dienst zu stellen?"  
+  
+#ask comparison
+  utter_ask_comparison_form_comparison:
+  - text: "Oder möchtest du die Datenschutzerklärungen von verschiedenen Diensten vergleichen?"
+
+#change to privacy path
+  utter_ask_privacy_policy_path:
+  - text: "Interessierst du dich für Informationen über die Datenschutzerklärung von diesem oder einem anderen Dienst?"
+
+  #utter_ask_this_service_privacy:
+  utter_ask_change_to_privacy_form_policy:
+  - text: "Interessierst du dich für Informationen über die Datenschutzerklärung von diesem oder einem anderen Dienst?"
+    buttons: 
+    - title: "Dieser Dienst"
+      payload: '/this_service{"policy":"Dieser Diens"}'
+    - title: "Ein anderer Dienst"
+      payload: '/another_service{"policy":"Another service"}'
+    - title: "Ich interessiere mich nicht dafür"
+      payload: '/no_service{"policy":"No service"}'
+    
+
+#privacy path  
+  
+  utter_ask_privacy_form_service:
+    - text: "Für welchen Dienst interessierst du dich?"
+
+  utter_ask_privacy_form_datatype:
+  - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder deine Rechte an diesen Daten)?"
+    channel: 'alexa_assistant'
+  - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder deine Rechte an diesen Daten)?"
+    channel: 'telegram'
+  - text: "Für welche Informationen interessierst du dich?"
+    buttons: 
+    - title: "Metadaten"
+      payload: '/datatypes{"datatype":"Metadaten"}'
+    - title: "Länder, in die meine Daten weitergegeben werden"
+      payload: '/datatypes{"datatype":"Länder"}'
+    - title: "Drittparteien an die meine Daten weitergegeben werden"
+      payload: '/datatypes{"datatype":"Drittparteien"}'
+    - title: "Anzahl der Drittparteien an die meine Daten weitergegeben werden"
+      payload: '/datatypes{"datatype":"Anzahl von Drittparteien"}'
+    - title: "Persönliche Daten, die gespeichert werden"
+      payload: '/datatypes{"datatype":"persönliche Daten"}'
+    - title: "Datenschutzbeauftragter"
+      payload: '/datatypes{"datatype":"Datenschutzbeauftragter"}'
+    - title: "Informationen zur Datenportabilität"
+      payload: '/datatypes{"datatype":"Datenportabilität"}'
+    - title: "Information zu meinen Rechten an den Daten"
+      payload: '/datatypes{"datatype":"Rechte"}'
+    - title: "Controller"
+      payload: '/datatypes{"datatype":"Controller"}'
+  
+  
+  utter_datatypes_again:
+  - text: "Interessierst du dich für weitere Informationen?"
+  
+  utter_ask_service_again:
+  - text: "Interessierst du dich für einen weiteren Dienst?"
+  
+#change to request path      
+  utter_ask_request_path:
+  - text: "Möchtest du eine Auskunftsanfrage zu deinen Daten an einen Dienst zu stellen?"
+  
+  #utter_ask_this_service_request:
+  utter_ask_change_to_request_form_request:
+  - text: "Möchtest du eine Auskunftsanfrage an diesen oder einen anderen Dienst stellen?"
+    buttons: 
+    - title: "An diesen Dienst"
+      payload: '/this_service{"request":"This service"}'
+    - title: "An einen anderen Dienst"
+      payload: '/another_service{"request":"Another service"}'
+    - title: "Ich möchte keine Auskunftsanfrage stellen"
+      payload: '/no_service{"request":"No service"}'
+
+#comparison path
+  utter_ask_comparison_form_service:
+  - text: "Welche Dienste interessieren dich?"
+  
+  utter_ask_comparison_form_comparison_types:
+  - text: "Woran hast du Interesse?"
+    buttons: 
+    - title: "Welche dieser Dienste meine Daten an ein bestimmtes Land weitergeben."
+      payload: "Weitergabe an ein Land"
+    - title: "Welche dieser Dienste meine Daten an eine bestimmte Drittpartei weitergeben."
+      payload: "Datenweitergabe an einen bestimmten Dienst"
+    - title: "Ob meine persönlichen Daten zwischen diesen Diensten geteilt werden."
+      payload: "Datenaustausch"
+      
+  utter_give_comparison_info:
+  - text: "Hier sind deine Informationen."
+  
+  utter_ask_comparison_country:
+  - text: "Für welches Land interessierst du dich?"
+  
+  utter_ask_comparison_company:
+  - text: "Für welche Drittpartei interessierst du dich?"
+  
+  utter_ask_comparison_types_again:
+  - text: "Interessierst du dich für weitere Vergleiche?"
+  
+  utter_ask_service_again_comparison:
+  - text: "Interessierst du dich für Vergleiche anderer Dienste?"
+  
+
+#request path
+  utter_ask_request_form_service:
+  - text: "Für welchen Dienst interessierst du dich?"
+    buttons: 
+    - title: "Google"
+      payload: '/services{"service":"Google"}'
+    - title: "Amazon"
+      payload: '/services{"service":"Amazon"}'
+    - title: "Facebook"
+      payload: '/services{"service":"Facebook"}'
+
+  utter_ask_request_form_datatype:
+  - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder welche Rechte du an diesen Daten hast)?"
+    channel: 'alexa_assistant'
+  - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder welche Rechte du an diesen Daten hast)?"
+    channel: 'telegram'
+  - text: "Für welche Informationen interessierst du dich?"
+    buttons: 
+    - title: "Metadaten"
+      payload: '/datatypes{"datatype":"metadata"}'
+    - title: "Länder, in die meine Daten weitergegeben werden"
+      payload: '/datatypes{"datatype":"countries"}'
+    - title: "Drittparteien an die meine Daten weitergegeben werden"
+      payload: '/datatypes{"datatype":"third parties"}'
+    - title: "Anzahl der Drittparteien an die meine Daten weitergegeben werden"
+      payload: '/datatypes{"datatype":"number of third parties"}'
+    - title: "Persönliche Daten, die gespeichert werden"
+      payload: '/datatypes{"datatype":"personal data"}'
+    - title: "Datenschutzbeauftragter"
+      payload: '/datatypes{"datatype":"data protection officer"}'
+    - title: "Informationen zum Zugriff auf meine Daten"
+      payload: '/datatypes{"datatype":"access to data portability"}'
+    - title: "Information zu meinen Rechten an den Daten"
+      payload: '/datatypes{"datatype":"right"}'
+    - title: "Controller"
+      payload: '/datatypes{"datatype":"controller"}'
+  
+  utter_ask_authentification:
+  - text: "Was ist deine Authentifizierung? TODO"
+
+  utter_ask_request_again:
+  - text: "Möchtest du eine Auskunftsanfrage bei diesem oder einem anderen Dienst stellen?"
+
+
+#greeting
+  utter_greet:
+  - text: "Hallo!"
+
+  utter_cheer_up:
+  - text: "Hier ist etwas, das dich aufheitern wird."
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Hat dir das weitergeholfen?"
+
+  utter_happy:
+  - text: "Super, weiter so!"
+
+#goodbye
+  utter_goodbye:
+  - text: "Tschüss und bis zum nächsten Mal!"
+
+  utter_iamabot:
+  - text: "Ich bin ein Bot, der dir hilft Informationen über den Datenschutz verschiedener Dienste zu erhalten."
+
+forms:
+  privacy_form:
+    privacy_policy:
+      - type: from_entity
+        entity: privacy_policy
+    services:
+      - type: from_entity
+        entity: service
+    datatype:
+      - type: from_entity
+        entity: datatype
+        
+  comparison_form:
+    comparison:
+      - type: from_entity
+        entity: comparison
+    service_company:
+      - type: from_entity
+        entity: service_company
+    service:
+      - type: from_entity
+        entity: service
+    #comparison_types:
+    #  - type: from_entity
+    #    entity: comparison_types
+    #comparison_type_country:
+    #  - type: from_intent
+    #    value: data transfer to a specific country
+    #    intent: data transfer to a specific country
+    #comparison_type_company:
+    #  - type: from_intent
+    #    value: data transfer to a specific company
+    #    intent: data transfer to a specific company
+    #comparison_type_sharing:
+    #  - type: from_intent
+    #    value: data sharing between these services
+    #    intent: data sharing between these services
+    country:
+      - type: from_entity
+        entity: country
+    company:
+      - type: from_entity
+        entity: company
+        
+  request_form:
+    requesting:
+      - type: from_entity
+        entity: requesting
+    services:
+      - type: from_entity
+        entity: service
+    datatype:
+      - type: from_entity
+        entity: datatype
+        
+  change_to_request_form:
+    request:
+      - type: from_entity
+        entity: request
+        
+  change_to_privacy_form:
+    policy:
+      - type: from_entity
+        entity: policy
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
