@@ -1,5 +1,4 @@
-version: '2.0'
-
+version: "2.0"
 nlu:
 - intent: bot_usage
   examples: |
@@ -18,7 +17,6 @@ nlu:
     - Was kann ich machen?
     - Was passiert hier?
     - Welche Fragen kann ich stellen?
-    
 - intent: start_again
   examples: |
     - Bitte wieder zum Anfang
@@ -40,9 +38,6 @@ nlu:
     - Gehe zum Anfang
     - Gehe zurück zum Start
     - Gehe zum Start
-
-
-
 - intent: privacy_policies
   examples: |
     - [Datenschutzerklärung](privacy_policy)
@@ -59,35 +54,15 @@ nlu:
     - Ich interessiere mich für Informationen zu [Datenschutzerklärungen](privacy_policy)
     - Ich möchte Informationen zu [Datenschutzerklärungen](privacy_policy)
     - Infos zu [Datenschutzerklärungen](privacy_policy)
-    - Informationen zu [Datenschutzerklärungen](privacy_policy)
     - Informationen zu einer [Datenschutzerklärung](privacy_policy)
     - Infos zu einer [Datenschutzerklärung](privacy_policy)
-
-- synonym: Datenschutzerklärung
-  examples: |
-    - Datenschutzbestimmung
-    - Datenschutzerklärungen
-    - Datenschutzbestimmungen
-    - Datenschutz Erklärung
-    - Datenschutz Bestimmung
-    - Datenschutz-Bestimmung
-    - Datenschutz-Erklärung
-
-- synonym: Dienst
-  examples: |
-    - Firmen
-    - Unternehmen
-    - Diensten
-    - Dienste
-    - Service
-    - Services
-
+    - eine [datenschutzerklärung](privacy_policy)
 - intent: comparison
   examples: |
     - [vergleich](comparison)
     - [vergleichen](comparison)
     - Ich interessiere mich für einen [Vergleich](comparison) von verschiedenen Datenschutzerklärungen.
-    - [vergleichen](comparison) von Datenschutzerklärungen 
+    - [vergleichen](comparison) von Datenschutzerklärungen
     - [Vergleich](comparison) von Diensten
     - [vergleichen](comparison) von verschiedenen Diensten
     - [vergleichen](comparison) der Datenschutzerklärungen von verschiedenen Diensten
@@ -100,12 +75,10 @@ nlu:
     - Ich möchte die Datenschutzerklärungen von verschiedenen Diensten [vergleichen](comparison)
     - Ich interessiere mich dafür Datenschutzerklärungen von verschiedenen Diensten zu [vergleichen](comparison)
     - Ich interessiere mich dafür Datenschutzerklärungen zu [vergleichen](comparison)
-
-
 - intent: requesting
   examples: |
     - [Anfrage](requesting)
-    - [Auskunftsanfrage](requesting) 
+    - [Auskunftsanfrage](requesting)
     - [Auskunftsanfrage](requesting) bei einem Dienst
     - [Auskunft](requesting) von einem Dienst
     - Ich interessiere mich für eine [Auskunftsanfrage](requesting) bei einem Dienst
@@ -114,8 +87,6 @@ nlu:
     - Ich möchte eine [Auskunft](requesting) erhalten
     - Ich interessiere mich dafür eine [Auskunft](requesting) zu bekommen
     - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
-
-
 - intent: services
   examples: |
     - [Bundesministerium der Justiz und für Verbraucherschutz](service_company)
@@ -130,14 +101,6 @@ nlu:
     - [Matomo](service_company)
     - [Yellow Company AG](service_company)
     - [Purple](service_company)
-
-- synonym: WhatsApp
-  examples: |
-    - Whats App
-    - Whatsapp
-    - whatsapp
-    - whats app
-
 - intent: another_service
   examples: |
     - ein anderer Dienst
@@ -148,8 +111,6 @@ nlu:
     - Ich interessiere mich für andere Dienste
     - andere Dienste
     - bei anderen Diensten
-
-
 - intent: this_service
   examples: |
     - dieser Dienst
@@ -159,8 +120,6 @@ nlu:
     - Ich habe interesse am jetzigen Dienst
     - ich habe Interesse an diesem Dienst
     - Gib mir Informationen zu diesem Dienst
-
-
 - intent: no_service
   examples: |
     - kein Dienst
@@ -168,8 +127,6 @@ nlu:
     - Ich interessiere mich für keinen Dienst
     - Ich interessiere mich für gar keinen Dienst
     - Ich habe doch an keinem Dienst Interesse
-
-
 - intent: datatypes
   examples: |
     - [Drittparteien](datatype) zu denen meine Daten weitergeleitet werden
@@ -186,7 +143,7 @@ nlu:
     - An welche [Länder](datatype) werden meine Daten gegeben?
     - An welche [Länder](datatype) werden die Daten weitergeleitet?
     - Zu welcher [Anzahl von Drittparteien](datatype) werden meine Daten gegeben?
-    - Zu wievielen [Anzahl von Drittparteien](datatype) werden meine Daten weitergeleitet?   
+    - Zu wievielen [Anzahl von Drittparteien](datatype) werden meine Daten weitergeleitet?
     - [Anzahl von Drittparteien](datatype)
     - [Anzahl von Drittparteien](datatype) zu denen meine Daten weitergegeben werden.
     - [Metadaten](datatype)
@@ -218,67 +175,24 @@ nlu:
     - Was sind meine [Rechte](datatype) an den Daten?
     - [Controller](datatype)
     - Ich interessiere mich für den [Controller](datatype)
-
-- synonym: Metadaten
-  examples: |
-    - Meta Daten
-    - meta daten
-    - meta Daten
-    - Meta daten
-- synonym: Datenschutzbeauftragter
-  examples: |
-    - Datenschutzbeauftragte
-- synonym: Rechte
-  examples: |
-    - Recht
-    - meine Rechte
-    - Rechten
-    - mein Recht
-- synonym: Datenportabilität
-  examples: |
-    - Daten Portabilität
-    - Daten-Portabilität
-- synonym: Anzahl der Drittparteien
-  examples: |
-    - Wieviele Drittparteien
-
-- synonym: Drittparteien
-  examples: |
-    - Dritt-Parteien
-    - Dritt Parteien
-    - dritt Parteien
-
 - intent: data transfer to a specific country
   examples: |
     - Datenweitergabe an ein bestimmtes Land
     - Weitergabe an ein Land
     - Weitergabe an ein bestimmtes Land
     - Ich interessiere mich für ein bestimmtes Land
-
 - intent: data transfer to a specific company
   examples: |
     - Datenweitergabe an einen bestimmten Dienst
     - Weitergabe an einen Dienst
     - Weitergabe an einen bestimmten Dienst
     - Ich interessiere mich für einen bestimmten Dienst
-
 - intent: data sharing between these services
   examples: |
     - Datenaustausch
     - Austausch der Daten zwischen den Diensten
     - Datenaustausch zwischen den Diensten
     - Datenaustausch untereinander
-
-#- intent: comparison_types
-#  examples: |
-#    - [Datenweitergabe an ein bestimmtes Land](comparison_types)
-#    - [Datenweitergabe an einen bestimmten Dienst](comparison_types)
-#    - [Datenaustausch](comparison_types)
-#    - [Datenaustausch](comparison_types) zwischen den Diensten
-#    - [Datenaustausch](comparison_types) zwischen Diensten
-#    - [Datenaustausch](comparison_types) untereinander
-
-
 - intent: greet
   examples: |
     - hey
@@ -293,7 +207,7 @@ nlu:
     - hey there
     - Heyhey
     - Guten Tag
-
+    - Hallo
 - intent: goodbye
   examples: |
     - Tschüss
@@ -306,7 +220,6 @@ nlu:
     - Tschau
     - bye bye
     - Bis später
-
 - intent: affirm
   examples: |
     - yes
@@ -333,7 +246,6 @@ nlu:
     - great
     - wonderful
     - yeah
-
 - intent: deny
   examples: |
     - no
@@ -349,14 +261,12 @@ nlu:
     - nein, danke
     - bitte nicht
     - nein, danke sehr
-
 - intent: bot_challenge
   examples: |
     - Bist du ein Bot?
     - Bist du ein Mensch?
     - Sind Sie ein Bot?
     - Was bist du?
-
 - intent: country
   examples: |
     - [EU](country)
@@ -543,7 +453,6 @@ nlu:
     - [Papua Neu-Guinea](country)
     - [Polen](country)
     - [Puerto Rico](country)
-    - [Korea](country)
     - [Portugal](country)
     - [Paraguay](country)
     - [Palästina](country)
@@ -612,3 +521,53 @@ nlu:
     - [Südafrika](country)
     - [Sambia](country)
     - [Zimbabwe](country)
+- synonym: Datenschutzerklärung
+  examples: |
+    - Datenschutzbestimmung
+    - Datenschutzerklärungen
+    - Datenschutzbestimmungen
+    - Datenschutz Erklärung
+    - Datenschutz Bestimmung
+    - Datenschutz-Bestimmung
+    - Datenschutz-Erklärung
+- synonym: Dienst
+  examples: |
+    - Firmen
+    - Unternehmen
+    - Diensten
+    - Dienste
+    - Service
+    - Services
+- synonym: WhatsApp
+  examples: |
+    - Whats App
+    - Whatsapp
+    - whatsapp
+    - whats app
+- synonym: Metadaten
+  examples: |
+    - Meta Daten
+    - meta daten
+    - meta Daten
+    - Meta daten
+- synonym: Datenschutzbeauftragter
+  examples: |
+    - Datenschutzbeauftragte
+- synonym: Rechte
+  examples: |
+    - Recht
+    - meine Rechte
+    - Rechten
+    - mein Recht
+- synonym: Datenportabilität
+  examples: |
+    - Daten Portabilität
+    - Daten-Portabilität
+- synonym: Anzahl der Drittparteien
+  examples: |
+    - Wieviele Drittparteien
+- synonym: Drittparteien
+  examples: |
+    - Dritt-Parteien
+    - Dritt Parteien
+    - dritt Parteien
