@@ -1,0 +1,12 @@
+version: "3.4"
+services:
+  db:
+    volumes:
+      - db-volume:/bitnami/postgresql
+  app:
+    image: "floramarleen/chatbot:image_tag_test8"
+    ports:
+      - 5055:5055
+volumes:
+  db-volume:
+    name: db-volume
