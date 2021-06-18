@@ -52,7 +52,7 @@ for name in list_services:
 
 
 # intent mit allen services und companies(third parties) befüllen
-with open(r'data\de\nlu.yml', 'r', encoding = "utf-8") as yaml_file:
+with open(r'data\nlu.yml', 'r', encoding = "utf-8") as yaml_file:
     code = ruamel.yaml.load(yaml_file, Loader=ruamel.yaml.RoundTripLoader)
     for i in range(len(code["nlu"])):
         for key in code["nlu"][i]:
@@ -60,9 +60,9 @@ with open(r'data\de\nlu.yml', 'r', encoding = "utf-8") as yaml_file:
                 if code["nlu"][i][key]=="services":
                     code["nlu"][i]["examples"]=string_services
 
-with open(r'data\de\nlu.yml', 'w', encoding = "utf-8") as yaml_file:
+with open(r'data\nlu.yml', 'w', encoding = "utf-8") as yaml_file:
     dump = ruamel.yaml.dump(code, default_flow_style = False, allow_unicode = True, encoding = None, Dumper=ruamel.yaml.RoundTripDumper)
     yaml_file.write( dump )
 
 # rasa train ausführen
-os.system("rasa train --data data/de/ --config config_domain/de/config.yml --domain config_domain/de/domain.yml --fixed-model-name 'de-model'")
+os.system("rasa train --fixed-model-name 'de-model'")

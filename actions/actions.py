@@ -17,9 +17,11 @@ import pytz
 import ast
 import json
 from countrygroups import EUROPEAN_UNION
+from deep_translator import GoogleTranslator
 
 from graphqlclient import GraphQLClient
 url='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8082/'
+
 
 #fill services slot 
 class ActionSetSlotValueRequest(Action):
@@ -42,11 +44,38 @@ class ActionSetSlotValueRequest(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        slot_value_service_company = tracker.get_slot('service_company')
-        slot_value_company=slot_value_service_company[0]
+        slot_value_company=tracker.latest_message['text']
         return [SlotSet("company", slot_value_company)]
 
+    
+#read possible services from tilt hub and give options as buttons
+class ActionGiveOptions(Action):
+    def name(self) -> Text:
+        return "action_give_options"
 
+    def run(self, 
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        buttons=[]
+        message="Möglichkeiten sind: "
+        channel = tracker.get_latest_input_channel() #get channel which is used
+        if channel=="socketio":
+            #buttons.append({"title": "Metadaten", "payload": '/datatypes{"datatype":"Metadaten"}'})
+            buttons.append({"title": "Länder, in die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Länder"}'})
+            buttons.append({"title": "Drittparteien an die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Drittparteien"}'})
+            buttons.append({"title": "Anzahl der Drittparteien an die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Anzahl von Drittparteien"}'})
+            buttons.append({"title": "Persönliche Daten, die gespeichert werden", "payload": '/datatypes{"datatype":"persönliche Daten"}'})
+            buttons.append({"title": "Datenschutzbeauftragter", "payload": '/datatypes{"datatype":"Datenschutzbeauftragter"}'})
+            buttons.append({"title": "Informationen zur Datenportabilität", "payload": '/datatypes{"datatype":"Datenportabilität"}'})
+            buttons.append({"title": "Information zu meinen Rechten an den Daten", "payload": '/datatypes{"datatype":"Rechte"}'})
+            buttons.append({"title": "Controller", "payload": '/datatypes{"datatype":"Controller"}'})
+        else:
+            message="Möglichkeiten sind: Länder, in die deine Daten weitergegeben werden, Drittparteien, an die deine Daten weitergegeben werden, die Anzahl dieser Drittparteien, persönliche Daten die gespeichert werden, Informationen zu deinen Rechten an den Daten, Informationen zu Datenportabilität, den Datenschutzbeauftragten oder den Controller."
+        dispatcher.utter_message(text=message, buttons=buttons)
+        return []
+
+#new action:
 #read possible services from tilt hub and give options as buttons
 class ActionReadServices(Action):
     def name(self) -> Text:
@@ -69,10 +98,9 @@ class ActionReadServices(Action):
                 message = message + name + ", "
         
         message=message[:-2]
+        
         dispatcher.utter_message(text=message)
         return []
-
-
 #update Slots for path change
 class ActionSetSlotValueRequest(Action):
     def name(self) -> Text:
@@ -150,7 +178,7 @@ class ActionSetSlotNoServicePrivacy(Action):
 
         
 #give comparison info about personal data
-class ActionGiveComparisonInfoCountry(Action):
+class ActionGiveComparisonInfoSharingBetween(Action):
     def name(self) -> Text:
         return "action_give_comparison_info_sharing_between"
     def run(self, 
@@ -159,8 +187,6 @@ class ActionGiveComparisonInfoCountry(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         #get slot value
         service_list=tracker.get_slot("service")
-        #company=tracker.get_slot("company")
-        #company=str(company).title()
         
         #check if service name is possible, else return
         client = GraphQLClient(url)
@@ -170,28 +196,32 @@ class ActionGiveComparisonInfoCountry(Action):
         
         #loop through all given services and give info
         for service in service_list:
-            service_upper=str(service).title()
+            service_upper=service.title()
+            service_upper2=service.capitalize()
             #check if service name is possible, else return
+            meta_name=service
             contains=0
             for r in result_dict:
-                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
+                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"] or service_upper2 == r["node"]["meta"]["name"]:
                     contains=1
-                    meta_name=service_upper
-            if contains==0:
-                dispatcher.utter_message(text="Leider haben wir keine Informationen zum Dienst {}.".format(service))
-                if service==service_list[-1]:
-                    return []
-                else: 
-                    service_list.remove(service)
+                    if service == r["node"]["meta"]["name"]:
+                        meta_name=service
+                    else:
+                        meta_name=service_upper
                 
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
-            file= requests.get(address, auth=('admin', 'secret'))
+            
+            # load password and username for database access
+            f=open('./access_data.json')
+            data=json.load(f)
+            username=data["database"]["user"]
+            pw=data["database"]["pw"]
+            file= requests.get(address, auth=(str(username), str(pw)))
             file_read = json.loads(file.text[1:-1])
             instance = tilt.tilt_from_dict(file_read)
             
             #check if service transferres data to company
-            #string_list=[]
             part_yes="Der Dienst " + str(service) + " teilt deine Daten mit "
             yes_list=[]
             for element in list(instance.data_disclosed):
@@ -200,10 +230,8 @@ class ActionGiveComparisonInfoCountry(Action):
                         yes_list.append(str(recipient.name).title())
             if yes_list!=[]:
                 string_service=part_yes+ ', '.join([str(elem) for elem in yes_list]) + "."
-                #string_list.append(string_service)
             else:
-                string_service="Der Dienst " + str(service) + " teilt deine Daten mit keinem anderen Dienst."
-                #string_list.append(string_service)
+                string_service="Der Dienst " + str(service) + " teilt deine Daten mit keinem der anderen Dienste."
             dispatcher.utter_message(text=string_service)
         
                                              
@@ -220,8 +248,8 @@ class ActionGiveComparisonInfoCountry(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         #get slot values
         service_list=tracker.get_slot("service")
-        country=tracker.get_slot("country")
-        
+        country_de=tracker.get_slot("country")
+        country=GoogleTranslator(source='de', target='en').translate(country_de) #get english name of country
         #check if service name is possible, else return
         client = GraphQLClient(url)
         result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
@@ -236,7 +264,10 @@ class ActionGiveComparisonInfoCountry(Action):
             for r in result_dict:
                 if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
                     contains=1
-                    meta_name=service_upper
+                    if service == r["node"]["meta"]["name"]:
+                        meta_name= service
+                    else: 
+                        meta_name=service_upper
             if contains==0:
                 dispatcher.utter_message(text="Leider haben wir keinen Informationen über den Dienst {}.".format(service))
                 if service==service_list[-1]:
@@ -246,13 +277,19 @@ class ActionGiveComparisonInfoCountry(Action):
                 
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
-            file= requests.get(address, auth=('admin', 'secret'))
+            #load password and username for database access
+            f=open('./access_data.json')
+            data=json.load(f)
+            username=data["database"]["user"]
+            pw=data["database"]["pw"]
+            #get file
+            file= requests.get(address, auth=(username, pw))
             file_read = json.loads(file.text[1:-1])
             instance = tilt.tilt_from_dict(file_read)
             
             #check if service transferres data to country
             if not list(instance.third_country_transfers):
-                dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Land {} weiter.".format(service, country))
+                dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Land {} weiter.".format(service, country_de))
             else:
                 transfer=0
                 for element in list(instance.third_country_transfers):
@@ -261,7 +298,7 @@ class ActionGiveComparisonInfoCountry(Action):
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an das Land {} weiter.".format(service, country))
                         transfer=1
                 if transfer==0:
-                    dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Land {} weiter.".format(service, country))
+                    dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Land {} weiter.".format(service, country_de))
                                              
         return[]        
 
@@ -290,10 +327,14 @@ class ActionGiveComparisonInfoCompany(Action):
             service_upper=service.title()
             #check if service name is possible, else return
             contains=0
+            meta_name=service
             for r in result_dict:
                 if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
                     contains=1
-                    meta_name=service_upper
+                    if service == r["node"]["meta"]["name"]:
+                        meta_name=service
+                    else: 
+                        meta_name=service_upper
             if contains==0:
                 dispatcher.utter_message(text="Leider haben wir keine Informationen über den Dienst {}.".format(service))
                 if service==service_list[-1]:
@@ -303,19 +344,30 @@ class ActionGiveComparisonInfoCompany(Action):
                 
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
-            file= requests.get(address, auth=('admin', 'secret'))
+            #load password and username for database access
+            f=open('./access_data.json')
+            data=json.load(f)
+            username=data["database"]["user"]
+            pw=data["database"]["pw"]
+            #get file
+            file= requests.get(address, auth=(username, pw))
+
             file_read = json.loads(file.text[1:-1])
+            
             instance = tilt.tilt_from_dict(file_read)
             
             #check if service transferres data to company
+            answer=0
             for element in list(instance.data_disclosed):
                 transfer=0
                 for recipient in list(element.recipients):
-                    if str(recipient.name).title()==company:
+                    transfer=0
+                    if (str(recipient.name).title()==company and answer==0) or (str(recipient.name)==company and answer==0):
                         transfer=1
+                        answer=1
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an das Unternehmen {} weiter.".format(service, company))
-                if transfer==0:
-                    dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Unternehmen {} weiter.".format(service, company))
+            if transfer==0 and answer==0:
+                dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Unternehmen {} weiter.".format(service, company))
                                              
         return[]        
     
@@ -333,21 +385,26 @@ class ActionGiveServiceInfo(Action):
         #get slot values
         service=tracker.get_slot("service")
         datatype=tracker.get_slot("datatype")
+        datatype=datatype.capitalize()
         #take care of synonyms in case of text input
         if datatype in ["Meta Daten", "meta Daten", "meta daten", "Meta daten", "Metadaten"]:
             datatype= "metadata"
-        elif datatype in ["Datenschutzbeauftragte", "Datenschutzbeauftragter"]:
+        elif datatype in ["Datenschutzbeauftragte", "Datenschutzbeauftragter", "Datenschutz Beauftragter", "Datenschutz beauftragter", "Datenschutzbeauftragten"]:
             datatype="data protection officer"
         elif datatype in ["Recht", "Rechte", "meine Rechte", "mein Recht", "Rechten"]:
             datatype="right"
-        elif datatype in ["Datenportabilität", "Daten Portabilität", "Daten-Portabilität"]:
+        elif datatype in ["Datenportabilität", "Daten Portabilität", "Daten-Portabilität", "Portabilität", "Daten portabilität", "Daten-portabilität"]:
             datatype="access to data portability"
-        elif datatype in ["Anzahl der Drittparteien", "Wieviele Drittparteien"]:
+        elif datatype in ["Anzahl der Drittparteien", "Wieviele Drittparteien", "Anzahl", "Anzahl der drittparteien", "Anzahl der Dritt-Parteien", "Anzahl der dritt-parteien", "Anzahl der Dritt-parteien", "Anzahl von Dritt-Parteien", "Anzahl von drittparteien", "Anzahl von Drittparteien", "Anzahl von Dritt-parteien", "Anzahl der dritt partei", "Anzahl der Drittpartei", "Anzahl der drittpartei"]:
             datatype="number of third parties"
-        elif datatype in ["Drittparteien", "Dritt-Parteien", "Dritt Parteien", "dritt Parteien"]:
+        elif datatype in ["Drittparteien", "Dritt-Parteien", "Dritt Parteien", "dritt Parteien", "Dritt parteien", "Drittpartei"]:
             datatype="third parties"
-        elif datatype in ["Controller"]:
+        elif datatype in ["Länder", "Länder, in die meine Daten weitergegeben werden", "Länder, an die meine Daten weitergegeben werden", "Land"]:
+            datatype="countries"
+        elif datatype in ["Controller", "Control"]:
             datatype="controller"
+        elif datatype in ["persönliche Daten", "Persönliche Daten", "Persönliche daten", "persönliche Daten, die über mich gespeichert werden", "persönliche Daten, die gespeichert werden"]:
+            datatype="personal data"
         
         #map datatypes to datatypes as formulated as output
         datatypes_dict={
@@ -355,9 +412,9 @@ class ActionGiveServiceInfo(Action):
             "countries": "Länder, an die deine Daten weitergegeben werden",
             "third parties": "Drittparteien, an die deine Daten weitergegeben werden",
             "number of third parties": "Anzahl der Drittparteien, an die deine Daten weitergegeben werden",
-            "personal data": "persönliche Daten",
+            "personal data": "persönlichen Daten",
             "data protection officer": "Datenschutzbeauftragte*r",
-            "access to data portability": "Datenportabilität",
+            "access to data portability": "Datenportabilität und Datenzugriff",
             "right": "Rechte an den Daten",
             "controller": "Controller*in"
         }
@@ -379,17 +436,22 @@ class ActionGiveServiceInfo(Action):
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         service_list=service
         
-        countries_dict={} #initalize dict for countries for more services
+        countries_dict={} #initalize dict for countries in case of more services
         
         #loop through all given services and give info
         for service in service_list:
             service_upper=service.title()
+            service_upper2=service.capitalize()
             #check if service name is possible, else return
+            meta_name=service
             contains=0
             for r in result_dict:
-                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
+                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"] or service_upper2 == r["node"]["meta"]["name"]:
                     contains=1
-                    meta_name=service_upper
+                    if service == r["node"]["meta"]["name"]:
+                        meta_name=service
+                    else:
+                        meta_name=service_upper
             if contains==0:
                 dispatcher.utter_message(text="Leider haben wir keine Informationen über den Dienst {}.".format(service))
                 if service==service_list[-1]:
@@ -399,21 +461,23 @@ class ActionGiveServiceInfo(Action):
                 
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
-            #file= requests.get('http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "Blue"}', auth=('admin', 'secret'))
-            file= requests.get(address, auth=('admin', 'secret'))
+            #load password and username for database access
+            f=open('./access_data.json')
+            data=json.load(f)
+            username=data["database"]["user"]
+            pw=data["database"]["pw"]
+            #get file
+            file= requests.get(address, auth=(username, pw))
             file_read = json.loads(file.text[1:-1])
-            
-            #file = requests.get('https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json')
-            #file_read = json.loads(file.content)
             instance = tilt.tilt_from_dict(file_read)
             tilt_dict=instance.to_dict()   
-            
+#################################################################################################################################################            
             if channel =="telegram": #for telegram format differently
                 dispatcher.utter_message(text="Das sind die Informationen über die {} des Dienstes {}.".format(datatype_out, service_upper))
                         
                 if datatype=="countries" and len(service_list)==1: #if only one service given
                     if not list(instance.third_country_transfers):
-                        dispatcher.utter_message(text="Deine Daten werden an keine Drittpartei weitergegeben.")
+                        dispatcher.utter_message(text="Deine Daten werden in kein Land weitergegeben.")
                     else:
                         countries=[]
                         EU=0
@@ -425,11 +489,11 @@ class ActionGiveServiceInfo(Action):
                         number_countries=len(countries)
                         countries_string = ', '.join([str(elem) for elem in countries])
                         if number_countries>1:
-                            dispatcher.utter_message(text="Deine Daten werden an {} andere Länder weitergegeben. {} davon gehören zur Europäischen Unsion. **Die Länder sind:** {}".format(str(number_countries), str(EU), countries_string))
+                            dispatcher.utter_message(text="Deine Daten werden in {} andere Länder weitergegeben. {} davon gehören zur Europäischen Unsion. **Die Länder sind:** {}".format(str(number_countries), str(EU), countries_string))
                         elif number_countries==1 and EU==1: 
-                            dispatcher.utter_message(text="Deine Daten werden an ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}".format(countries_string))
+                            dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}".format(countries_string))
                         else:
-                            dispatcher.utter_message(text="Deine Daten werden an ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}".format(countries_string))
+                            dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}".format(countries_string))
                         
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
@@ -446,17 +510,18 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Der Dienst {} speichert keine persönlichen Daten von dir.".format(service_upper))
                     else:
                         categories_string = ', '.join([str(elem) for elem in categories])    
-                        dispatcher.utter_message(text="Der Dienst {} speichert folgende Daten: ".format(service_upper, categories_string))
+                        dispatcher.utter_message(text="Der Dienst {} speichert folgende Daten: {}.".format(service_upper, categories_string))
                     
                 elif datatype=="third parties":
                     third_parties=[]
                     for element in list(instance.data_disclosed):
                         for recipient in list(element.recipients):
                             third_parties.append(recipient.name)
+                    if None in third_parties:
+                            third_parties.remove(None)
                     if not third_parties:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        third_parties=third_parties[:-1]
                         third_parties_string = ', '.join([str(elem) for elem in third_parties])    
                         dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
                 
@@ -465,10 +530,11 @@ class ActionGiveServiceInfo(Action):
                     for element in list(instance.data_disclosed):
                         for recipient in list(element.recipients):
                             third_parties.append(recipient.name)
+                    if None in third_parties:
+                            third_parties.remove(None)
                     if not third_parties:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        third_parties=third_parties[:-1]
                         number=len(third_parties)
                         if number==1:
                             dispatcher.utter_message(text="Deine Daten werden an eine Drittpartei weitergegeben.")
@@ -481,30 +547,41 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Leider haben wir keine Informationen über {} für den Dienst {}.".format(datatype, service_upper))
                     else:
                         con=[]
+                        rep=[]
+                        if con_dict["name"]:
+                            value=str(con_dict["name"])
+                            con.append("Name: "+ str(value))
                         for element in con_dict.keys():
                             if con_dict[element]:
                                 if element=="address":
                                     address=str(con_dict[element]).replace(" ", "%20")
                                     value_link= "https://maps.google.com/?q="+address
                                     name_link=dpo_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    key_value_string="Adresse: " + "["+ name_link + "](" + value_link + ")"
                                     dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
                                 elif element=="country":
                                     country=str(dpo_dict[element])
                                     value=pytz.country_names[country]
-                                    con.append(str(element).capitalize()+ ": " +value)
+                                    con.append("Land: " +value)
                                 elif element=="representative":
-                                    con.append("Repräsentant:  \n")
+                                    if con_dict[element]["name"]:
+                                        value=con_dict[element]["name"]
+                                        rep.append("Name: "+ str(value))
                                     for el in con_dict[element].keys():
                                         if el=="email":
                                             value=str(con_dict[element][el])
                                             key_value_string=str(el).capitalize()+ ": " +value
-                                            con.append(key_value_string)
-                                        else:
+                                            rep.append(key_value_string)
+                                        elif el =="phone":
+                                            value=str(con_dict[element][el])
+                                            key_value_string="Telefonnummer"+ ": " +value
+                                            rep.append(key_value_string)
+                                        elif el!="name":
                                             value=con_dict[element][el]
                                             key_value_string=str(el).capitalize()+ ": "+value
-                                            con.append(key_value_string)
-                                else:
+                                            rep.append(key_value_string)
+                                    con.append("Repräsentant*in:  \n"+ ',  \n'.join([str(elem) for elem in rep]))
+                                elif element!="name":
                                     value=str(con_dict[element])
                                     key_value_string=str(element).capitalize()+ ": " +value
                                     con.append(key_value_string)
@@ -517,6 +594,9 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Leider haben wir keine Informationen zu {} für den Dienst {}.".format(datatype, service_upper))
                     else:
                         dpo=[]
+                        if dpo_dict["name"]:
+                            value=dpo_dict["name"]
+                            dpo.append("Name: "+ str(value))
                         for element in dpo_dict.keys():
                             if dpo_dict[element]:
                                 if element=="email":
@@ -525,19 +605,19 @@ class ActionGiveServiceInfo(Action):
                                     dpo.append(key_value_string)
                                 elif element=="phone":
                                     value=dpo_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": "+value
+                                    key_value_string="Telefonnummer: "+value
                                     dpo.append(key_value_string)
                                 elif element=="address":
                                     address=str(dpo_dict[element]).replace(" ", "%20")
                                     value_link= "https://maps.google.com/?q="+address
                                     name_link=dpo_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    key_value_string="Adresse: " + "["+ name_link + "](" + value_link + ")"
                                     dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
                                 elif element=="country":
                                     country=str(dpo_dict[element])
                                     value=pytz.country_names[country]
-                                    dpo.append(str(element).capitalize()+ ": " +value)
-                                else:
+                                    dpo.append("Land: " +value)
+                                elif element!="name":
                                     value=str(dpo_dict[element])
                                     key_value_string=str(element).capitalize()+ ": " +value
                                     dpo.append(key_value_string)
@@ -599,7 +679,7 @@ class ActionGiveServiceInfo(Action):
                             if dt_dict["url"]:
                                 info.append("URL: "+str(dt_dict["url"]))
                             if dt_dict["email"]:
-                                info.append("E-Mail: mailto:"+str(dt_dict["email"]))
+                                info.append("E-Mail: "+str(dt_dict["email"]))
                             if dt_dict["identificationEvidences"]:
                                 identification=[]
                                 info.append("Für eine Identifikation brauchst du: ")
@@ -617,13 +697,13 @@ class ActionGiveServiceInfo(Action):
                                             info_tmp= info_tmp +key_value_string + "  \n"
                                         elif element=="phone":
                                             value=dt_dict["supervisoryAuthority"][element]
-                                            key_value_string=str(element).capitalize()+ ": "+value
+                                            key_value_string="Telefonnummer: "+value
                                             info_tmp = info_tmp +key_value_string+ "  \n"
                                         elif element=="address":
                                             address=str(dt_dict["supervisoryAuthority"][element]).replace(" ", "%20")
                                             value_link= "https://maps.google.com/?q="+address
                                             name_link=dt_dict["supervisoryAuthority"][element]
-                                            key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                            key_value_string="Adresse: " + "["+ name_link + "](" + value_link + ")"
                                             dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
                                             #info_tmp.append(key_value_string)
                                         elif element=="country":
@@ -633,8 +713,7 @@ class ActionGiveServiceInfo(Action):
                                         else:
                                             value=str(dt_dict["supervisoryAuthority"][element])
                                             key_value_string=str(element).capitalize()+ ": " +value
-                                            info_tmp  = info_tmp +key_value_string+ "  \n"
-                                        #info_tmp_string = ',  \n'.join([str(elem) for elem in info_tmp])  
+                                            info_tmp  = info_tmp +key_value_string+ "  \n" 
                                 info.append(info_tmp)
                         else:
                             info.append("Hier sind die Informationen zu deinem " + right_names[rights.index(dt)]+":")
@@ -658,8 +737,9 @@ class ActionGiveServiceInfo(Action):
                                 info.append(identification_string)
                         info_string = '  \n'.join([str(elem) for elem in info])  
                         dispatcher.utter_message(text="{}".format(info_string))
-                              
-            else: #if channel is not telegram keep formating
+                        
+############################################################################################################################################                              
+            elif channel=="socketio": #if channel socketio keep formatting
                 if not (datatype=="countries" and len(service_list)>1):
                     dispatcher.utter_message(text="Das sind die Informationen über **{}** des Dienstes {}.".format(datatype_out, service_upper))
                 
@@ -699,17 +779,18 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Der Dienst {} speichert keine persönlichen Daten über dich.".format(service_upper))
                     else:
                         categories_string = ', '.join([str(elem) for elem in categories])    
-                        dispatcher.utter_message(text="Der Dienst {} speichert folgende persönlichen Daten über dich: {}".format(service_upper, categories_string))
+                        dispatcher.utter_message(text="Der Dienst {} speichert folgende persönlichen Daten über dich: {}.".format(service_upper, categories_string))
                     
                 elif datatype=="third parties":
                     third_parties=[]
                     for element in list(instance.data_disclosed):
                         for recipient in list(element.recipients):
                             third_parties.append(recipient.name)
-                    if third_parties[:-1]==[]:
+                    if None in third_parties:
+                            third_parties.remove(None)
+                    if third_parties==[]:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an keine Drittpartei weiter.".format(service_upper))
                     else:
-                        third_parties=third_parties[:-1]
                         third_parties_string = ', '.join([str(elem) for elem in third_parties])    
                         dispatcher.utter_message(text="Drittparteien sind: {}".format(third_parties_string))
                 
@@ -718,10 +799,11 @@ class ActionGiveServiceInfo(Action):
                     for element in list(instance.data_disclosed):
                         for recipient in list(element.recipients):
                             third_parties.append(recipient.name)
+                    if None in third_parties:
+                            third_parties.remove(None)
                     if not third_parties:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an keine Drittparteien weiter.".format(service_upper))
                     else:
-                        third_parties=third_parties[:-1]
                         number=len(third_parties)
                         if number==1:
                             dispatcher.utter_message(text="Deine Daten werden an eine Drittpartei weitergegeben.")
@@ -734,31 +816,41 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Unfortunately there is no information about the {} of {}.".format(datatype, service))
                     else:
                         con=[]
+                        rep=[]
+                        if con_dict["name"]:
+                            value=str(con_dict["name"])
+                            con.append("Name: "+ str(value))
                         for element in con_dict.keys():
                             if con_dict[element]:
                                 if element=="address":
                                     address=str(con_dict[element]).replace(" ", "%20")
                                     value_link= "https://maps.google.com/?q="+address
                                     name_link=con_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    key_value_string="Adresse: " + "["+ name_link + "](" + value_link + ")"
                                     con.append(key_value_string)
                                 elif element=="country":
                                     country=str(con_dict[element])
                                     value=pytz.country_names[country]
-                                    con.append(str(element).capitalize()+ ": " +value)
+                                    con.append("Land: " +value)
                                 elif element=="representative":
-                                    con_tmp="Representative:  \n"
+                                    if con_dict[element]["name"]:
+                                        value=con_dict[element]["name"]
+                                        rep.append("Name: "+ str(value))
                                     for el in con_dict[element].keys():
                                         if el=="email":
                                             value=str(con_dict[element][el])
                                             key_value_string=str(el).capitalize()+ ": " +value
-                                            con_tmp=con_tmp+key_value_string+ "  \n"
-                                        else:
+                                            rep.append(key_value_string)
+                                        elif el =="phone":
+                                            value=str(con_dict[element][el])
+                                            key_value_string="Telefonnummer"+ ": " +value
+                                            rep.append(key_value_string)
+                                        elif el !="name":
                                             value=con_dict[element][el]
                                             key_value_string=str(el).capitalize()+ ": "+value
-                                            con_tmp=con_tmp+key_value_string+"  \n"
-                                    con.append(con_tmp)
-                                else:
+                                            rep.append(key_value_string)
+                                    con.append("Repräsentant*in:  \n"+ ',  \n'.join([str(elem) for elem in rep]))
+                                elif element!="name":
                                     value=str(con_dict[element])
                                     key_value_string=str(element).capitalize()+ ": " +value
                                     con.append(key_value_string)
@@ -779,18 +871,18 @@ class ActionGiveServiceInfo(Action):
                                     sup.append(key_value_string)
                                 elif element=="phone":
                                     value=sup_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": "+value
+                                    key_value_string="Telefonnummer: "+value
                                     sup.append(key_value_string)
                                 elif element=="address":
                                     address=str(sup_dict[element]).replace(" ", "%20")
                                     value_link= "https://maps.google.com/?q="+address
                                     name_link=sup_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                    key_value_string= "Adresse: " + "["+ name_link + "](" + value_link + ")"
                                     sup.append(key_value_string)
                                 elif element=="country":
                                     country=str(sup_dict[element])
                                     value=pytz.country_names[country]
-                                    sup.append(str(element).capitalize()+ ": " +value)
+                                    sup.append("Land: " +value)
                                 else:
                                     value=str(sup_dict[element])
                                     key_value_string=str(element).capitalize()+ ": " +value
@@ -804,18 +896,21 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Leider haben wir keine Informationen über {} für den Dienst {}.".format(datatype, service_upper))
                     else:
                         dpo=[]
+                        if dpo_dict["name"]:
+                            value=dpo_dict["name"]
+                            dpo.append("Name: "+ value)
                         for element in dpo_dict.keys():
                             if dpo_dict[element]:
                                 if element=="address":
                                     address=str(dpo_dict[element]).replace(" ", "%20")
                                     value_link= "https://maps.google.com/?q="+address
                                     name_link=dpo_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": " + "*["+ name_link + "](" + value_link + ")*"
+                                    key_value_string="Adresse: " + "*["+ name_link + "](" + value_link + ")*"
                                     dpo.append(key_value_string)
                                 elif element=="country":
                                     country=str(dpo_dict[element])
                                     value=pytz.country_names[country]
-                                    key_value_string=str(element).capitalize()+ ": *" +value+"*"
+                                    key_value_string="Land: *" +value+"*"
                                     dpo.append(key_value_string)
                                 elif element=="email":
                                     value="mailto:"+ "*"+str(dpo_dict[element])+"*"
@@ -823,9 +918,9 @@ class ActionGiveServiceInfo(Action):
                                     dpo.append(key_value_string)
                                 elif element=="phone":
                                     value=dpo_dict[element]
-                                    key_value_string=str(element).capitalize()+ ": "+value
+                                    key_value_string="Telefonnummer: "+value
                                     dpo.append(key_value_string)
-                                else:
+                                elif element!="name":
                                     value="*"+str(dpo_dict[element])+"*"
                                     key_value_string=str(element).capitalize()+ ": " +value
                                     dpo.append(key_value_string)    
@@ -905,18 +1000,18 @@ class ActionGiveServiceInfo(Action):
                                             info_tmp= info_tmp +key_value_string + "  \n"
                                         elif element=="phone":
                                             value=dt_dict["supervisoryAuthority"][element]
-                                            key_value_string=str(element).capitalize()+ ": "+value
+                                            key_value_string="Telefonnummer: "+value
                                             info_tmp = info_tmp +key_value_string+ "  \n"
                                         elif element=="address":
                                             address=str(dt_dict["supervisoryAuthority"][element]).replace(" ", "%20")
                                             value_link= "https://maps.google.com/?q="+address
                                             name_link=dt_dict["supervisoryAuthority"][element]
-                                            key_value_string=str(element).capitalize()+ ": " + "["+ name_link + "](" + value_link + ")"
+                                            key_value_string="Adresse: " + "["+ name_link + "](" + value_link + ")"
                                             info_tmp = info_tmp +key_value_string+ "  \n"
                                         elif element=="country":
                                             country=str(dt_dict["supervisoryAuthority"][element])
                                             value=pytz.country_names[country]
-                                            info_tmp  = info_tmp +(str(element).capitalize()+ ": " +value) + "  \n"
+                                            info_tmp  = info_tmp +"Land: " +value + "  \n"
                                         else:
                                             value=str(dt_dict["supervisoryAuthority"][element])
                                             key_value_string=str(element).capitalize()+ ": " +value
@@ -944,24 +1039,262 @@ class ActionGiveServiceInfo(Action):
                                 info.append(identification_string)
                         info_string = '  \n'.join([str(elem) for elem in info])  
                         dispatcher.utter_message(text="{}".format(info_string))
-         
+####################################################################################################################################################         
+            else: #format for alexa
+                if datatype=="countries" and len(service_list)>1:
+                    do_nothing=0
+                else:
+                    dispatcher.utter_message(text="Das sind die Informationen des Dienstes {} über die {}.".format(service_upper, datatype_out))
+                        
+                if datatype=="countries" and len(service_list)==1: #if only one service given
+                    if not list(instance.third_country_transfers):
+                        dispatcher.utter_message(text="Deine Daten werden an keine Drittpartei weitergegeben.")
+                    else:
+                        countries=[]
+                        EU=0
+                        for element in list(instance.third_country_transfers):
+                            country_name=pytz.country_names[element.country]
+                            country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
+                            if country_name in EUROPEAN_UNION.names: #check if country is in EU
+                                EU=EU+1
+                            countries.append(country_name_german)
+                        number_countries=len(countries)
+                        countries_string = ', '.join([str(elem) for elem in countries])
+                        if number_countries>1:
+                            dispatcher.utter_message(text="Deine Daten werden an {} andere Länder weitergegeben. {} davon gehören zur Europäischen Unsion. Die Länder sind:  {}".format(str(number_countries), str(EU), countries_string))
+                        elif number_countries==1 and EU==1: 
+                            dispatcher.utter_message(text="Deine Daten werden an ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}.".format(countries_string))
+                        else:
+                            dispatcher.utter_message(text="Deine Daten werden an ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}.".format(countries_string))
+                        
+                if datatype=="countries" and len(service_list)>1: #if more than one service given
+                    countries=[]
+                    for element in list(instance.third_country_transfers):
+                        country_name=pytz.country_names[element.country]
+                        countries.append(country_name)
+                    countries_dict.update({service:countries})
+                    
+                elif datatype=="personal data":
+                    categories=[]
+                    for element in list(instance.data_disclosed):
+                        categories.append(element.category)
+                    if categories==[]:
+                        dispatcher.utter_message(text="Der Dienst {} speichert keine persönlichen Daten von dir.".format(service_upper))
+                    else:
+                        categories_string = ', '.join([str(elem) for elem in categories]) 
+                        
+                        dispatcher.utter_message(text="Der Dienst {} speichert folgende Daten: {}.".format(service_upper, categories_string))
+                    
+                elif datatype=="third parties":
+                    third_parties=[]
+                    for element in list(instance.data_disclosed):
+                        for recipient in list(element.recipients):
+                            third_parties.append(recipient.name)
+                    if None in third_parties:
+                            third_parties.remove(None)
+                    if not third_parties:
+                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
+                    else:
+                        third_parties_string = ', '.join([str(elem) for elem in third_parties])    
+                        dispatcher.utter_message(text="Drittparteien: {}.".format(third_parties_string))
+                
+                elif datatype=="number of third parties":
+                    third_parties=[]
+                    for element in list(instance.data_disclosed):
+                        for recipient in list(element.recipients):
+                            third_parties.append(recipient.name)
+                    if None in third_parties:
+                            third_parties.remove(None)
+                    if not third_parties:
+                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
+                    else:
+                        number=len(third_parties)
+                        if number==1:
+                            dispatcher.utter_message(text="Deine Daten werden an eine Drittpartei weitergegeben.")
+                        else: 
+                            dispatcher.utter_message(text="Deine Daten werden an {} Drittparteien weitergegeben.".format(number))
+                            
+                elif datatype=="controller":
+                    con_dict=tilt_dict["controller"]
+                    if not bool(con_dict):
+                        dispatcher.utter_message(text="Leider haben wir keine Informationen über {} für den Dienst {}.".format(datatype, service_upper))
+                    else:
+                        con=[]
+                        rep=[]
+                        if con_dict["name"]:
+                            value=con_dict["name"]
+                            con.append("Name: "+ str(value))
+                        for element in con_dict.keys():
+                            if con_dict[element]:
+                                if element=="address":
+                                    value_link=con_dict[element]
+                                    key_value_string="Adresse"+ ": " +  value_link + "."
+                                    con.append(key_value_string)
+                                    #unwichtig=0
+                                elif element=="country":
+                                    country=str(con_dict[element])
+                                    value=pytz.country_names[country]
+                                    con.append("Land"+ ": " +value)
+                                elif element=="representative":
+                                    if con_dict[element]["name"]:
+                                        value=con_dict[element]["name"]
+                                        rep.append("Name: "+ str(value))
+                                    for el in con_dict[element].keys():
+                                        if el=="email":
+                                            value=str(con_dict[element][el])
+                                            key_value_string=str(el).capitalize()+ ": " +value
+                                            rep.append(key_value_string)
+                                        elif el =="phone":
+                                            value=str(con_dict[element][el])
+                                            key_value_string="Telefonnummer"+ ": " +value
+                                            rep.append(key_value_string)
+                                        elif el != "name":
+                                            value=con_dict[element][el]
+                                            key_value_string=str(el).capitalize()+ ": "+value
+                                            rep.append(key_value_string)
+                                    con.append("Repräsentant*in:  \n"+ ',  \n'.join([str(elem) for elem in rep]))
+
+                                elif element !="name":
+                                    value=str(con_dict[element])
+                                    key_value_string=str(element).capitalize()+ ": " +value
+                                    con.append(key_value_string)
+                        con_string = ',  \n'.join([str(elem) for elem in con])  
+                        dispatcher.utter_message(text="{}.".format(con_string))
+                    
+                elif datatype=="data protection officer":
+                    dpo_dict=tilt_dict["dataProtectionOfficer"]
+                    if not bool(dpo_dict):
+                        dispatcher.utter_message(text="Leider haben wir keine Informationen zu {} für den Dienst {}.".format(datatype, service_upper))
+                    else:
+                        dpo=[]
+                        if dpo_dict["name"]:
+                            value=dpo_dict["name"]
+                            dpo.append("Name: "+ str(value))
+                        for element in dpo_dict.keys():
+                            if dpo_dict[element]:
+                                if element=="email":
+                                    value=str(dpo_dict[element])
+                                    key_value_string="E-Mail"+ ": " +value
+                                    dpo.append(key_value_string)
+                                elif element=="phone":
+                                    value=dpo_dict[element]
+                                    key_value_string="Telefonnummer"+ ": "+value
+                                    dpo.append(key_value_string)
+                                elif element=="address":
+                                    value_link=dpo_dict[element]
+                                    key_value_string= "Adresse: " +  str(value_link) + "."
+                                    dpo.append(key_value_string)
+                                elif element=="country":
+                                    country=str(dpo_dict[element])
+                                    value=pytz.country_names[country]
+                                    dpo.append("Land"+ ": " +value)
+                                elif element !="name":
+                                    value=str(dpo_dict[element])
+                                    key_value_string=str(element).capitalize()+ ": " +value
+                                    dpo.append(key_value_string)
+                        dpo_string = ',  \n'.join([str(elem) for elem in dpo])  
+                        dispatcher.utter_message(text="{}.".format(dpo_string))
+                    
+                elif datatype=="access to data portability":
+                    access_dict=tilt_dict["accessAndDataPortability"]
+                    if not bool(access_dict):
+                        dispatcher.utter_message(text="Leider haben wir keine Informationen zu {} von dem Dienst {}.".format(datatype, service_upper))
+                    else:
+                        info_access=[]
+                        if access_dict["available"] and access_dict["description"]==False:
+                            if access_dict["available"]=="true":
+                                info_access.append("Datenportabilität ist möglich.")
+                            else:
+                                info_access.append("Datenportabilität ist nicht möglich.")
+                        if access_dict["description"]:
+                            info_access.append(str(file_read["accessAndDataPortability"]["description"]))
+                        if access_dict["url"]:
+                            info_access.append("URL: "+str(file_read["accessAndDataPortability"]["url"]))
+                        if access_dict["email"]:
+                            link_email= str(file_read["accessAndDataPortability"]["email"])
+                            info_access.append("E-Mail: "+ link_email)
+                        if access_dict["identificationEvidences"]:
+                            identification=[]
+                            for el in access_dict["identificationEvidences"]:
+                                identification.append(el)
+                            identification_string='Für eine Identifikation brauchst du: '+', '.join([elem for elem in identification])  
+                            info_access.append(identification_string)
+                        if access_dict["administrativeFee"]:
+                            fee=[]
+                            for el in access_dict["administrativeFee"]:
+                                fee.append(str(access_dict["administrativeFee"][el]))
+                            fee='Die Bearbeitungsgebühr beträgt: '+' '.join([elem for elem in fee])
+                            info_access.append(fee)
+                        info_access_string = ',  \n'.join([str(elem) for elem in info_access])  
+                        dispatcher.utter_message(text="{}.".format(info_access_string))
+                
+                elif datatype=="right":
+                    rights=["rightToInformation","rightToRectificationOrDeletion","rightToDataPortability","rightToWithdrawConsent", "rightToComplain"]
+                    right_names=["Recht auf Information", "Recht auf Berichtigung und Löschung", "Recht auf Datenportabilität", "Widerrufsrecht", "Beschwerderecht"]
+                    for dt in rights:
+                        dt_dict=tilt_dict[dt]
+                        info=[]
+                        if not bool(dt_dict):
+                            dispatcher.utter_message(text="Leider haben wir keine Informationen zu {} von dem Dienst {}.".format(datatype_out, service_upper))
+                        elif dt=="rightToComplain":
+                            info.append("Hier sind die Informationen zu deinem " + right_names[rights.index(dt)]+":")
+                            if dt_dict["available"] and dt_dict["description"]==False:
+                                if dt_dict["available"]=="true":
+                                    info.append("Ein Datenzugriff ist möglich.")
+                                else:
+                                    info_access.append("Ein Datenzugriff ist nicht möglich.")
+                            if dt_dict["supervisoryAuthority"]:
+                                info_tmp="Aufsichtsbehörde:  \n"
+                                for element in dt_dict["supervisoryAuthority"].keys():
+                                    if dt_dict["supervisoryAuthority"][element]:
+                                        if element=="email":
+                                            value=str(dt_dict["supervisoryAuthority"][element])
+                                            key_value_string="E-Mail" ": " +value
+                                            info_tmp= info_tmp +key_value_string + ".  \n"
+                                        elif element=="phone":
+                                            value=dt_dict["supervisoryAuthority"][element]
+                                            key_value_string="Telefonnummer"+ ": "+value
+                                            info_tmp = info_tmp +key_value_string+ ".  \n"
+                                        elif element=="address":
+                                            unwichtig=0
+                                        elif element=="country":
+                                            country=str(dt_dict["supervisoryAuthority"][element])
+                                            value=pytz.country_names[country]
+                                            info_tmp  = info_tmp +("Land"+ ": " +value) + ".  \n"
+                                        else:
+                                            value=str(dt_dict["supervisoryAuthority"][element])
+                                            key_value_string=str(element).capitalize()+ ": " +value
+                                            info_tmp  = info_tmp +key_value_string+ ".  \n"
+                                info.append(info_tmp)
+                        else:
+                            info.append("Hier sind die Informationen zu deinem " + right_names[rights.index(dt)]+":")
+                            if dt_dict["available"] and dt_dict["description"]==False:
+                                if dt_dict["available"]=="true":
+                                    info.append("Datenzugriff ist möglich.")
+                                else:
+                                    info_access.append("Datenzugriff ist nicht möglich.")
+                            if dt_dict["description"]:
+                                info.append(str(dt_dict["description"]))
+                        info_string = '  \n'.join([str(elem) for elem in info])  
+                        dispatcher.utter_message(text="{}".format(info_string))
+        
+#################################################################################################################################################################        
         if datatype=="countries" and len(service_list)>1: #give info for all services at once
-            countries_string="Das ist die Information zu **{}** der Dienste {}.  \n"
+            countries_string="Das ist die Information der Dienste {} zu {} .  \n"
             services=' and '.join([str(elem) for elem in countries_dict.keys()])
             for key in countries_dict.keys():
                 EU=0
                 countries=', '.join([str(elem) for elem in countries_dict[key]]) 
                 for el in countries_dict[key]: #check if country is in EU
-                    print(el)
                     if el in EUROPEAN_UNION.names:                        
                         EU=EU+1
                 if len(countries_dict[key])>1:
                     countries_string=countries_string +"Der Dienst "+ key.capitalize() + " gibt deine Daten an " + str(len(countries_dict[key])) + " verschiedene Länder weiter. " + str(EU)+ " davon sind Teil der Europäischen Union. Die Länder sind " + countries + ".   \n"
                 elif len(countries_dict[key])==1 and EU==1:
-                    countries_string=countries_string +"Der Dienst "+ key.capitalize() + " gibt deine Daten an ein anderes Land weiter: " + countries +  " Es ist Teil der Europäischen Union.  \n"
+                    countries_string=countries_string +"Der Dienst "+ key.capitalize() + " gibt deine Daten an ein anderes Land weiter: " + countries +  ". Es ist Teil der Europäischen Union.  \n"
                 else:
-                    countries_string=countries_string +"Der Dienst "+ key.capitalize() + " gibt deine Daten an ein anderes Land weiter: "+ countries + " Es ist nicht Teil der Europäischen Union.  \n"
-            dispatcher.utter_message(text=countries_string.format(datatype_out, services))
+                    countries_string=countries_string +"Der Dienst "+ key.capitalize() + " gibt deine Daten an ein anderes Land weiter: "+ countries + ". Es ist nicht Teil der Europäischen Union.  \n"
+            dispatcher.utter_message(text=countries_string.format(services, datatype_out))
             
 
             

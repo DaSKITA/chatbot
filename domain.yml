@@ -23,6 +23,7 @@ intents:
   - data transfer to a specific company
   - data sharing between these services
   - start_again
+  - repeat
   
   
 
@@ -34,7 +35,6 @@ entities:
   - privacy_policy
   - requesting
   - comparison
-  #- comparison_types
   - country
 
   
@@ -83,21 +83,6 @@ slots:
   comparison:
     type: any
 
-  #comparison_type_country:
-  #  type: any
-  #  
-  #comparison_type_company:
-  #  type: any
-  #  
-  #comparison_type_sharing:
-  #  type: any
-#  comparison_types:
-#    type: categorical
-#    values:
-#    - Datenweitergabe an ein bestimmtes Land
-#    - Datenweitergabe an einen bestimmten Dienst
-#    - Datenaustausch
-#    influence_conversation: true
     
   country:
     type: any
@@ -119,9 +104,7 @@ actions:
 - action_fill_company_slot
 - action_fill_service_slot
 - action_give_comparison_info_sharing_between
-#- action_fill_one_comparison_slot_company
-#- action_fill_one_comparison_slot_country
-#- action_fill_one_comparison_slot_sharing
+- action_give_options
 
 
 responses:
@@ -132,9 +115,7 @@ responses:
 
 # bot introduction
   utter_bot_usage:
-  - text: "Test Welcome"
-    channel: "alexa_assistant"
-  - text: "Willkommen, ich bin ein Bot, der dir hilft Informationen über den Datenschutz verschiedener Dienste zu erhalten. Wofür interessierst du dich?"
+  - text: "Willkommen, ich kann dir helfen Informationen über den Datenschutz verschiedener Dienste zu erhalten. Wofür interessierst du dich?"
 
 
 #ask privacy policy
@@ -151,14 +132,14 @@ responses:
 
 #change to privacy path
   utter_ask_privacy_policy_path:
-  - text: "Interessierst du dich für Informationen über die Datenschutzerklärung von diesem oder einem anderen Dienst?"
+  - text: "Interessierst du dich für Informationen über Datenschutzerklärungen?"
 
   #utter_ask_this_service_privacy:
   utter_ask_change_to_privacy_form_policy:
   - text: "Interessierst du dich für Informationen über die Datenschutzerklärung von diesem oder einem anderen Dienst?"
     buttons: 
     - title: "Dieser Dienst"
-      payload: '/this_service{"policy":"Dieser Diens"}'
+      payload: '/this_service{"policy":"Dieser Dienst"}'
     - title: "Ein anderer Dienst"
       payload: '/another_service{"policy":"Another service"}'
     - title: "Ich interessiere mich nicht dafür"
@@ -171,30 +152,11 @@ responses:
     - text: "Für welchen Dienst interessierst du dich?"
 
   utter_ask_privacy_form_datatype:
-  - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder deine Rechte an diesen Daten)?"
+  - text: "Für welche Informationen interessierst du dich (z.B. Länder, in die deine Daten weitergegeben werden oder deine Rechte an diesen Daten)? test"
     channel: 'alexa_assistant'
-  - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder deine Rechte an diesen Daten)?"
+  - text: "Für welche Informationen interessierst du dich?"
     channel: 'telegram'
   - text: "Für welche Informationen interessierst du dich?"
-    buttons: 
-    - title: "Metadaten"
-      payload: '/datatypes{"datatype":"Metadaten"}'
-    - title: "Länder, in die meine Daten weitergegeben werden"
-      payload: '/datatypes{"datatype":"Länder"}'
-    - title: "Drittparteien an die meine Daten weitergegeben werden"
-      payload: '/datatypes{"datatype":"Drittparteien"}'
-    - title: "Anzahl der Drittparteien an die meine Daten weitergegeben werden"
-      payload: '/datatypes{"datatype":"Anzahl von Drittparteien"}'
-    - title: "Persönliche Daten, die gespeichert werden"
-      payload: '/datatypes{"datatype":"persönliche Daten"}'
-    - title: "Datenschutzbeauftragter"
-      payload: '/datatypes{"datatype":"Datenschutzbeauftragter"}'
-    - title: "Informationen zur Datenportabilität"
-      payload: '/datatypes{"datatype":"Datenportabilität"}'
-    - title: "Information zu meinen Rechten an den Daten"
-      payload: '/datatypes{"datatype":"Rechte"}'
-    - title: "Controller"
-      payload: '/datatypes{"datatype":"Controller"}'
   
   
   utter_datatypes_again:
@@ -205,7 +167,7 @@ responses:
   
 #change to request path      
   utter_ask_request_path:
-  - text: "Möchtest du eine Auskunftsanfrage zu deinen Daten an einen Dienst zu stellen?"
+  - text: "Möchtest du eine Auskunftsanfrage zu deinen Daten an einen Dienst stellen?"
   
   #utter_ask_this_service_request:
   utter_ask_change_to_request_form_request:
@@ -225,12 +187,14 @@ responses:
   utter_ask_comparison_form_comparison_types:
   - text: "Woran hast du Interesse?"
     buttons: 
-    - title: "Welche dieser Dienste meine Daten an ein bestimmtes Land weitergeben."
+    - title: "Welche dieser Dienste geben meine Daten an ein bestimmtes Land weiter?"
       payload: "Weitergabe an ein Land"
-    - title: "Welche dieser Dienste meine Daten an eine bestimmte Drittpartei weitergeben."
+    - title: "Welche dieser Dienste geben meine Daten an einen bestimmten Dienst weiter?"
       payload: "Datenweitergabe an einen bestimmten Dienst"
-    - title: "Ob meine persönlichen Daten zwischen diesen Diensten geteilt werden."
+    - title: "Werden meine persönlichen Daten zwischen diesen Diensten geteilt?"
       payload: "Datenaustausch"
+    channel: 'socketio'
+  - text: "Woran hast du Interesse? Möglichkeiten sind: Welche dieser Dienste deine Daten an ein bestimmtes Land weitergeben, oder welche dieser Dienste deine Daten an einen bestimmten Dienst weitergeben, oder ob die Dienste deine persönlichen Daten untereinander teilen."
       
   utter_give_comparison_info:
   - text: "Hier sind deine Informationen."
@@ -251,13 +215,6 @@ responses:
 #request path
   utter_ask_request_form_service:
   - text: "Für welchen Dienst interessierst du dich?"
-    buttons: 
-    - title: "Google"
-      payload: '/services{"service":"Google"}'
-    - title: "Amazon"
-      payload: '/services{"service":"Amazon"}'
-    - title: "Facebook"
-      payload: '/services{"service":"Facebook"}'
 
   utter_ask_request_form_datatype:
   - text: "Für welche Informationen interessierst du dich (z.B. welche Daten über dich gespeichert werden oder welche Rechte du an diesen Daten hast)?"
@@ -286,7 +243,7 @@ responses:
       payload: '/datatypes{"datatype":"controller"}'
   
   utter_ask_authentification:
-  - text: "Was ist deine Authentifizierung? TODO"
+  - text: "Tut mir leid, das kann ich leider noch nicht."
 
   utter_ask_request_again:
   - text: "Möchtest du eine Auskunftsanfrage bei diesem oder einem anderen Dienst stellen?"
@@ -335,21 +292,6 @@ forms:
     service:
       - type: from_entity
         entity: service
-    #comparison_types:
-    #  - type: from_entity
-    #    entity: comparison_types
-    #comparison_type_country:
-    #  - type: from_intent
-    #    value: data transfer to a specific country
-    #    intent: data transfer to a specific country
-    #comparison_type_company:
-    #  - type: from_intent
-    #    value: data transfer to a specific company
-    #    intent: data transfer to a specific company
-    #comparison_type_sharing:
-    #  - type: from_intent
-    #    value: data sharing between these services
-    #    intent: data sharing between these services
     country:
       - type: from_entity
         entity: country

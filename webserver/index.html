@@ -78,14 +78,15 @@
         (e.onload = () => {
           window.WebChat.default(
             {
-              customData: { language: "en" },
-              socketUrl: "http://localhost:5005",
+              customData: { language: "de" },
+              //socketUrl: "http://localhost:5005",
+              socketUrl: "http://localhost:80",
               selector: "#webchat",
               initPayload: null,//"Hey!",
-              customData: {"language": "en"}, // arbitrary custom data. Stay minimal as this will be added to the socket
+              customData: {"language": "de"}, // arbitrary custom data. Stay minimal as this will be added to the socket
               socketPath: "/socket.io/",
               title: "Privacy chatbot",
-              subtitle: "Say 'Hi' to me!",
+              subtitle: "Sag' mir 'Hallo'!",
               params: {"storage": "session"}, // can be set to "local"  or "session". details in storage section.
               hideWhenNotConnected: false,
               docViewer: false,
