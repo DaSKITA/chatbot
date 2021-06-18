@@ -7,6 +7,9 @@ services:
     image: "floramarleen/chatbot:action_server_image_tag"
     ports:
       - 5055:5055
+  rabbit:
+    ports:
+      - "5672:5672"
 volumes:
   db-volume:
     name: db-volume
