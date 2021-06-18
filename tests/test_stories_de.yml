@@ -1,0 +1,197 @@
+#### This file contains tests to evaluate that your bot behaves as expected.
+#### If you want to learn more, please see the docs: https://rasa.com/docs/rasa/testing-your-assistant
+
+stories:
+- story: privacy path 1
+  steps:
+  - user: |
+      Hallo!
+    intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
+  - action: utter_ask_requesting
+  - user: |
+      Ich interessiere mich für Informationen zu einer [Datenschutzerklärung](privacy_policy)
+    intent: privacy_policies
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      Dienst [Black](service_company)
+    intent: services
+  - action: action_fill_service_slot
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      Ich interessiere mich für die [Drittparteien](datatype)
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Nein, danke.
+    intent: deny
+  - action: utter_ask_service_again
+  - user: |
+      Nein
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      Nein
+    intent: deny
+  - action: utter_goodbye
+
+- story: privacy path 2 more services
+  steps:
+  - user: |
+      Hi!
+    intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
+  - action: utter_ask_requesting
+  - user: |
+      Ich interessiere mich für eine [Datenschutzerklärung](privacy_policy)
+    intent: privacy_policies
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      [Elias Company](service_company), [Black](service_company)
+    intent: services
+  - action: action_fill_service_slot
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      Gib mir Informationen zu den [Drittparteien](datatype) an die meine Daten weitergegeben werden
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Nein, danke.
+    intent: deny
+  - action: utter_ask_service_again
+  - user: |
+      Nö
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      Nein
+    intent: deny
+  - action: utter_goodbye      
+
+- story: privacy path 3 loop datatype
+  steps:
+  - user: |
+      Hey!
+    intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
+  - action: utter_ask_requesting
+  - user: |
+      Gib mir Infos zu [Datenschutzerklärung](privacy_policy) 
+    intent: privacy_policies
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      Infos zum Dienst [Elias Company](service_company)
+    intent: services
+  - action: action_fill_service_slot
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      Ich interessiere mich für meine [Rechte](datatype) an den Daten
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Ja, bitte.
+    intent: affirm
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      Ich interessiere mich für die [Länder](datatype) an die meine Daten weitergegeben werden
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Nein, danke.
+    intent: deny  
+  - action: utter_ask_service_again
+  - user: |
+      Nein
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      Nein
+    intent: deny
+  - action: utter_goodbye
+  
+- story: privacy path 4 loop service
+  steps:
+  - user: |
+      Hello!
+    intent: greet
+  - action: utter_greet
+  - action: utter_bot_usage
+  - action: utter_ask_privacy_form_privacy_policy
+  - action: utter_ask_comparison_form_comparison
+  - action: utter_ask_requesting
+  - user: |
+      Ich interessiere mich für eine [Datenschutzerklärung]{"entity": "privacy_policy", "value":"Datenschutzerklärung"} von Diensten.
+    intent: privacy_policies
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      der Dienst [Elias Company](service_company)
+    intent: services
+  - action: action_fill_service_slot
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      Ich interessiere mich für den [Datenschutzbeauftragten](datatype).
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Nö.
+    intent: deny
+  - action: utter_ask_service_again
+  - user: |
+      ja
+    intent: affirm
+  - action: utter_ask_privacy_form_service
+  - action: action_read_services
+  - user: |
+      [Black](service_company).
+    intent: services
+  - action: action_fill_service_slot
+  - action: utter_ask_privacy_form_datatype
+  - user: |
+      Gib mir Informationen zu meinen [Rechte](datatype).
+    intent: datatypes
+  - action: action_give_privacy_info
+  - action: utter_datatypes_again
+  - user: |
+      Nein, danke.
+    intent: deny
+  - action: utter_ask_service_again
+  - user: |
+      Nein.
+    intent: deny
+  - action: utter_ask_request_path
+  - user: |
+      Nein
+    intent: deny
+  - action: utter_goodbye  
+
+- story: say goodbye
+  steps:
+  - user: |
+      Tschüss!
+    intent: goodbye
+  - action: utter_goodbye
+
+- story: bot challenge
+  steps:
+  - user: |
+      Bist du ein Bot?
+    intent: bot_challenge
+  - action: utter_iamabot
