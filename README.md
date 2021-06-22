@@ -33,7 +33,7 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 	- englisch: Action Server starten mittels `rasa run actions --actions actions.actions_en` und `rasa shell --model models/en-model.tar.gz` oder `rasa shell --model models/en-model.tar.gz --debug`
 
 ## Webinterface
-- im index.html die socket url anpassen z.B. `socketUrl: "http://localhost:80"`
+- im index.html die socket url anpassen z.B. `socketUrl: "http://localhost:80"` oder `socketUrl: "https://implementation.cloud`
 - deutsch: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --cors "*" --debug`
 - englisch: Action Server starten mittels `rasa run actions --actions actions.actions_en` und `rasa run --model models/en-model.tar.gz --enable-api --cors "*" --debug`
 
@@ -62,4 +62,5 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 1. Evtl. Action server image erneuern: `docker build . -f Dockerfile_action_image -t <account_username>/chatbot:<custom_image_tag>`
 2. Evtl. neuen image tag im Ordner etc\rasa im file docker-compose.override.yml anpassen
 3. In den Ordner etc\rasa navigieren und `docker-compose up -d` ausführen
-4. Auf http://localhost:80 gehen und Rasa x Benutzeroberfläche starten
+4. User hinzufügen mit `sudo python3 rasa_x_commands.py create --update admin me <PASSWORD>`
+5. Auf https://implementation.cloud gehen, Rasa x Benutzeroberfläche starten und einloggen
