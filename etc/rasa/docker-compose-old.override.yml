@@ -1,5 +1,8 @@
 version: "3.4"
 services:
+  db:
+    volumes:
+      - db-volume:/bitnami/postgresql
   app:
     image: "floramarleen/chatbot:action_server_image_tag"
     ports:
@@ -7,3 +10,6 @@ services:
   rabbit:
     ports:
       - "5672:5672"
+volumes:
+  db-volume:
+    name: db-volume

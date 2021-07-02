@@ -80,7 +80,6 @@ services:
     expose:
       - "5002"
     volumes:
-      - ./config.yml:/app/config.yml
       - ./models:/app/models
       - ./environments.yml:/app/environments.yml
       - ./credentials.yml:/app/credentials.yml
@@ -206,11 +205,3 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     expose:
       - "6379"
-
-  webserver:
-    container_name: webserver
-    build: 
-      context: ../../webserver/
-    hostname: webserver
-    ports: 
-      - 9999:80
