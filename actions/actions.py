@@ -69,14 +69,14 @@ class ActionGiveOptions(Action):
             buttons.append({"title": "Datenschutzbeauftragter", "payload": '/datatypes{"datatype":"Datenschutzbeauftragter"}'})
             buttons.append({"title": "Informationen zur Datenportabilität", "payload": '/datatypes{"datatype":"Datenportabilität"}'})
             buttons.append({"title": "Information zu meinen Rechten an den Daten", "payload": '/datatypes{"datatype":"Rechte"}'})
-            buttons.append({"title": "Controller", "payload": '/datatypes{"datatype":"Controller"}'})
+            buttons.append({"title": "Verantwortliche*r", "payload": '/datatypes{"datatype":"Verantwortliche*r"}'})
         else:
-            message="Möglichkeiten sind: Länder, in die deine Daten weitergegeben werden, Drittparteien, an die deine Daten weitergegeben werden, die Anzahl dieser Drittparteien, persönliche Daten die gespeichert werden, Informationen zu deinen Rechten an den Daten, Informationen zu Datenportabilität, den Datenschutzbeauftragten oder den Controller."
+            message="Möglichkeiten sind: Länder, in die deine Daten weitergegeben werden, Drittparteien, an die deine Daten weitergegeben werden, die Anzahl dieser Drittparteien, persönliche Daten die gespeichert werden, Informationen zu deinen Rechten an den Daten, Informationen zu Datenportabilität, den Datenschutzbeauftragten oder den Verantwortlichen."
         dispatcher.utter_message(text=message, buttons=buttons)
         return []
 
 #new action:
-#read possible services from tilt hub and give options as buttons
+#read possible services from tilt hub and give options
 class ActionReadServices(Action):
     def name(self) -> Text:
         return "action_read_services"
@@ -85,20 +85,31 @@ class ActionReadServices(Action):
             dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        channel = tracker.get_latest_input_channel() #get channel which is used
         client = GraphQLClient(url)
         result = client.execute('''query { TiltNodes { edges { node { meta { name language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
-        
-        buttons = []
-        message="Mögliche Dienste sind: "
-        for r in result_dict:
-            if r["node"]["meta"]["language"]=="de":
-                name=r["node"]["meta"]["name"]
-                message = message + name + ", "
-        
-        message=message[:-2]
-        
+        if channel=="socketio":
+        #buttons = []
+            message="Mögliche Dienste sind: "
+            for r in result_dict:
+                if r["node"]["meta"]["language"]=="de":
+                    name=r["node"]["meta"]["name"]
+                    message = message + name + ", "
+            
+            message=message[:-2]
+        else:
+            message="Mögliche Dienste sind: "
+            i=1
+            for r in result_dict:
+                if r["node"]["meta"]["language"]=="de":
+                    name=r["node"]["meta"]["name"]
+                    message = message + name +": "+ str(i)+ ", "
+                    i = i+1
+            
+            message=message[:-2]
+            message = message + "Nenne die Nummer des Dienstes, der dich interessiert."
         dispatcher.utter_message(text=message)
         return []
 #update Slots for path change
@@ -190,25 +201,40 @@ class ActionGiveComparisonInfoSharingBetween(Action):
         
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result = client.execute('''query { TiltNodes { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         
         #loop through all given services and give info
         for service in service_list:
+            contains = 0
             service_upper=service.title()
-            service_upper2=service.capitalize()
-            #check if service name is possible, else return
-            meta_name=service
-            contains=0
-            for r in result_dict:
-                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"] or service_upper2 == r["node"]["meta"]["name"]:
-                    contains=1
-                    if service == r["node"]["meta"]["name"]:
-                        meta_name=service
-                    else:
-                        meta_name=service_upper
-                
+            number_dict = {"Eins": "1", "Zwei": "2", "Drei": "3", "Vier": "4", "Fünf": "5", "Sechs":"6", "Sieben": "7", "Acht": "8", "Neun": "9", "Zehn": "10", "Elf": "11", "Zwölf": "12", "Dreizehn": "13", "Vierzehn": "14", "Fünfzehn": "15", "Sechzehn": "16", "Siebzehn": "17", "Achtzehn": "18", "Neunzehn": "19", "Zwanzig": "20", "Einundzwanzig": "21", "Zweiundzwanzig": "22", "Dreiundzwanzig": "23", "Vierundzwanzig": "24", "Fünfundzwanzig": "25", "Sechsundzwanzig": "26", "Siebenundzwanzig": "27", "Achtundzwanzig": "28", "Neunundzwanzig": "29", "Dreißig": "30"}
+            if service_upper in number_dict.keys():
+                service = number_dict[service_upper]
+            if service in ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]:
+                number = service
+                i = 1
+                for r in result_dict:
+                    if r["node"]["meta"]["language"]=="de":
+                        if str(i) == number:
+                            meta_name=r["node"]["meta"]["name"]
+                            service = meta_name
+                            contains = 1
+                    i = i+1
+            else:
+                service_upper=service.title()
+                service_upper2=service.capitalize()
+                #check if service name is possible, else return
+                meta_name=service
+                contains=0
+                for r in result_dict:
+                    if service in r["node"]["meta"]["name"] or service_upper in r["node"]["meta"]["name"] or service_upper2 in r["node"]["meta"]["name"]:
+                        contains=1
+                        meta_name = r["node"]["meta"]["name"]
+            if contains==0:
+                dispatcher.utter_message(text="Leider haben wir keinen Informationen über den Dienst {}.".format(service))
+                continue    
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
             
@@ -252,28 +278,43 @@ class ActionGiveComparisonInfoCountry(Action):
         country=GoogleTranslator(source='de', target='en').translate(country_de) #get english name of country
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result = client.execute('''query { TiltNodes { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         
         #loop through all given services and give info
         for service in service_list:
+            contains = 0
             service_upper=service.title()
-            #check if service name is possible, else return
-            contains=0
-            for r in result_dict:
-                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
-                    contains=1
-                    if service == r["node"]["meta"]["name"]:
-                        meta_name= service
-                    else: 
-                        meta_name=service_upper
+            number_dict = {"Eins": "1", "Zwei": "2", "Drei": "3", "Vier": "4", "Fünf": "5", "Sechs":"6", "Sieben": "7", "Acht": "8", "Neun": "9", "Zehn": "10", "Elf": "11", "Zwölf": "12", "Dreizehn": "13", "Vierzehn": "14", "Fünfzehn": "15", "Sechzehn": "16", "Siebzehn": "17", "Achtzehn": "18", "Neunzehn": "19", "Zwanzig": "20", "Einundzwanzig": "21", "Zweiundzwanzig": "22", "Dreiundzwanzig": "23", "Vierundzwanzig": "24", "Fünfundzwanzig": "25", "Sechsundzwanzig": "26", "Siebenundzwanzig": "27", "Achtundzwanzig": "28", "Neunundzwanzig": "29", "Dreißig": "30"}
+            if service_upper in number_dict.keys():
+                service = number_dict[service_upper]
+            if service in ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]:
+                number = service
+                i = 1
+                for r in result_dict:
+                    if r["node"]["meta"]["language"]=="de":
+                        if str(i) == number:
+                            meta_name=r["node"]["meta"]["name"]
+                            service = meta_name
+                            contains = 1
+                    i = i+1
+            else:
+                service_upper=service.title()
+                #check if service name is possible, else return
+                for r in result_dict:
+                    if service in r["node"]["meta"]["name"] or service_upper in r["node"]["meta"]["name"]:
+                        contains=1
+                        meta_name = r["node"]["meta"]["name"]
+
             if contains==0:
                 dispatcher.utter_message(text="Leider haben wir keinen Informationen über den Dienst {}.".format(service))
-                if service==service_list[-1]:
-                    return []
-                else: 
-                    service_list.remove(service)
+                continue
+                #if n_services ==1:
+                #    return []
+                #else: 
+                #    service_list.remove(service)
+                  
                 
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
@@ -318,29 +359,39 @@ class ActionGiveComparisonInfoCompany(Action):
         
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result = client.execute('''query { TiltNodes { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         
         #loop through all given services and give info
         for service in service_list:
+            contains = 0
             service_upper=service.title()
-            #check if service name is possible, else return
-            contains=0
-            meta_name=service
-            for r in result_dict:
-                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"]:
-                    contains=1
-                    if service == r["node"]["meta"]["name"]:
-                        meta_name=service
-                    else: 
-                        meta_name=service_upper
+            number_dict = {"Eins": "1", "Zwei": "2", "Drei": "3", "Vier": "4", "Fünf": "5", "Sechs":"6", "Sieben": "7", "Acht": "8", "Neun": "9", "Zehn": "10", "Elf": "11", "Zwölf": "12", "Dreizehn": "13", "Vierzehn": "14", "Fünfzehn": "15", "Sechzehn": "16", "Siebzehn": "17", "Achtzehn": "18", "Neunzehn": "19", "Zwanzig": "20", "Einundzwanzig": "21", "Zweiundzwanzig": "22", "Dreiundzwanzig": "23", "Vierundzwanzig": "24", "Fünfundzwanzig": "25", "Sechsundzwanzig": "26", "Siebenundzwanzig": "27", "Achtundzwanzig": "28", "Neunundzwanzig": "29", "Dreißig": "30"}
+            if service_upper in number_dict.keys():
+                service = number_dict[service_upper]
+            if service in ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]:
+                number = service
+                i = 1
+                for r in result_dict:
+                    if r["node"]["meta"]["language"]=="de":
+                        if str(i) == number:
+                            meta_name=r["node"]["meta"]["name"]
+                            service = meta_name
+                            contains = 1
+                    i = i+1
+            else:
+                service_upper=service.title()
+                #check if service name is possible, else return
+                meta_name=service
+                for r in result_dict:
+                    if service in r["node"]["meta"]["name"] or service_upper in r["node"]["meta"]["name"]:
+                        contains=1
+                        meta_name = r["node"]["meta"]["name"]
+
             if contains==0:
-                dispatcher.utter_message(text="Leider haben wir keine Informationen über den Dienst {}.".format(service))
-                if service==service_list[-1]:
-                    return []
-                else: 
-                    service_list.remove(service)
+                dispatcher.utter_message(text="Leider haben wir keinen Informationen über den Dienst {}.".format(service))
+                continue
                 
             #get tilt of service
             address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
@@ -362,7 +413,7 @@ class ActionGiveComparisonInfoCompany(Action):
                 transfer=0
                 for recipient in list(element.recipients):
                     transfer=0
-                    if (str(recipient.name).title()==company and answer==0) or (str(recipient.name)==company and answer==0):
+                    if (company in str(recipient.name).title() and answer==0) or (company in str(recipient.name) and answer==0):
                         transfer=1
                         answer=1
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an das Unternehmen {} weiter.".format(service, company))
@@ -387,24 +438,42 @@ class ActionGiveServiceInfo(Action):
         datatype=tracker.get_slot("datatype")
         datatype=datatype.capitalize()
         #take care of synonyms in case of text input
-        if datatype in ["Meta Daten", "meta Daten", "meta daten", "Meta daten", "Metadaten"]:
-            datatype= "metadata"
-        elif datatype in ["Datenschutzbeauftragte", "Datenschutzbeauftragter", "Datenschutz Beauftragter", "Datenschutz beauftragter", "Datenschutzbeauftragten"]:
-            datatype="data protection officer"
-        elif datatype in ["Recht", "Rechte", "meine Rechte", "mein Recht", "Rechten"]:
-            datatype="right"
-        elif datatype in ["Datenportabilität", "Daten Portabilität", "Daten-Portabilität", "Portabilität", "Daten portabilität", "Daten-portabilität"]:
-            datatype="access to data portability"
-        elif datatype in ["Anzahl der Drittparteien", "Wieviele Drittparteien", "Anzahl", "Anzahl der drittparteien", "Anzahl der Dritt-Parteien", "Anzahl der dritt-parteien", "Anzahl der Dritt-parteien", "Anzahl von Dritt-Parteien", "Anzahl von drittparteien", "Anzahl von Drittparteien", "Anzahl von Dritt-parteien", "Anzahl der dritt partei", "Anzahl der Drittpartei", "Anzahl der drittpartei"]:
-            datatype="number of third parties"
-        elif datatype in ["Drittparteien", "Dritt-Parteien", "Dritt Parteien", "dritt Parteien", "Dritt parteien", "Drittpartei"]:
-            datatype="third parties"
-        elif datatype in ["Länder", "Länder, in die meine Daten weitergegeben werden", "Länder, an die meine Daten weitergegeben werden", "Land"]:
-            datatype="countries"
-        elif datatype in ["Controller", "Control"]:
-            datatype="controller"
-        elif datatype in ["persönliche Daten", "Persönliche Daten", "Persönliche daten", "persönliche Daten, die über mich gespeichert werden", "persönliche Daten, die gespeichert werden"]:
-            datatype="personal data"
+        for string in ["Meta Daten", "meta Daten", "meta daten", "Meta daten", "Metadaten"]:
+            if datatype in string:
+                datatype= "metadata"
+                break
+        for string in ["Datenschutzbeauftragte", "Datenschutzbeauftragter", "Datenschutz Beauftragter", "Datenschutz beauftragter", "Datenschutzbeauftragten"]:
+            if datatype in string:
+                datatype="data protection officer"
+                break
+        for string in ["Recht", "Rechte", "meine Rechte", "mein Recht", "Rechten"]:
+            if datatype in string:
+                datatype="right"
+                break
+        for string in ["Datenportabilität", "Daten Portabilität", "Daten-Portabilität", "Portabilität", "Daten portabilität", "Daten-portabilität"]:
+            if datatype in string:
+                datatype="access to data portability"
+                break
+        for string in ["Anzahl der Drittparteien", "Wieviele Drittparteien", "Anzahl", "Anzahl der drittparteien", "Anzahl der Dritt-Parteien", "Anzahl der dritt-parteien", "Anzahl der Dritt-parteien", "Anzahl von Dritt-Parteien", "Anzahl von drittparteien", "Anzahl von Drittparteien", "Anzahl von Dritt-parteien", "Anzahl der dritt partei", "Anzahl der Drittpartei", "Anzahl der drittpartei"]:
+            if datatype in string:
+                datatype="number of third parties"
+                break
+        for string in ["Drittparteien", "Dritt-Parteien", "Dritt Parteien", "dritt Parteien", "Dritt parteien", "Drittpartei"]:
+            if datatype in string:
+                datatype="third parties"
+                break
+        for string in ["Länder", "Länder, in die meine Daten weitergegeben werden", "Länder, an die meine Daten weitergegeben werden", "Land"]:
+            if datatype in string:
+                datatype="countries"
+                break
+        for string in ["Verantwortlicher", "Verantwortliche", "Verantwortliche*r", "Verantwortlichen"]:
+            if datatype in string:
+                datatype="controller"
+                break
+        for string in ["persönliche Daten", "Persönliche Daten", "Persönliche daten", "persönliche Daten, die über mich gespeichert werden", "persönliche Daten, die gespeichert werden"]:
+            if datatype in string:
+                datatype="personal data"
+                break
         
         #map datatypes to datatypes as formulated as output
         datatypes_dict={
@@ -416,7 +485,7 @@ class ActionGiveServiceInfo(Action):
             "data protection officer": "Datenschutzbeauftragte*r",
             "access to data portability": "Datenportabilität und Datenzugriff",
             "right": "Rechte an den Daten",
-            "controller": "Controller*in"
+            "controller": "Verantwortliche Person"
         }
         #if datatype not possible give info about that
         if datatype not in datatypes_dict.keys():
@@ -431,7 +500,7 @@ class ActionGiveServiceInfo(Action):
         
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name } } } } } ''')
+        result = client.execute('''query { TiltNodes { edges { node { meta {name, language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         service_list=service
@@ -440,18 +509,36 @@ class ActionGiveServiceInfo(Action):
         
         #loop through all given services and give info
         for service in service_list:
+            contains = 0
             service_upper=service.title()
-            service_upper2=service.capitalize()
-            #check if service name is possible, else return
-            meta_name=service
-            contains=0
-            for r in result_dict:
-                if service == r["node"]["meta"]["name"] or service_upper == r["node"]["meta"]["name"] or service_upper2 == r["node"]["meta"]["name"]:
-                    contains=1
-                    if service == r["node"]["meta"]["name"]:
-                        meta_name=service
-                    else:
-                        meta_name=service_upper
+            number_dict = {"Eins": "1", "Zwei": "2", "Drei": "3", "Vier": "4", "Fünf": "5", "Sechs":"6", "Sieben": "7", "Acht": "8", "Neun": "9", "Zehn": "10", "Elf": "11", "Zwölf": "12", "Dreizehn": "13", "Vierzehn": "14", "Fünfzehn": "15", "Sechzehn": "16", "Siebzehn": "17", "Achtzehn": "18", "Neunzehn": "19", "Zwanzig": "20", "Einundzwanzig": "21", "Zweiundzwanzig": "22", "Dreiundzwanzig": "23", "Vierundzwanzig": "24", "Fünfundzwanzig": "25", "Sechsundzwanzig": "26", "Siebenundzwanzig": "27", "Achtundzwanzig": "28", "Neunundzwanzig": "29", "Dreißig": "30"}
+            if service_upper in number_dict.keys():
+                service = number_dict[service_upper]
+            if service in ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"]:
+                number = service
+                i = 1
+                for r in result_dict:
+                    if r["node"]["meta"]["language"]=="de":
+                        if str(i) == number:
+                            meta_name=r["node"]["meta"]["name"]
+                            service_upper = meta_name
+                            contains = 1
+                    i = i+1
+            else:
+                service_upper=service.title()
+                service_upper2=service.capitalize()
+                #check if service name is possible, else return
+                meta_name=service
+                for r in result_dict:
+                    if service in r["node"]["meta"]["name"] or service_upper in r["node"]["meta"]["name"] or service_upper2 in r["node"]["meta"]["name"]:
+                        contains=1
+                        meta_name = r["node"]["meta"]["name"]
+                        #if service in r["node"]["meta"]["name"]:
+                        #    meta_name=service
+                        #elif service_upper in r["node"]["meta"]["name"]:
+                        #    meta_name = service_upper
+                        #else:
+                        #    meta_name=service_upper2
             if contains==0:
                 dispatcher.utter_message(text="Leider haben wir keine Informationen über den Dienst {}.".format(service))
                 if service==service_list[-1]:

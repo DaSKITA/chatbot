@@ -97,6 +97,36 @@ nlu:
     - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
 - intent: services
   examples: |
+    - [1](service_company)
+    - [2](service_company)
+    - [3](service_company)
+    - [4](service_company)
+    - [5](service_company)
+    - [6](service_company)
+    - [7](service_company)
+    - [8](service_company)
+    - [9](service_company)
+    - [10](service_company)
+    - [11](service_company)
+    - [12](service_company)
+    - [13](service_company)
+    - [14](service_company)
+    - [15](service_company)
+    - [16](service_company)
+    - [17](service_company)
+    - [18](service_company)
+    - [19](service_company)
+    - [20](service_company)
+    - [21](service_company)
+    - [22](service_company)
+    - [23](service_company)
+    - [24](service_company)
+    - [25](service_company)
+    - [26](service_company)
+    - [27](service_company)
+    - [28](service_company)
+    - [29](service_company)
+    - [30](service_company)
     - [Berliner Verkehrsbetriebe](service_company)
     - [Bundesministerium der Justiz und für Verbraucherschutz](service_company)
     - Ich interessiere mich für das [Bundesministerium der Justiz und für Verbraucherschutz](service_company)
@@ -195,8 +225,10 @@ nlu:
     - I am interested in information about my [Rechte](datatype) to the data
     - was sind meine [Rechte](datatype)?
     - Was sind meine [Rechte](datatype) an den Daten?
-    - [Controller](datatype)
-    - Ich interessiere mich für den [Controller](datatype)
+    - [Verantwortlicher](datatype)
+    - [Verantwortliche](datatype)
+    - [Verantwortliche*r](datatype)
+    - Ich interessiere mich für den [Verantwortlichen](datatype)
 - intent: data transfer to a specific country
   examples: |
     - Datenweitergabe an ein bestimmtes Land
