@@ -24,18 +24,14 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 ## Setup 
 
 - Sicherstellen, dass alle Dokumente im tilt hub abrufbar sind: `python preprocessing.py`
-- Neues Modell trainieren: 
-	- deutsch: `rasa train --data data/de/ --config config.yml --domain domain.yml --fixed-model-name "de-model"`
-	- englisch: `rasa train --data data/en/ --config config_en.yml -domain domain_en.yml --fixed-model-name "en-model"`
+- Neues Modell trainieren: rasa train --data data --config config.yml --domain domain.yml --fixed-model-name "de-model"`
 
-- Modell testen: 
-	- deutsch: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa shell --model models/de-model.tar.gz` oder `rasa shell --model models/de-model.tar.gz --debug`
-	- englisch: Action Server starten mittels `rasa run actions --actions actions.actions_en` und `rasa shell --model models/en-model.tar.gz` oder `rasa shell --model models/en-model.tar.gz --debug`
+- Modell testen: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa shell --model models/de-model.tar.gz` oder `rasa shell --model models/de-model.tar.gz --debug`
+
 
 ## Webinterface
 - im index.html die socket url anpassen z.B. `socketUrl: "http://localhost:80"` oder `socketUrl: "https://implementation.cloud`
 - deutsch: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --cors "*" --debug`
-- englisch: Action Server starten mittels `rasa run actions --actions actions.actions_en` und `rasa run --model models/en-model.tar.gz --enable-api --cors "*" --debug`
 
 ## REST API
 
@@ -44,16 +40,12 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 ## Telegram
 1. 	https version der Website erstellen: z.B. `ngrok http 5005` bei rasa x `ngrok http 80`
 2.	In credentials.yml bei webhook the https url einfügen
-3.	Action server und rasa starten: 
-	- deutsch: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector telegram --cors "*" --debug --credentials credentials.yml`
-	- englisch: `rasa run actions --actions actions.actions_en` und `rasa run --model models/en-model.tar.gz --enable-api --connector telegram --cors "*" --debug --credentials credentials.yml`
+3.	Action server und rasa starten: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector telegram --cors "*" --debug --credentials credentials.yml`
 5. 	in telegram "daskita_bot" suchen und Konversation starten
 
 ## Alexa
 1.	https version der Website erstellen: z.B. `ngrok http 5005` bei rasa x `ngrop http 80`
-2.	Action server und rasa starten: 
-	- deutsch: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml`
-	- englisch: `rasa run actions --actions actions.actions_en` und `rasa run --model models/en-model.tar.gz --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml`
+2.	Action server und rasa starten: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml`
 4.	auf der Amazon Alexa developer page: den endpoint mit der https url + `/webhooks/alexa_assistant/webhook` anpassen
 5.	auf der Amazon Alexa developer page: Build klicken
 6.	Konversation starten mit: `Alexa, starte datenschutz bot`
