@@ -54,11 +54,11 @@ slots:
     - Länder
     - Drittparteien
     - Anzahl von Drittparteien
-    - persönliche Daten
+    - personenbezogene Daten
     - Datenschutzbeauftragter
     - Datenportabilität
     - Rechte
-    - Controller
+    - Verantwortliche Person
     
   request:
     type: categorical
@@ -128,7 +128,7 @@ responses:
   
 #ask comparison
   utter_ask_comparison_form_comparison:
-  - text: "Oder möchtest du die Datenschutzerklärungen von verschiedenen Diensten vergleichen?"
+  - text: "Möchtest du die Datenschutzerklärungen von verschiedenen Diensten vergleichen?"
 
 #change to privacy path
   utter_ask_privacy_policy_path:
@@ -167,7 +167,7 @@ responses:
   
 #change to request path      
   utter_ask_request_path:
-  - text: "Möchtest du eine Auskunftsanfrage zu deinen Daten an einen Dienst stellen?"
+  - text: "Oder möchtest du eine Auskunftsanfrage zu deinen Daten an einen Dienst stellen?"
   
   #utter_ask_this_service_request:
   utter_ask_change_to_request_form_request:
@@ -191,10 +191,10 @@ responses:
       payload: "Weitergabe an ein Land"
     - title: "Welche dieser Dienste geben meine Daten an einen bestimmten Dienst weiter?"
       payload: "Datenweitergabe an einen bestimmten Dienst"
-    - title: "Werden meine persönlichen Daten zwischen diesen Diensten geteilt?"
+    - title: "Werden meine personenbezogene Daten zwischen diesen Diensten geteilt?"
       payload: "Datenaustausch"
     channel: 'socketio'
-  - text: "Woran hast du Interesse? Möglichkeiten sind: Welche dieser Dienste deine Daten an ein bestimmtes Land weitergeben, oder welche dieser Dienste deine Daten an einen bestimmten Dienst weitergeben, oder ob die Dienste deine persönlichen Daten untereinander teilen."
+  - text: "Woran hast du Interesse? Möglichkeiten sind: Welche dieser Dienste deine Daten an ein bestimmtes Land weitergeben, oder welche dieser Dienste deine Daten an einen bestimmten Dienst weitergeben, oder ob die Dienste deine personenbezogene Daten untereinander teilen."
       
   utter_give_comparison_info:
   - text: "Hier sind deine Informationen."
@@ -231,7 +231,7 @@ responses:
       payload: '/datatypes{"datatype":"third parties"}'
     - title: "Anzahl der Drittparteien an die meine Daten weitergegeben werden"
       payload: '/datatypes{"datatype":"number of third parties"}'
-    - title: "Persönliche Daten, die gespeichert werden"
+    - title: "Personenbezogene Daten, die gespeichert werden"
       payload: '/datatypes{"datatype":"personal data"}'
     - title: "Datenschutzbeauftragter"
       payload: '/datatypes{"datatype":"data protection officer"}'
@@ -239,7 +239,7 @@ responses:
       payload: '/datatypes{"datatype":"access to data portability"}'
     - title: "Information zu meinen Rechten an den Daten"
       payload: '/datatypes{"datatype":"right"}'
-    - title: "Controller"
+    - title: "Verantwortliche Person"
       payload: '/datatypes{"datatype":"controller"}'
   
   utter_ask_authentification:
