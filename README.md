@@ -50,6 +50,12 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 5.	auf der Amazon Alexa developer page: Build klicken
 6.	Konversation starten mit: `Alexa, starte datenschutz bot`
 
+## Hinzufügen einer neuen Datenschutzerklärung:
+1. tilt Dokument in tilt hub hochladen
+2. `preprocessing.py`ausführen
+3. Model trainieren mit `rasa train`
+4. Model bei Rasa X hochladen und aktivieren 
+
 ## Nutzung Rasa X:
 1. Evtl. Action server image erneuern: `docker build . -f Dockerfile_action_image -t <account_username>/chatbot:<custom_image_tag>`
 2. Evtl. neuen image tag im Ordner etc\rasa im file docker-compose.override.yml anpassen
