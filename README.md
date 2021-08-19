@@ -1,5 +1,10 @@
 # Chatbot
-Entwicklung eines Chatbots, mit dem NutzerInnen kommunizieren können (als NutzerInnenschnittstelle zu tilt-Dokumenten).
+
+<center>
+<h2> ➡️ 🌐 <a href="http://implementation.cloud:9999/"> Hier direkt ausprobieren.</a> ⬅️</h2>
+</center>
+
+Entwicklung eines Chatbots, mit dem NutzerInnen kommunizieren können (als Nutzer:innenschnittstelle zu tilt-Dokumenten).
 
 Mögliche Anwendungen: 
 1.	AP2 Transparenz: 
@@ -11,9 +16,6 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
   b)	Abfragen bei NutzerInnen, ob und welche Informationen gelöscht werden sollen -> (E-Mail) Löschanfrage wird automatisch generiert
   ->	Brücke zu unterstützten Auskunftsanfragen
 
-
-
-(weitere Anwendungen möglich)
 
 ![](./docs/uebersicht.png)
 
