@@ -1,7 +1,7 @@
 # Chatbot
 
 <center>
-<h2> ➡️ 🌐 <a href="http://implementation.cloud:9999/"> Hier direkt ausprobieren.</a> ⬅️</h2>
+<h2> ➡️ 🌐 <a href="http://implementation.cloud:9999/"> Hier direkt im Chat ausprobieren</a> oder auf <a href="https://www.amazon.de/gp/product/B09D3Q81PW">Amazon Alexa</a> installieren. ⬅️</h2>
 </center>
 
 Entwicklung eines Chatbots, mit dem NutzerInnen kommunizieren können (als Nutzer:innenschnittstelle zu tilt-Dokumenten).
