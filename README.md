@@ -65,3 +65,7 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 4. User hinzufügen mit `sudo python3 rasa_x_commands.py create --update admin me <PASSWORD>`
 5. Auf https://implementation.cloud gehen, Rasa x Benutzeroberfläche starten und einloggen
 6. Bot auf Website ist erreichbar unter https://implementation.cloud:9999
+
+## Credits
+- Development: Flora Muscinelli and Elias Grünewald
+- Admin: Elias Grünewald / https://developer.amazon.com/alexa/console/ask 
