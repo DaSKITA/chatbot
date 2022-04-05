@@ -5,7 +5,7 @@ import os
 import ruamel.yaml
 
 # aus datenbank alle möglichen services lesen
-url='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8082/'
+url = 'http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
 client = GraphQLClient(url)
 result = client.execute('''query { TiltNodes { edges { node { meta { name language} } } } } ''')
 result_dict=ast.literal_eval(result)
@@ -32,7 +32,7 @@ for r in result_dict:
     if r["node"]["meta"]["language"]=="de":
         name=r["node"]["meta"]["name"]
         list_services.append(name)
-    
+
 
 # list enthält alle third parties aus tilt hub
 for r in result_dict_company:
