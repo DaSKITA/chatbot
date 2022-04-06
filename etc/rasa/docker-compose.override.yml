@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   app:
-    image: "floramarleen/chatbot:action_server_image_tag"
+    image: "gebauerm23/chatbot:1.0"
     ports:
       - 5055:5055
   rabbit:

@@ -6,13 +6,13 @@
 
 Entwicklung eines Chatbots, mit dem NutzerInnen kommunizieren können (als Nutzer:innenschnittstelle zu tilt-Dokumenten).
 
-Mögliche Anwendungen: 
-1.	AP2 Transparenz: 
-NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) abfragen/angeboten bekommen 
+Mögliche Anwendungen:
+1.	AP2 Transparenz:
+NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) abfragen/angeboten bekommen
 
-2.	AP3 Auskunft: 
-  a)	NutzerInnen kännen angeben, welche Infos sie bei einem Dienst anfragen wollen (in tilt steht, welche Daten gesammelt werden -> werden von Chatbot „angeboten“) 
-			-> (E-Mail) Anfrage wird automatisch generiert      
+2.	AP3 Auskunft:
+  a)	NutzerInnen kännen angeben, welche Infos sie bei einem Dienst anfragen wollen (in tilt steht, welche Daten gesammelt werden -> werden von Chatbot „angeboten“)
+			-> (E-Mail) Anfrage wird automatisch generiert
   b)	Abfragen bei NutzerInnen, ob und welche Informationen gelöscht werden sollen -> (E-Mail) Löschanfrage wird automatisch generiert
   ->	Brücke zu unterstützten Auskunftsanfragen
 
@@ -23,7 +23,7 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
 Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenbank, um tilt-Dokumente auszulesen. Ausgespielt wird der Bot über eine Website und Messenger-Dienste.
 
 
-## Setup 
+## Setup
 
 - Sicherstellen, dass alle Dokumente im tilt hub abrufbar sind: `python preprocessing.py`
 - Neues Modell trainieren: rasa train --data data --config config.yml --domain domain.yml --fixed-model-name "de-model"`
@@ -56,16 +56,16 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 1. tilt Dokument in tilt hub hochladen
 2. `preprocessing.py`ausführen
 3. Model trainieren mit `rasa train`
-4. Model bei Rasa X hochladen und aktivieren 
+4. Model bei Rasa X hochladen und aktivieren
 
 ## Nutzung Rasa X:
 1. Evtl. Action server image erneuern: `docker build . -f Dockerfile_action_image -t <account_username>/chatbot:<custom_image_tag>`
 2. Evtl. neuen image tag im Ordner etc\rasa im file docker-compose.override.yml anpassen
-3. In den Ordner etc\rasa navigieren und `docker-compose up -d` ausführen
+3. In den Ordner etc\rasa navigieren und `docker-compose --env-file rasa-x.env up -d` ausführen
 4. User hinzufügen mit `sudo python3 rasa_x_commands.py create --update admin me <PASSWORD>`
 5. Auf https://implementation.cloud gehen, Rasa x Benutzeroberfläche starten und einloggen
 6. Bot auf Website ist erreichbar unter https://implementation.cloud:9999
 
 ## Credits
 - Development: Flora Muscinelli and Elias Grünewald
-- Admin: Elias Grünewald / https://developer.amazon.com/alexa/console/ask 
+- Admin: Elias Grünewald / https://developer.amazon.com/alexa/console/ask
