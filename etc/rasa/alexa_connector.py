@@ -16,12 +16,11 @@ logger = logging.getLogger(__name__)
 
 class AlexaConnector(InputChannel):
     """A custom http input channel for Alexa.
-    You can find more information on custom connectors in the 
+    You can find more information on custom connectors in the
     Rasa docs: https://rasa.com/docs/rasa/user-guide/connectors/custom-connectors/
     """
 
     @classmethod
-    #def name(cls):
     def name(cls) -> Text:
         return "alexa_assistant"
 
@@ -52,7 +51,7 @@ class AlexaConnector(InputChannel):
             else:
                 # get the Alexa-detected intent
                 intent = payload["request"]["intent"]["name"]
-        
+
                 # makes sure the user isn't trying to end the skill
                 if intent == "AMAZON.StopIntent":
                     session = "true"
@@ -63,13 +62,13 @@ class AlexaConnector(InputChannel):
 
                     # initialize output channel
                     out = CollectingOutputChannel()
-                    
+
                     # send the user message to Rasa & wait for the
                     # response to be sent back
                     await on_new_message(UserMessage(text, out))
                     # extract the text from Rasa's response
                     responses = [m["text"] for m in out.messages]
-                    #message = responses[0] 
+                    #message = responses[0]
                     #give more than the first response
                     message=""
                     for res in responses:

@@ -22,6 +22,10 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
 
 Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenbank, um tilt-Dokumente auszulesen. Ausgespielt wird der Bot über eine Website und Messenger-Dienste.
 
+## Requirements
+
+* Python < 3.9.0
+* Rasa == 2.8.14
 
 ## Setup
 

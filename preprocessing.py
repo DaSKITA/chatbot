@@ -44,7 +44,8 @@ for r in result_dict_company:
                 companies=recipient[j]["name"]
                 list_services.append(companies)
 list_services = list(dict.fromkeys(list_services))
-list_services.remove("null")
+if "null" in list_services:
+    list_services.remove("null")
 
 #combine services and third parties in string
 for name in list_services:
@@ -52,7 +53,7 @@ for name in list_services:
 
 
 # intent mit allen services und companies(third parties) befüllen
-with open(r'data\nlu.yml', 'r', encoding = "utf-8") as yaml_file:
+with open(r'data/nlu.yml', 'r', encoding = "utf-8") as yaml_file:
     code = ruamel.yaml.load(yaml_file, Loader=ruamel.yaml.RoundTripLoader)
     for i in range(len(code["nlu"])):
         for key in code["nlu"][i]:
@@ -60,7 +61,7 @@ with open(r'data\nlu.yml', 'r', encoding = "utf-8") as yaml_file:
                 if code["nlu"][i][key]=="services":
                     code["nlu"][i]["examples"]=string_services
 
-with open(r'data\nlu.yml', 'w', encoding = "utf-8") as yaml_file:
+with open(r'data/nlu.yml', 'w', encoding = "utf-8") as yaml_file:
     dump = ruamel.yaml.dump(code, default_flow_style = False, allow_unicode = True, encoding = None, Dumper=ruamel.yaml.RoundTripDumper)
     yaml_file.write( dump )
 
