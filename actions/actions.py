@@ -89,7 +89,7 @@ class ActionReadServices(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         channel = tracker.get_latest_input_channel() #get channel which is used
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name language} } } } } ''')
+        result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         if channel=="socketio":
@@ -205,7 +205,7 @@ class ActionGiveComparisonInfoSharingBetween(Action):
 
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name, language } } } } } ''')
+        result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
 
@@ -282,7 +282,7 @@ class ActionGiveComparisonInfoCountry(Action):
         country=GoogleTranslator(source='de', target='en').translate(country_de) #get english name of country
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name, language } } } } } ''')
+        result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
 
@@ -363,7 +363,7 @@ class ActionGiveComparisonInfoCompany(Action):
 
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta { name, language } } } } } ''')
+        result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
 
@@ -504,7 +504,7 @@ class ActionGiveServiceInfo(Action):
 
         #check if service name is possible, else return
         client = GraphQLClient(url)
-        result = client.execute('''query { TiltNodes { edges { node { meta {name, language} } } } } ''')
+        result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta {name, language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
         service_list=service
@@ -551,16 +551,8 @@ class ActionGiveServiceInfo(Action):
             tilt_username = os.environ.get("TILTHUB_USER")
             tilt_pw = os.environ.get("TILTHUB_PW")
             tilthub_response = requests.get(
-                base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}', auth=(tilt_username, tilt_pw))
+                base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '" }', auth=(tilt_username, tilt_pw))
             tilt_dict = json.loads(tilthub_response.text)[0]
-
-            # f=open('./access_data.json')
-            # data=json.load(f)
-            # username=data["database"]["user"]
-            # pw=data["database"]["pw"]
-            # #get file
-            # file= requests.get(address, auth=(username, pw))
-            # file_read = json.loads(file.text[1:-1])
             #instance = tilt.tilt_from_dict(tilt_dict)
             #tilt_dict=instance.to_dict()
 #################################################################################################################################################
@@ -1294,7 +1286,7 @@ class ActionGiveServiceInfo(Action):
                                     dpo.append(key_value_string)
                                 elif element=="country":
                                     country=str(dpo_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     dpo.append("Land"+ ": " +value_german)
                                 elif element !="name":

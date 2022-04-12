@@ -7,7 +7,7 @@ import ruamel.yaml
 # aus datenbank alle möglichen services lesen
 url = 'http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
 client = GraphQLClient(url)
-result = client.execute('''query { TiltNodes { edges { node { meta { name language} } } } } ''')
+result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name language} } } } } ''')
 result_dict=ast.literal_eval(result)
 result_dict=result_dict["data"]["TiltNodes"]["edges"]
 
