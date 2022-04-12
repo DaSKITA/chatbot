@@ -311,3 +311,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/python,macos,windows,pycharm,vscode
 
 .vscode
+etc/rasa/db/data

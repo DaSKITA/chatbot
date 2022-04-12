@@ -15,6 +15,9 @@ services:
         - ./actions:/app/actions
       ports:
         - 5055:5055
+      environment:
+        - TILTHUB_USER=${TILTHUB_USER}
+        - TILTHUB_PW=${TILTHUB_PW}
 
     webserver:
       container_name: webserver

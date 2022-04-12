@@ -5,26 +5,27 @@
 # https://rasa.com/docs/rasa/custom-actions
 
 from typing import Any, Text, Dict, List
-from rasa_sdk.events import UserUtteranceReverted
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
 
+import os
 import json
 import requests
 from tilt import tilt
 import pytz
 import ast
-import json
 from countrygroups import EUROPEAN_UNION
 from deep_translator import GoogleTranslator
 
 from graphqlclient import GraphQLClient
+
+base_url = "http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8080"
 url='http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
 
 
 #fill services slot
-class ActionSetSlotValueRequest(Action):
+class ActionSetSlotValueRequestService(Action):
     def name(self) -> Text:
         return "action_fill_service_slot"
 
@@ -36,7 +37,7 @@ class ActionSetSlotValueRequest(Action):
         return [SlotSet("service", slot_value_service_company)]
 
 #fill company slot
-class ActionSetSlotValueRequest(Action):
+class ActionSetSlotValueRequestCompany(Action):
     def name(self) -> Text:
         return "action_fill_company_slot"
 
@@ -75,6 +76,7 @@ class ActionGiveOptions(Action):
         dispatcher.utter_message(text=message, buttons=buttons)
         return []
 
+
 #new action:
 #read possible services from tilt hub and give options
 class ActionReadServices(Action):
@@ -112,8 +114,10 @@ class ActionReadServices(Action):
             message = message
         dispatcher.utter_message(text=message)
         return []
+
+
 #update Slots for path change
-class ActionSetSlotValueRequest(Action):
+class ActionSetSlotValueRequestChange(Action):
     def name(self) -> Text:
         return "action_change_to_request"
 
@@ -236,7 +240,7 @@ class ActionGiveComparisonInfoSharingBetween(Action):
                 dispatcher.utter_message(text="Leider haben wir keinen Informationen über den Dienst {}.".format(service))
                 continue
             #get tilt of service
-            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            address=base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
 
             # load password and username for database access
             f=open('./access_data.json')
@@ -317,7 +321,7 @@ class ActionGiveComparisonInfoCountry(Action):
 
 
             #get tilt of service
-            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            address=base_url+'/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
             #load password and username for database access
             f=open('./access_data.json')
             data=json.load(f)
@@ -394,7 +398,7 @@ class ActionGiveComparisonInfoCompany(Action):
                 continue
 
             #get tilt of service
-            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            address=base_url+'/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
             #load password and username for database access
             f=open('./access_data.json')
             data=json.load(f)
@@ -542,17 +546,23 @@ class ActionGiveServiceInfo(Action):
                     service_list.remove(service)
 
             #get tilt of service
-            address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
+            # address='http://ec2-18-185-97-19.eu-central-1.compute.amazonaws.com:8080/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
             #load password and username for database access
-            f=open('./access_data.json')
-            data=json.load(f)
-            username=data["database"]["user"]
-            pw=data["database"]["pw"]
-            #get file
-            file= requests.get(address, auth=(username, pw))
-            file_read = json.loads(file.text[1:-1])
-            instance = tilt.tilt_from_dict(file_read)
-            tilt_dict=instance.to_dict()
+            tilt_username = os.environ.get("TILTHUB_USER")
+            tilt_pw = os.environ.get("TILTHUB_PW")
+            tilthub_response = requests.get(
+                base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}', auth=(tilt_username, tilt_pw))
+            tilt_dict = json.loads(tilthub_response.text)[0]
+
+            # f=open('./access_data.json')
+            # data=json.load(f)
+            # username=data["database"]["user"]
+            # pw=data["database"]["pw"]
+            # #get file
+            # file= requests.get(address, auth=(username, pw))
+            # file_read = json.loads(file.text[1:-1])
+            #instance = tilt.tilt_from_dict(tilt_dict)
+            #tilt_dict=instance.to_dict()
 #################################################################################################################################################
             if channel =="telegram": #for telegram format differently
                 dispatcher.utter_message(text="Das sind die Informationen über die {} des Dienstes {}.".format(datatype_out, service_upper))

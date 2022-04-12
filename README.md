@@ -26,12 +26,13 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 
 * Python < 3.9.0
 * Rasa == 2.8.14
+* Download Tilt-Hub Credentials: `https://tubcloud.tu-berlin.de/f/1962491489`
 
 ## Setup
 
 - Sicherstellen, dass alle Dokumente im tilt hub abrufbar sind: `python preprocessing.py`
+- Request the TILTHUB .env file and set your environment variables via 'source tilthub-creds.txt'
 - Neues Modell trainieren: rasa train --data data --config config.yml --domain domain.yml --fixed-model-name "de-model"`
-
 - Modell testen: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa shell --model models/de-model.tar.gz` oder `rasa shell --model models/de-model.tar.gz --debug`
 
 
@@ -63,6 +64,7 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 4. Model bei Rasa X hochladen und aktivieren
 
 ## Nutzung Rasa X:
+1. Request the TILTHUB .env file and set your environment variables via 'source tilthub-creds.txt'
 1. Evtl. Action server image erneuern: `docker build . -f Dockerfile_action_image -t <account_username>/chatbot:<custom_image_tag>`
 2. Evtl. neuen image tag im Ordner etc\rasa im file docker-compose.override.yml anpassen
 3. In den Ordner etc\rasa navigieren und `docker-compose --env-file rasa-x.env up -d` ausführen

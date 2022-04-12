@@ -4,6 +4,10 @@ services:
     image: "gebauerm23/chatbot:1.0"
     ports:
       - 5055:5055
+    environment:
+        - TILTHUB_USER=${TILTHUB_USER}
+        - TILTHUB_PW=${TILTHUB_PW}
+
   rabbit:
     ports:
       - "5672:5672"
