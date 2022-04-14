@@ -21,7 +21,7 @@ from deep_translator import GoogleTranslator
 from graphqlclient import GraphQLClient
 
 base_url = "http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8080"
-url='http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
+url = 'http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
 
 
 #fill services slot
@@ -248,13 +248,12 @@ class ActionGiveComparisonInfoSharingBetween(Action):
             username=data["database"]["user"]
             pw=data["database"]["pw"]
             file= requests.get(address, auth=(str(username), str(pw)))
-            file_read = json.loads(file.text[1:-1])
-            instance = tilt.tilt_from_dict(file_read)
+            tilt_dict = json.loads(file.text[1:-1])
 
             #check if service transferres data to company
             part_yes="Der Dienst " + str(service) + " teilt deine Daten mit "
             yes_list=[]
-            for element in list(instance.data_disclosed):
+            for element in list(tilt_dict['dataDisclosed']):
                 for recipient in list(element.recipients):
                     if str(recipient.name).title() in service_list:
                         yes_list.append(str(recipient.name).title())
@@ -329,15 +328,14 @@ class ActionGiveComparisonInfoCountry(Action):
             pw=data["database"]["pw"]
             #get file
             file= requests.get(address, auth=(username, pw))
-            file_read = json.loads(file.text[1:-1])
-            instance = tilt.tilt_from_dict(file_read)
+            tilt_dict= json.loads(file.text[1:-1])
 
             #check if service transferres data to country
-            if not list(instance.third_country_transfers):
+            if not list(tilt_dict['thirdCountryTransfers']):
                 dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an das Land {} weiter.".format(service, country_de))
             else:
                 transfer=0
-                for element in list(instance.third_country_transfers):
+                for element in list(tilt_dict['thirdCountryTransfers']):
                     country_name=pytz.country_names[element.country]
                     if country_name==country:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an das Land {} weiter.".format(service, country_de))
@@ -407,17 +405,15 @@ class ActionGiveComparisonInfoCompany(Action):
             #get file
             file= requests.get(address, auth=(username, pw))
 
-            file_read = json.loads(file.text[1:-1])
-
-            instance = tilt.tilt_from_dict(file_read)
+            tilt_dict = json.loads(file.text[1:-1])
 
             #check if service transferres data to company
             answer=0
-            for element in list(instance.data_disclosed):
+            for element in list(tilt_dict['dataDisclosed']):
                 transfer=0
-                for recipient in list(element.recipients):
+                for recipient in list(element["recipients"]):
                     transfer=0
-                    if (company in str(recipient.name).title() and answer==0) or (company in str(recipient.name) and answer==0):
+                    if (company in str(recipient["name"]).title() and answer==0) or (company in str(recipient.name) and answer==0):
                         transfer=1
                         answer=1
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an das Unternehmen {} weiter.".format(service, company))
@@ -553,20 +549,18 @@ class ActionGiveServiceInfo(Action):
             tilthub_response = requests.get(
                 base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '" }', auth=(tilt_username, tilt_pw))
             tilt_dict = json.loads(tilthub_response.text)[0]
-            #instance = tilt.tilt_from_dict(tilt_dict)
-            #tilt_dict=instance.to_dict()
 #################################################################################################################################################
             if channel =="telegram": #for telegram format differently
                 dispatcher.utter_message(text="Das sind die Informationen über die {} des Dienstes {}.".format(datatype_out, service_upper))
 
                 if datatype=="countries" and len(service_list)==1: #if only one service given
-                    if not list(instance.third_country_transfers):
+                    if not list(tilt_dict["thirdCountryTransfers"]):
                         dispatcher.utter_message(text="Deine Daten werden in kein Land weitergegeben.")
                     else:
                         countries=[]
                         EU=0
-                        for element in list(instance.third_country_transfers):
-                            country_name=pytz.country_names[element.country]
+                        for element in list(tilt_dict["thirdCountryTransfers"]):
+                            country_name=pytz.country_names[element["country"]]
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -582,17 +576,17 @@ class ActionGiveServiceInfo(Action):
 
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
-                    for element in list(instance.third_country_transfers):
-                        country_name=pytz.country_names[element.country]
+                    for element in list(tilt_dict["thirdCountryTransfers"]):
+                        country_name=pytz.country_names[element["country"]]
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
 
                 elif datatype=="personal data":
                     categories=[]
-                    for element in list(instance.data_disclosed):
+                    for element in list(tilt_dict['dataDisclosed']):
                         if element != "":
-                            categories.append(element.category)
+                            categories.append(element["category"])
                     if not categories:
                         dispatcher.utter_message(text="Der Dienst {} speichert keine personenbezogene Daten von dir.".format(service_upper))
                     else:
@@ -601,9 +595,9 @@ class ActionGiveServiceInfo(Action):
 
                 elif datatype=="third parties":
                     third_parties=[]
-                    for element in list(instance.data_disclosed):
-                        for recipient in list(element.recipients):
-                            third_parties.append(recipient.name)
+                    for element in list(tilt_dict['dataDisclosed']):
+                        for recipient in list(element["recipients"]):
+                            third_parties.append(recipient["name"])
                     if None in third_parties:
                             third_parties.remove(None)
                     if not third_parties:
@@ -614,9 +608,9 @@ class ActionGiveServiceInfo(Action):
 
                 elif datatype=="number of third parties":
                     third_parties=[]
-                    for element in list(instance.data_disclosed):
-                        for recipient in list(element.recipients):
-                            third_parties.append(recipient.name)
+                    for element in list(tilt_dict['dataDisclosed']):
+                        for recipient in list(element["recipients"]):
+                            third_parties.append(recipient["name"])
                     if None in third_parties:
                             third_parties.remove(None)
                     if not third_parties:
@@ -725,11 +719,11 @@ class ActionGiveServiceInfo(Action):
                             else:
                                 info_access.append("Datenportabilität ist nicht möglich.")
                         if access_dict["description"]:
-                            info_access.append(str(file_read["accessAndDataPortability"]["description"]))
+                            info_access.append(str(tilt_dict["accessAndDataPortability"]["description"]))
                         if access_dict["url"]:
-                            info_access.append("URL: "+str(file_read["accessAndDataPortability"]["url"]))
+                            info_access.append("URL: "+str(tilt_dict["accessAndDataPortability"]["url"]))
                         if access_dict["email"]:
-                            link_email= "mailto:"+ str(file_read["accessAndDataPortability"]["email"])
+                            link_email= "mailto:"+ str(tilt_dict["accessAndDataPortability"]["email"])
                             info_access.append("E-Mail: "+ link_email)
                         if access_dict["identificationEvidences"]:
                             identification=[]
@@ -835,13 +829,13 @@ class ActionGiveServiceInfo(Action):
 
                 if datatype=="countries" and len(service_list)==1: #if only one service given
 
-                    if not list(instance.third_country_transfers):
+                    if not list(tilt_dict["thirdCountryTransfers"]):
                         dispatcher.utter_message(text="Deine Daten werden in keine anderen Länder weitergegeben.")
                     else:
                         countries=[]
                         EU=0
-                        for element in list(instance.third_country_transfers):
-                            country_name=pytz.country_names[element.country]
+                        for element in list(tilt_dict["thirdCountryTransfers"]):
+                            country_name=pytz.country_names[element["country"]]
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -857,17 +851,18 @@ class ActionGiveServiceInfo(Action):
 
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
-                    for element in list(instance.third_country_transfers):
-                        country_name=pytz.country_names[element.country]
+                    for element in list(tilt_dict["thirdCountryTransfers"]):
+                        # TODO: write a wrapper class for this block
+                        country_name=pytz.country_names[element["country"]]
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
 
                 elif datatype=="personal data":
                     categories=[]
-                    for element in list(instance.data_disclosed):
+                    for element in list(tilt_dict['dataDisclosed']):
                         if element != "":
-                            categories.append(element.category)
+                            categories.append(element)
                     if not categories:
                         dispatcher.utter_message(text="Der Dienst {} speichert keine personenbezogene Daten über dich.".format(service_upper))
                     else:
@@ -876,9 +871,9 @@ class ActionGiveServiceInfo(Action):
 
                 elif datatype=="third parties":
                     third_parties=[]
-                    for element in list(instance.data_disclosed):
-                        for recipient in list(element.recipients):
-                            third_parties.append(recipient.name)
+                    for element in list(tilt_dict['dataDisclosed']):
+                        for recipient in list(element["recipients"]):
+                            third_parties.append(recipient["name"])
                     if None in third_parties:
                             third_parties.remove(None)
                     if third_parties==[]:
@@ -889,9 +884,9 @@ class ActionGiveServiceInfo(Action):
 
                 elif datatype=="number of third parties":
                     third_parties=[]
-                    for element in list(instance.data_disclosed):
-                        for recipient in list(element.recipients):
-                            third_parties.append(recipient.name)
+                    for element in list(tilt_dict['dataDisclosed']):
+                        for recipient in list(element["recipients"]):
+                            third_parties.append(recipient["name"])
                     if None in third_parties:
                             third_parties.remove(None)
                     if not third_parties:
@@ -1035,11 +1030,11 @@ class ActionGiveServiceInfo(Action):
                             else:
                                 info_access.append("Datenportabilität ist nicht möglich.")
                         if access_dict["description"]:
-                            info_access.append(str(file_read["accessAndDataPortability"]["description"]))
+                            info_access.append(str(tilt_dict["accessAndDataPortability"]["description"]))
                         if access_dict["url"]:
-                            info_access.append("URL: "+ "*"+str(file_read["accessAndDataPortability"]["url"])+"*")
+                            info_access.append("URL: "+ "*"+str(tilt_dict["accessAndDataPortability"]["url"])+"*")
                         if access_dict["email"]:
-                            link_email= "mailto:"+ str(file_read["accessAndDataPortability"]["email"])
+                            link_email= "mailto:"+ str(tilt_dict["accessAndDataPortability"]["email"])
                             info_access.append("E-Mail: "+"*"+ link_email+"*")
                         if access_dict["identificationEvidences"]:
                             identification=[]
@@ -1144,13 +1139,13 @@ class ActionGiveServiceInfo(Action):
                     dispatcher.utter_message(text="Das sind die Informationen des Dienstes {} über die {}.".format(service_upper, datatype_out))
 
                 if datatype=="countries" and len(service_list)==1: #if only one service given
-                    if not list(instance.third_country_transfers):
+                    if not list(tilt_dict["thirdCountryTransfers"]):
                         dispatcher.utter_message(text="Deine Daten werden in keine anderen Länder weitergegeben.")
                     else:
                         countries=[]
                         EU=0
-                        for element in list(instance.third_country_transfers):
-                            country_name=pytz.country_names[element.country]
+                        for element in list(tilt_dict["thirdCountryTransfers"]):
+                            country_name=pytz.country_names[element["country"]]
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -1166,17 +1161,17 @@ class ActionGiveServiceInfo(Action):
 
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
-                    for element in list(instance.third_country_transfers):
-                        country_name=pytz.country_names[element.country]
+                    for element in list(tilt_dict["thirdCountryTransfers"]):
+                        country_name=pytz.country_names[element["country"]]
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
 
                 elif datatype=="personal data":
                     categories=[]
-                    for element in list(instance.data_disclosed):
+                    for element in list(tilt_dict['dataDisclosed']):
                         if element != "":
-                            categories.append(element.category)
+                            categories.append(element["category"])
                     if categories==[]:
                         dispatcher.utter_message(text="Der Dienst {} speichert keine personenbezogene Daten von dir.".format(service_upper))
                     else:
@@ -1186,9 +1181,9 @@ class ActionGiveServiceInfo(Action):
 
                 elif datatype=="third parties":
                     third_parties=[]
-                    for element in list(instance.data_disclosed):
-                        for recipient in list(element.recipients):
-                            third_parties.append(recipient.name)
+                    for element in list(tilt_dict['dataDisclosed']):
+                        for recipient in list(element["recipients"]):
+                            third_parties.append(recipient["name"])
                     if None in third_parties:
                             third_parties.remove(None)
                     if not third_parties:
@@ -1199,9 +1194,9 @@ class ActionGiveServiceInfo(Action):
 
                 elif datatype=="number of third parties":
                     third_parties=[]
-                    for element in list(instance.data_disclosed):
-                        for recipient in list(element.recipients):
-                            third_parties.append(recipient.name)
+                    for element in list(tilt_dict['dataDisclosed']):
+                        for recipient in list(element["recipients"]):
+                            third_parties.append(recipient["name"])
                     if None in third_parties:
                             third_parties.remove(None)
                     if not third_parties:
@@ -1308,11 +1303,11 @@ class ActionGiveServiceInfo(Action):
                             else:
                                 info_access.append("Datenportabilität ist nicht möglich.")
                         if access_dict["description"]:
-                            info_access.append(str(file_read["accessAndDataPortability"]["description"]))
+                            info_access.append(str(tilt_dict["accessAndDataPortability"]["description"]))
                         if access_dict["url"]:
-                            info_access.append("URL: "+str(file_read["accessAndDataPortability"]["url"]))
+                            info_access.append("URL: "+str(tilt_dict["accessAndDataPortability"]["url"]))
                         if access_dict["email"]:
-                            link_email= str(file_read["accessAndDataPortability"]["email"])
+                            link_email= str(tilt_dict["accessAndDataPortability"]["email"])
                             info_access.append("E-Mail: "+ link_email)
                         if access_dict["identificationEvidences"]:
                             identification=[]
