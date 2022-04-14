@@ -12,7 +12,6 @@ from rasa_sdk.events import SlotSet
 import os
 import json
 import requests
-from tilt import tilt
 import pytz
 import ast
 from countrygroups import EUROPEAN_UNION
