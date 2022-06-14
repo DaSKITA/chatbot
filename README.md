@@ -1,9 +1,10 @@
 # Chatbot
 
-<center>
+<!-- <center>
 <h2> ➡️ 🌐 <a href="http://implementation.cloud:9999/"> Hier direkt im Chat ausprobieren</a> oder auf <a href="https://www.amazon.de/gp/product/B09D3Q81PW">Amazon Alexa</a> installieren. ⬅️</h2>
-</center>
+</center> -->
 
+<!--
 Entwicklung eines Chatbots, mit dem NutzerInnen kommunizieren können (als Nutzer:innenschnittstelle zu tilt-Dokumenten).
 
 Mögliche Anwendungen:
@@ -15,12 +16,24 @@ NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) a
 			-> (E-Mail) Anfrage wird automatisch generiert
   b)	Abfragen bei NutzerInnen, ob und welche Informationen gelöscht werden sollen -> (E-Mail) Löschanfrage wird automatisch generiert
   ->	Brücke zu unterstützten Auskunftsanfragen
+-->
+
+Development of a chatbot with which users can communicate (as a user interface to tilt documents).
+
+Possible applications:
+1. Transparency:
+Users can request/get (parts of) transparency information (from tilt documents).
+
+2. Data subject access requests:
+  a) users can specify what info they want to request from a service (in tilt it says what data is collected -> are "offered" by chatbot).
+			-> (email) request is generated automatically
+  b) ask users if and which information should be deleted -> (email) deletion request is generated automatically
+  -> bridge to supported information requests
+
 
 
 ![](./docs/uebersicht.png)
 
-
-Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenbank, um tilt-Dokumente auszulesen. Ausgespielt wird der Bot über eine Website und Messenger-Dienste.
 
 ## Requirements
 
@@ -28,7 +41,7 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 * Rasa == 2.8.14
 * Download Tilt-Hub Credentials: `https://tubcloud.tu-berlin.de/f/1962491489`
 
-## Setup
+## Setup (in German)
 
 - Sicherstellen, dass alle Dokumente im tilt hub abrufbar sind: `python preprocessing.py`
 - Request the TILTHUB .env file and set your environment variables via 'source tilthub-creds.txt'
@@ -57,6 +70,8 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 5.	auf der Amazon Alexa developer page: Build klicken
 6.	Konversation starten mit: `Alexa, starte datenschutz bot`
 
+See also https://developer.amazon.com/alexa/console/ask.
+
 ## Hinzufügen einer neuen Datenschutzerklärung:
 1. tilt Dokument in tilt hub hochladen
 2. `preprocessing.py`ausführen
@@ -73,5 +88,4 @@ Der Chatbot ist mit Rasa Open Source programmiert. Er nutzt tilt-hub als Datenba
 6. Bot auf Website ist erreichbar unter https://implementation.cloud:9999
 
 ## Credits
-- Development: Flora Muscinelli and Elias Grünewald
-- Admin: Elias Grünewald / https://developer.amazon.com/alexa/console/ask
+- Development: Elias Grünewald, Flora Muscinelli, Michael Gebauer, and Nicola Leschke
