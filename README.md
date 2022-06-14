@@ -25,8 +25,7 @@ Possible applications:
 Users can request/get (parts of) transparency information (from tilt documents).
 
 2. Data subject access requests:
-  a) users can specify what info they want to request from a service (in tilt it says what data is collected -> are "offered" by chatbot).
-			-> (email) request is generated automatically
+  a) users can specify what info they want to request from a service (in tilt it says what data is collected -> are "offered" by chatbot) -> (email) request is generated automatically
   b) ask users if and which information should be deleted -> (email) deletion request is generated automatically
   -> bridge to supported information requests
 
