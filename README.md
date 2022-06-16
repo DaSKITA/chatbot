@@ -31,7 +31,7 @@ Users can request/get (parts of) transparency information (from tilt documents).
 
 
 
-![](./docs/uebersicht.png)
+<!-- ![](./docs/uebersicht.png) -->
 
 
 ## Requirements
