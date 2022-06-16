@@ -339,7 +339,7 @@ class ActionGiveComparisonInfoCountry(Action):
             else:
                 transfer=0
                 for element in list(tilt_dict['thirdCountryTransfers']):
-                    country_name=pytz.country_names[element.country]
+                    country_name=pytz.country_names.get(element.get("country", ""), "")
                     if country_name==country:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an das Land {} weiter.".format(service, country_de))
                         transfer=1
@@ -566,7 +566,7 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get("", ""), "")
+                            country_name=pytz.country_names.get(element.get("country", ""), "")
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -585,7 +585,7 @@ class ActionGiveServiceInfo(Action):
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
-                        country_name=pytz.country_names.get(element.get("", ""), "")
+                        country_name=pytz.country_names.get(element.get("country", ""), "")
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
@@ -843,7 +843,7 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get("", ""), "")
+                            country_name=pytz.country_names.get(element.get("country", ""), "")
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -861,7 +861,7 @@ class ActionGiveServiceInfo(Action):
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
                         # TODO: write a wrapper class for this block
-                        country_name=pytz.country_names.get(element.get("", ""), "")
+                        country_name=pytz.country_names.get(element.get("country", ""), "")
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
@@ -1153,7 +1153,7 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get("", ""), "")
+                            country_name=pytz.country_names.get(element.get(element, ""), "")
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -1172,7 +1172,7 @@ class ActionGiveServiceInfo(Action):
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
-                        country_name=pytz.country_names.get(element.get("", ""), "")
+                        country_name=pytz.country_names.get(element.get("country", ""), "")
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
