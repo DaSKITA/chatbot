@@ -97,7 +97,7 @@ nlu:
     - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
 - intent: services
   examples: |
-    - [Johannes](service_company)
+    - [TILT Baker](service_company)
     - [ZDF Mediathek](service_company)
     - [whatsapp](service_company)
     - [webde](service_company)
@@ -154,8 +154,8 @@ nlu:
     - [amazon](service_company)
     - [Adobe](service_company)
     - [Google Support](service_company)
-    - [InformationsTechnikZentrum Bund (ITZBund)](service_company)
-    - [Matomo](service_company)
+    - [Crumble AG](service_company)
+    - [Twink Inc.](service_company)
     - [[]](service_company)
     - [We may disclose your Personal Information to members of our corporate group (that is, entities that control, are controlled by, or are under common control with us)](service_company)
     - [Service providers.](service_company)

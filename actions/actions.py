@@ -242,10 +242,12 @@ class ActionGiveComparisonInfoSharingBetween(Action):
             address=base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
 
             # load password and username for database access
-            f=open('./access_data.json')
-            data=json.load(f)
-            username=data["database"]["user"]
-            pw=data["database"]["pw"]
+            # f=open('./access_data.json')
+            # data=json.load(f)
+            # username=data["database"]["user"]
+            # pw=data["database"]["pw"]
+            username = os.environ["TILTHUB_USER"]
+            pw = os.environ["TILTHUB_PW"]
             file= requests.get(address, auth=(str(username), str(pw)))
             tilt_dict = json.loads(file.text[1:-1])
 
@@ -321,10 +323,12 @@ class ActionGiveComparisonInfoCountry(Action):
             #get tilt of service
             address=base_url+'/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
             #load password and username for database access
-            f=open('./access_data.json')
-            data=json.load(f)
-            username=data["database"]["user"]
-            pw=data["database"]["pw"]
+            # f=open('./access_data.json')
+            # data=json.load(f)
+            # username=data["database"]["user"]
+            # pw=data["database"]["pw"]
+            username = os.environ["TILTHUB_USER"]
+            pw = os.environ["TILTHUB_PW"]
             #get file
             file= requests.get(address, auth=(username, pw))
             tilt_dict= json.loads(file.text[1:-1])
@@ -397,10 +401,13 @@ class ActionGiveComparisonInfoCompany(Action):
             #get tilt of service
             address=base_url+'/tilt/tilt?filter={"meta.name" : "' + meta_name + '"}'
             #load password and username for database access
-            f=open('./access_data.json')
-            data=json.load(f)
-            username=data["database"]["user"]
-            pw=data["database"]["pw"]
+            # f=open('./access_data.json')
+            # data=json.load(f)
+            # username=data["database"]["user"]
+            # pw=data["database"]["pw"]
+            username = os.environ["TILTHUB_USER"]
+            pw = os.environ["TILTHUB_PW"]
+
             #get file
             file= requests.get(address, auth=(username, pw))
 
