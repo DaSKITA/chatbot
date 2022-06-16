@@ -566,24 +566,26 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names[element["country"]]
+                            country_name=pytz.country_names.get(element.get("", ""), "")
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
                             countries.append(country_name_german)
-                        number_countries=len(countries)
+                        number_countries=len([country for country in countries if country != ""])
                         countries_string = ', '.join([str(elem) for elem in countries])
                         if number_countries>1:
                             dispatcher.utter_message(text="Deine Daten werden in {} andere Länder weitergegeben. {} davon gehören zur Europäischen Unsion. **Die Länder sind:** {}".format(str(number_countries), str(EU), countries_string))
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}".format(countries_string))
+                        elif number_countries == 0:
+                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor oder deine Daten werden an keine anderen Länder weitergegeben.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}".format(countries_string))
 
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
-                        country_name=pytz.country_names[element["country"]]
+                        country_name=pytz.country_names.get(element.get("", ""), "")
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
@@ -841,7 +843,7 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names[element["country"]]
+                            country_name=pytz.country_names.get(element.get("", ""), "")
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
@@ -859,7 +861,7 @@ class ActionGiveServiceInfo(Action):
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
                         # TODO: write a wrapper class for this block
-                        country_name=pytz.country_names[element["country"]]
+                        country_name=pytz.country_names.get(element.get("", ""), "")
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
@@ -1151,24 +1153,26 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names[element["country"]]
+                            country_name=pytz.country_names.get(element.get("", ""), "")
                             country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
                             countries.append(country_name_german)
-                        number_countries=len(countries)
+                        number_countries=len([country for country in countries if country != ""])
                         countries_string = ', '.join([str(elem) for elem in countries])
                         if number_countries>1:
                             dispatcher.utter_message(text="Deine Daten werden in {} andere Länder weitergegeben. {} davon gehören zur Europäischen Unsion. Die Länder sind:  {}".format(str(number_countries), str(EU), countries_string))
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}.".format(countries_string))
+                        elif number_countries == 0:
+                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor oder deine Daten werden an keine anderen Länder weitergegeben.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}.".format(countries_string))
 
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
-                        country_name=pytz.country_names[element["country"]]
+                        country_name=pytz.country_names.get(element.get("", ""), "")
                         country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})

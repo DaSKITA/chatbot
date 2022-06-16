@@ -10,7 +10,7 @@ rules:
   - action: action_read_services
 
 - rule: repeat services requests
-  steps: 
+  steps:
   - action: utter_ask_privacy_form_service
   - action: action_read_services
   - intent: repeat
@@ -32,7 +32,7 @@ rules:
   - intent: repeat
   - action: utter_ask_request_form_service
   - action: action_read_services
-  
+
 #activate comparison form
 - rule: Activate comparison form
   steps:
@@ -67,7 +67,7 @@ rules:
   steps:
   - action: utter_ask_comparison_form_comparison_types
   - intent: repeat
-  - action: utter_ask_comparison_form_comparison_types  
+  - action: utter_ask_comparison_form_comparison_types
 
 - rule: ask which country
   steps:
@@ -86,22 +86,22 @@ rules:
   - action: utter_ask_comparison_country
   - intent: country
   - action: action_give_comparison_info_country
-  - action: utter_ask_comparison_types_again 
+  - action: utter_ask_comparison_types_again
 
 - rule: repeat comparison, country
   steps:
   - action: action_give_comparison_info_country
-  - action: utter_ask_comparison_types_again 
+  - action: utter_ask_comparison_types_again
   - intent: repeat
   - action: action_give_comparison_info_country
-  - action: utter_ask_comparison_types_again  
-  
+  - action: utter_ask_comparison_types_again
+
 - rule: ask which company
   steps:
   - action: utter_ask_comparison_form_comparison_types
   - intent: data transfer to a specific company
   - action: utter_ask_comparison_company
-  
+
 - rule: repeat ask which company
   steps:
   - action: utter_ask_comparison_company
@@ -113,30 +113,30 @@ rules:
   - action: utter_ask_comparison_country
   - intent: country
   - action: action_give_comparison_info_country
-  - action: utter_ask_comparison_types_again 
-  
+  - action: utter_ask_comparison_types_again
+
 - rule: repeat comparison types
-  steps: 
-  - action: utter_ask_comparison_types_again 
+  steps:
+  - action: utter_ask_comparison_types_again
   - intent: repeat
-  - action: utter_ask_comparison_types_again 
-  
+  - action: utter_ask_comparison_types_again
+
 - rule: give info and ask for more comparison types; sharing between
   steps:
   - action: utter_ask_comparison_form_comparison_types
   - intent: data sharing between these services
   - action: action_give_comparison_info_sharing_between
-  - action: utter_ask_comparison_types_again 
-  
+  - action: utter_ask_comparison_types_again
+
 - rule: ask for company, give info and ask for more comparison types
   steps:
   - action: utter_ask_comparison_company
   - intent: services
   - action: action_fill_company_slot
   - action: action_give_comparison_info_company
-  - action: utter_ask_comparison_types_again  
-  
-- rule: give option to more comparison types 
+  - action: utter_ask_comparison_types_again
+
+- rule: give option to more comparison types
   steps:
   - action: utter_ask_comparison_types_again
   - intent: affirm
@@ -191,14 +191,14 @@ rules:
   - action: utter_ask_privacy_policy_path
 
 - rule: if no other service, say goodbye; request
-  steps: 
+  steps:
   - action: utter_ask_privacy_policy_path
   - action: utter_ask_comparison_form_comparison
   - intent: deny
   - action: utter_goodbye
-  
+
 - rule: repeat ask for path change to privacy
-  steps: 
+  steps:
   - action: utter_ask_privacy_policy_path
   - action: utter_ask_comparison_form_comparison
   - intent: repeat
@@ -211,7 +211,7 @@ rules:
   - action: utter_ask_request_path
   - intent: deny
   - action: utter_goodbye
-  
+
 - rule: repeat ask request path
   steps:
   - action: utter_ask_comparison_form_comparison
@@ -221,12 +221,12 @@ rules:
   - action: utter_ask_request_path
 
 #privacy path
-- rule: start privacy track 
-  steps: 
-  - intent: privacy_policies 
+- rule: start privacy track
+  steps:
+  - intent: privacy_policies
   - action: utter_ask_privacy_form_service
   - action: action_read_services
-  
+
 - rule: repeat services, privacy path
   steps:
   - action: utter_ask_privacy_form_service
@@ -243,7 +243,7 @@ rules:
   - action: action_fill_service_slot
   - action: utter_ask_privacy_form_datatype
   - action: action_give_options
-  
+
 - rule: repeat ask for datatype
   steps:
   - action: utter_ask_privacy_form_datatype
@@ -258,7 +258,7 @@ rules:
 #  - action: action_listen
 #  - intent: repeat
 #  - action: utter_ask_privacy_form_datatype
-#  - action: action_give_options  
+#  - action: action_give_options
 
 - rule: give info if asked for datatype and ask for more datatypes; privacy
   steps:
@@ -296,7 +296,7 @@ rules:
   - action: utter_datatypes_again
   - intent: deny
   - action: utter_ask_service_again
-  
+
 - rule: repeat other datatypes
   steps:
   - action: utter_datatypes_again
@@ -328,7 +328,7 @@ rules:
   - intent: deny
   - action: utter_ask_comparison_form_comparison
   - action: utter_ask_request_path
-  
+
 
 
 
@@ -341,7 +341,7 @@ rules:
 #  - action: utter_ask_change_to_request_form_request
 #
 #- rule: repeat change to request path, which service
-#  steps: 
+#  steps:
 #  - action: action_change_to_request
 #  - action: utter_ask_change_to_request_form_request
 #  - intent: repeat
@@ -355,9 +355,9 @@ rules:
 #  - action: action_another_service
 #  - action: utter_ask_request_form_service
 #  - action: action_read_services
-#  
+#
 #- rule: repeat change to request path
-#  steps: 
+#  steps:
 #  - action: utter_ask_request_form_service
 #  - action: action_read_services
 #  - intent: repeat
@@ -381,7 +381,7 @@ rules:
   - action: utter_ask_request_form_datatype
 
 - rule: change to request track; no change
-  steps: 
+  steps:
   - action: utter_ask_change_to_request_form_request
   - intent: no_service
   - action: action_no_service
@@ -396,7 +396,7 @@ rules:
 
 #request track
 - rule: ask for services, request
-  steps: 
+  steps:
   - action: utter_ask_request_form_service
   - action: action_read_services
   - intent: services
@@ -404,7 +404,7 @@ rules:
   - action: utter_ask_authentification
   - action: utter_ask_privacy_policy_path
   - action: utter_ask_comparison_form_comparison
-  
+
 
 #- rule: ask for datatype; request
 #  steps:
@@ -437,7 +437,7 @@ rules:
 #  - action: utter_ask_request_form_service
 #  - action: action_read_services
 
-  
+
 #- rule: ask for track change to policy track; request
 #  steps:
 #  - action: utter_ask_authentification
@@ -448,13 +448,13 @@ rules:
 
 
 #- rule: repeat ask for path change to privacy
-#  steps: 
+#  steps:
 #  - action: utter_ask_privacy_policy_path
 #  - action: utter_ask_comparison_form_comparison
 #  - intent: repeat
 #  - action: utter_ask_privacy_policy_path
 #  - action: utter_ask_comparison_form_comparison
-  
+
 
 
 #change to privacy track
@@ -465,13 +465,13 @@ rules:
 #  - intent: affirm
 #  - action: action_change_to_privacy
 #  - action: utter_ask_change_to_privacy_form_policy
-#  
+#
 #- rule: repeat ask which service, privacy
-#  steps: 
+#  steps:
 #  - action: utter_ask_change_to_privacy_form_policy
 #  - intent: repeat
 #  - action: utter_ask_change_to_privacy_form_policy
-#  
+#
 #- rule: change to privacy track; another service
 #  steps:
 #  - action: utter_ask_change_to_privacy_form_policy
@@ -479,7 +479,7 @@ rules:
 #  - action: action_another_service
 #  - action: utter_ask_privacy_form_service
 #  - action: action_read_services
-  
+
 - rule: repeat service options, privacy
   steps:
   - action: utter_ask_privacy_form_service
@@ -505,7 +505,7 @@ rules:
   - action: action_give_options
 
 #- rule: change to privacy track; no change
-#  steps: 
+#  steps:
 #  - action: utter_ask_change_to_privacy_form_policy
 #  - intent: no_service
 #  - action: action_no_service
@@ -531,7 +531,7 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
-  
+
 - rule: repeat bot
   steps:
   - action: utter_iamabot
@@ -545,8 +545,8 @@ rules:
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_requesting
-  
+  # - action: utter_ask_requesting
+
 - rule: Introduce yourself after user greets
   steps:
   - intent: greet
@@ -554,33 +554,33 @@ rules:
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_requesting
+  # - action: utter_ask_requesting
 
 - rule: repeat introduction
-  steps: 
+  steps:
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_requesting
+  # - action: utter_ask_requesting
   - intent: repeat
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_requesting
+  # - action: utter_ask_requesting
 
-#go back to start 
+#go back to start
 - rule: Go back to start
   steps:
   - intent: start_again
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
   - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_requesting
-  
+  # - action: utter_ask_requesting
+
 #- rule: repeat last message
 #  steps:
 #  - intent: repeat
 #  - action: action_repeat
-  
-  
+
+
 
