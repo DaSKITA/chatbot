@@ -15,7 +15,6 @@ Our user study shows, that TIBO purifies textual privacy policies and achieves t
 The following figure shows the general architecture of TIBO.
 ![](./docs/tibo.png)
 
-
 ## Requirements
 
 * Python < 3.9.0
