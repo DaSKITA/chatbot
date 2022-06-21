@@ -1,90 +1,89 @@
-# Chatbot
+# Transparency Information Bot (TIBO)
 
-<!-- <center>
-<h2> ➡️ 🌐 <a href="http://implementation.cloud:9999/"> Hier direkt im Chat ausprobieren</a> oder auf <a href="https://www.amazon.de/gp/product/B09D3Q81PW">Amazon Alexa</a> installieren. ⬅️</h2>
-</center> -->
-
-<!--
-Entwicklung eines Chatbots, mit dem NutzerInnen kommunizieren können (als Nutzer:innenschnittstelle zu tilt-Dokumenten).
-
-Mögliche Anwendungen:
-1.	AP2 Transparenz:
-NutzerInnen können (Teile der) Transparenzinformationen (aus tilt Dokumenten) abfragen/angeboten bekommen
-
-2.	AP3 Auskunft:
-  a)	NutzerInnen kännen angeben, welche Infos sie bei einem Dienst anfragen wollen (in tilt steht, welche Daten gesammelt werden -> werden von Chatbot „angeboten“)
-			-> (E-Mail) Anfrage wird automatisch generiert
-  b)	Abfragen bei NutzerInnen, ob und welche Informationen gelöscht werden sollen -> (E-Mail) Löschanfrage wird automatisch generiert
-  ->	Brücke zu unterstützten Auskunftsanfragen
--->
-
-Development of a chatbot with which users can communicate (as a user interface to tilt documents).
+Development of a conversational AI with which users can communicate (as a user interface to tilt documents).
 
 Possible applications:
 1. Transparency:
 Users can request/get (parts of) transparency information (from tilt documents).
+Our user study shows, that TIBO purifies textual privacy policies and achieves the goal of making transparency information more accessible for users.
 
 2. Data subject access requests:
   a) users can specify what info they want to request from a service (in tilt it says what data is collected -> are "offered" by chatbot) -> (email) request is generated automatically
   b) ask users if and which information should be deleted -> (email) deletion request is generated automatically
   -> bridge to supported information requests
 
-
-
-![](./docs/uebersicht.png)
+The following figure shows the general architecture of TIBO.
+![](./docs/tibo.png)
 
 
 ## Requirements
 
 * Python < 3.9.0
 * Rasa == 2.8.14
-* Download Tilt-Hub Credentials: `https://tubcloud.tu-berlin.de/f/1962491489`
+* Tilt-Hub running (see https://anonymous.4open.science/r/tilt-hub)
+* Tilt-Hub Credentials 
 
-## Setup (in German)
+## Setup
 
-- Sicherstellen, dass alle Dokumente im tilt hub abrufbar sind: `python preprocessing.py`
+### Tilt hub
+- Make sure that a Tilt-Hub instance is accessible `python preprocessing.py`
 - Request the TILTHUB .env file and set your environment variables via 'source tilthub-creds.txt'
-- Neues Modell trainieren: `rasa train --data data --config config.yml --domain domain.yml --fixed-model-name "de-model"`
-- Modell testen: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa shell --model models/de-model.tar.gz` oder `rasa shell --model models/de-model.tar.gz --debug`
 
+### Rasa Action Server
+- Train a new model with the following command: `rasa train --data data --config config.yml --domain domain.yml --fixed-model-name "de-model"` (as most available Tilt documents are in German, the given command trains a German model)
+- Test your model by starting the action server with the following comment: `rasa run actions --actions actions.actions` and `rasa shell --model models/de-model.tar.gz` or `rasa shell --model models/de-model.tar.gz --debug`
 
-## Webinterface
-- im index.html die socket url anpassen z.B. `socketUrl: "http://localhost:80"` oder `socketUrl: "https://implementation.cloud`
-- deutsch: Action Server starten mittels `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --cors "*" --debug`
+### Applications
 
-## REST API
+#### A. Web Server/Chatbot
+- set the socket url in index.html, e.g. `socketUrl: "http://localhost:80"`
+- start action server (if not already done): `rasa run actions --actions actions.actions` and `rasa run --model models/de-model.tar.gz --enable-api --cors "*" --debug`
 
-![](./docs/rest.png)
+#### B. Alexa Skill
+For accessing TIBO via the Alexa Skill, it is required to have an instance of the web server (chatbot) up and running (see above).
+Afterwards, you can stick to the following steps:
 
-## Telegram
-1. 	https version der Website erstellen: z.B. `ngrok http 5005` bei rasa x `ngrok http 80`
-2.	In credentials.yml bei webhook the https url einfügen
-3.	Action server und rasa starten: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector telegram --cors "*" --debug --credentials credentials.yml`
-5. 	in telegram "daskita_bot" suchen und Konversation starten
-
-## Alexa
-1.	https version der Website erstellen: z.B. `ngrok http 5005` bei rasa x `ngrop http 80`
-2.	Action server und rasa starten: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml`
-4.	auf der Amazon Alexa developer page: den endpoint mit der https url + `/webhooks/alexa_assistant/webhook` anpassen
-5.	auf der Amazon Alexa developer page: Build klicken
-6.	Konversation starten mit: `Alexa, starte datenschutz bot`
+1.	create a https version of the website: z.B. `ngrok http 5005` 
+2.	start the action server with rasa: `rasa run actions --actions actions.actions` und `rasa run --model models/de-model.tar.gz --enable-api --connector alexa_connector.AlexaConnector --cors "*" --debug --credentials credentials.yml`
+4.	go to the Amazon Alexa developer page: adjust endpoint with https url + `/webhooks/alexa_assistant/webhook`
+5.	on the Amazon Alexa developer page: click on Build 
+6.	Start conversation: `Alexa, starte Datenschutz Bot`
 
 See also https://developer.amazon.com/alexa/console/ask.
 
-## Hinzufügen einer neuen Datenschutzerklärung:
-1. tilt Dokument in tilt hub hochladen
-2. `preprocessing.py`ausführen
-3. Model trainieren mit `rasa train`
-4. Model bei Rasa X hochladen und aktivieren
 
-## Nutzung Rasa X:
-1. Request the TILTHUB .env file and set your environment variables via 'source tilthub-creds.txt'
-1. Evtl. Action server image erneuern: `docker build . -f Dockerfile_action_image -t <account_username>/chatbot:<custom_image_tag>`
-2. Evtl. neuen image tag im Ordner etc\rasa im file docker-compose.override.yml anpassen
-3. In den Ordner etc\rasa navigieren und `docker-compose --env-file rasa-x.env up -d` ausführen
-4. User hinzufügen mit `sudo python3 rasa_x_commands.py create --update admin me <PASSWORD>`
-5. Auf https://implementation.cloud gehen, Rasa x Benutzeroberfläche starten und einloggen
-6. Bot auf Website ist erreichbar unter https://implementation.cloud:9999
+## Rasa Action Server
+
+The rasa server can be reached can be reached at your domain under port 5005.
+
+### Classification Model
+
+The conversational AI, implemented wwith rasa open source, is based on a classification model (called rasa NLU) that takes an users message and maps that to a predefined intent. 
+These intents are mapped to a response (which is also called an action) by rasa core.
+You can find the predefined actions in the domain.yml (German) or domain_en.yml (English).
+If you want to extend the list of actions, please see also to https://rasa.com/docs/rasa/responses.
+
+For more information on developing and training rasa models, please refer to: https://rasa.com/docs/rasa/2.x/reference/rasa/train/
+
+### REST API
+You can access rasa core via a REST API, which can be reached at `your_domain:5005/webhooks/rest/webhook`.
+Particularly, you can send and receive messages or train the classification model via the API. 
+The following figure gives an example of an API call: 
+![](./docs/rest.png)
+
+You can find an API specification here: https://rasa.com/docs/rasa/pages/http-api. 
+
+## Application Examples
+In general, we use the REST API to interact with TIBO.
+We implemented to application examples, a chatbot window and an Alexa Skill.
+
+### Web Server/Chatbot Window
+The chatbot window can be embedded into any website. 
+An exemplified website is provided and can be reached at your specified socket url.
+
+### Alexa Skill
+Please refer to the previous chapter to get information on the setup.
+Once the Skill is installed on your Alexa device, you can start a conversation with TIBO.
 
 ## Credits
-- Development: Elias Grünewald, Flora Muscinelli, Michael Gebauer, and Nicola Leschke
+- Development: XXX
