@@ -1,0 +1,127 @@
+{
+    "meta": {
+        "_id": "af6bd0ae-d595-4b2b-b174-ff292089c90a",
+        "name": "man",
+        "created": "2021-06-21T12:21:52.411126",
+        "modified": "2021-06-21T12:21:52.411147",
+        "version": 1,
+        "language": "de",
+        "status": "active",
+        "url": "https://www.man.eu/de/de/general/hinweise-zum-datenschutz-kunden.html",
+        "_hash": "2456a2d8876cdef543b06a196f589b173850f4766edce3f488e1d9d2308cdd57"
+    },
+    "controller": {
+        "name": "MAN-Gesellschaft",
+        "country": null,
+        "address": null,
+        "division": null,
+        "representative": {
+            "name": null,
+            "email": null,
+            "phone": null
+        }
+    },
+    "dataProtectionOfficer": {
+        "email": null,
+        "phone": null,
+        "country": null,
+        "name": null,
+        "address": null
+    },
+    "dataDisclosed": [
+        {
+            "_id": [],
+            "category": [],
+            "purposes": [],
+            "legalBases": [],
+            "legitimateInterests": [],
+            "recipients": [],
+            "recipientsOnlyCategory": [],
+            "storage": [],
+            "nonDisclosure": []
+        }
+    ],
+    "thirdCountryTransfers": [
+        {
+            "country": [],
+            "adequacyDecision": [],
+            "appropriateGuarantees": [],
+            "presenceOfEnforceableRightsAndEffectiveRemedies": [],
+            "standardDataProtectionClause": []
+        }
+    ],
+    "accessAndDataPortability": {
+        "available": true,
+        "description": "Recht auf Auskunft",
+        "url": null,
+        "email": null,
+        "identificationEvidences": [],
+        "administrativeFee": {
+            "amount": null,
+            "currency": null
+        },
+        "dataFormats": []
+    },
+    "sources": [
+        {
+            "_id": [],
+            "dataCategory": [],
+            "sources": []
+        }
+    ],
+    "rightToInformation": {
+        "available": null,
+        "description": null,
+        "url": null,
+        "email": null,
+        "identificationEvidences": []
+    },
+    "rightToRectificationOrDeletion": {
+        "available": true,
+        "description": "Recht auf L\u00f6schung",
+        "url": null,
+        "email": null,
+        "identificationEvidences": []
+    },
+    "rightToDataPortability": {
+        "available": true,
+        "description": "Recht auf Daten\u00fcbertragbarkeit",
+        "url": null,
+        "email": null,
+        "identificationEvidences": []
+    },
+    "rightToWithdrawConsent": {
+        "available": true,
+        "description": " Einwilligung mit Wirkung f\u00fcr die Zukunft zu widerrufen",
+        "url": null,
+        "email": null,
+        "identificationEvidences": []
+    },
+    "rightToComplain": {
+        "available": true,
+        "description": "Widerspruchsrecht",
+        "url": null,
+        "email": null,
+        "identificationEvidences": [],
+        "supervisoryAuthority": {
+            "name": null,
+            "address": null,
+            "country": null,
+            "email": null,
+            "phone": null
+        }
+    },
+    "automatedDecisionMaking": {
+        "logicInvolved": "Automatisierte Entscheidungsfindung",
+        "inUse": true,
+        "scopeAndIntendedEffects": "Es besteht keine automatisierte Entscheidungsfindung gem. Art. 22 Abs.1,4 DS-GVO."
+    },
+    "changesOfPurpose": [
+        {
+            "description": [],
+            "affectedDataCategories": [],
+            "plannedDateOfChange": [],
+            "urlOfNewVersion": []
+        }
+    ]
+}

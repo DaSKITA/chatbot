@@ -18,9 +18,11 @@ from countrygroups import EUROPEAN_UNION
 from deep_translator import GoogleTranslator
 
 from graphqlclient import GraphQLClient
+from tilt_deafault_filler import TiltDefaultFiller
 
 base_url = "http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8080"
 url = 'http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
+tilt_default_filler = TiltDefaultFiller()
 
 
 #fill services slot
@@ -91,6 +93,7 @@ class ActionReadServices(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        result_dict = tilt_default_filler.replace_values(result_dict)
         if channel=="socketio":
         #buttons = []
             message="Mögliche Dienste sind: "
@@ -207,6 +210,7 @@ class ActionGiveComparisonInfoSharingBetween(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        result_dict = tilt_default_filler.replace_values(result_dict)
 
         #loop through all given services and give info
         for service in service_list:
@@ -285,6 +289,7 @@ class ActionGiveComparisonInfoCountry(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        result_dict = tilt_default_filler.replace_values(result_dict)
 
         #loop through all given services and give info
         for service in service_list:
@@ -367,6 +372,7 @@ class ActionGiveComparisonInfoCompany(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name, language } } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        result_dict = tilt_default_filler.replace_values(result_dict)
 
         #loop through all given services and give info
         for service in service_list:
@@ -509,6 +515,7 @@ class ActionGiveServiceInfo(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta {name, language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        result_dict = tilt_default_filler.replace_values(result_dict)
         service_list=service
 
         countries_dict={} #initalize dict for countries in case of more services
