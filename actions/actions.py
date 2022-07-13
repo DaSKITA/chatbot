@@ -19,10 +19,12 @@ from deep_translator import GoogleTranslator
 
 from graphqlclient import GraphQLClient
 from tilt_deafault_filler import TiltDefaultFiller
+from service_filter import ServiceFilter
 
 base_url = "http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8080"
 url = 'http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
 tilt_default_filler = TiltDefaultFiller()
+service_filter = ServiceFilter()
 
 
 #fill services slot
@@ -93,23 +95,23 @@ class ActionReadServices(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta { name language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
-        result_dict = tilt_default_filler.replace_values(result_dict)
+        result_dict = service_filter.filter_services(result_dict)
         if channel=="socketio":
         #buttons = []
             message="Mögliche Dienste sind: "
             for r in result_dict:
-                if r["node"]["meta"]["language"]=="de":
+                if r["node"]["meta"]["language"]=="de" or r["node"]["meta"]["language"]=="en":
                     name=r["node"]["meta"]["name"]
                     message = message + name + ", "
 
             message=message[:-2]
         else:
-            message="Nenne die Nummer des Dienstes, der dich interessiert. Mögliche Dienste sind: "
+            message="Mögliche Dienste sind: "
             i=1
             for r in result_dict:
-                if r["node"]["meta"]["language"]=="de":
+                if r["node"]["meta"]["language"]=="de" or r["node"]["meta"]["language"]=="en":
                     name=r["node"]["meta"]["name"]
-                    message = message + name +": "+ str(i)+ ", "
+                    message = message + name +", "
                     i = i+1
 
             message=message[:-2]
@@ -254,6 +256,7 @@ class ActionGiveComparisonInfoSharingBetween(Action):
             pw = os.environ["TILTHUB_PW"]
             file= requests.get(address, auth=(str(username), str(pw)))
             tilt_dict = json.loads(file.text[1:-1])
+            tilt_dict = tilt_default_filler.replace_values(tilt_dict)
 
             #check if service transferres data to company
             part_yes="Der Dienst " + str(service) + " teilt deine Daten mit "
@@ -337,6 +340,7 @@ class ActionGiveComparisonInfoCountry(Action):
             #get file
             file= requests.get(address, auth=(username, pw))
             tilt_dict= json.loads(file.text[1:-1])
+            tilt_dict = tilt_default_filler.replace_values(tilt_dict)
 
             #check if service transferres data to country
             if not list(tilt_dict['thirdCountryTransfers']):
@@ -418,6 +422,7 @@ class ActionGiveComparisonInfoCompany(Action):
             file= requests.get(address, auth=(username, pw))
 
             tilt_dict = json.loads(file.text[1:-1])
+            tilt_dict = tilt_default_filler.replace_values(tilt_dict)
 
             #check if service transferres data to company
             answer=0
@@ -515,7 +520,6 @@ class ActionGiveServiceInfo(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta {name, language} } } } } ''')
         result_dict=ast.literal_eval(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
-        result_dict = tilt_default_filler.replace_values(result_dict)
         service_list=service
 
         countries_dict={} #initalize dict for countries in case of more services
@@ -562,6 +566,7 @@ class ActionGiveServiceInfo(Action):
             tilthub_response = requests.get(
                 base_url + '/tilt/tilt?filter={"meta.name" : "' + meta_name + '" }', auth=(tilt_username, tilt_pw))
             tilt_dict = json.loads(tilthub_response.text)[0]
+            tilt_dict = tilt_default_filler.replace_values(tilt_dict)
 #################################################################################################################################################
             if channel =="telegram": #for telegram format differently
                 dispatcher.utter_message(text="Das sind die Informationen über die {} des Dienstes {}.".format(datatype_out, service_upper))
@@ -657,7 +662,7 @@ class ActionGiveServiceInfo(Action):
                                     dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
                                 elif element=="country":
                                     country=str(dpo_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     con.append("Land: " +value_german)
                                 elif element=="representative":
@@ -712,7 +717,7 @@ class ActionGiveServiceInfo(Action):
                                     dispatcher.utter_message(json_message={'text': key_value_string, 'parse_mode': 'markdown'})
                                 elif element=="country":
                                     country=str(dpo_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     dpo.append("Land: " +value_german)
                                 elif element!="name":
@@ -806,7 +811,7 @@ class ActionGiveServiceInfo(Action):
                                             #info_tmp.append(key_value_string)
                                         elif element=="country":
                                             country=str(dt_dict["supervisoryAuthority"][element])
-                                            value=pytz.country_names[country]
+                                            value=pytz.country_names.get(country, country)
                                             value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                             info_tmp  = info_tmp +(str(element).capitalize()+ ": " +value) + "  \n"
                                         else:
@@ -933,7 +938,7 @@ class ActionGiveServiceInfo(Action):
                                     con.append(key_value_string)
                                 elif element=="country":
                                     country=str(con_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     con.append("Land: " +value)
                                 elif element=="representative":
@@ -985,7 +990,7 @@ class ActionGiveServiceInfo(Action):
                                     sup.append(key_value_string)
                                 elif element=="country":
                                     country=str(sup_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     sup.append("Land: " +value)
                                 else:
@@ -1014,7 +1019,7 @@ class ActionGiveServiceInfo(Action):
                                     dpo.append(key_value_string)
                                 elif element=="country":
                                     country=str(dpo_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     key_value_string="Land: *" +value_german+"*"
                                     dpo.append(key_value_string)
@@ -1116,7 +1121,7 @@ class ActionGiveServiceInfo(Action):
                                             info_tmp = info_tmp +key_value_string+ "  \n"
                                         elif element=="country":
                                             country=str(dt_dict["supervisoryAuthority"][element])
-                                            value=pytz.country_names[country]
+                                            value=pytz.country_names.get(country, country)
                                             value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                             info_tmp  = info_tmp +"Land: " +value_german + "  \n"
                                         else:
@@ -1160,8 +1165,12 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get(element, ""), "")
-                            country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
+                            country_name=pytz.country_names.get(element.get("country", ""), None)
+                            if not country_name:
+                                country_name = "No Information Provided"
+                                country_name_german = "Keine Angabe erfolgt."
+                            else:
+                                country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
                             countries.append(country_name_german)
@@ -1179,8 +1188,12 @@ class ActionGiveServiceInfo(Action):
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
                     for element in list(tilt_dict["thirdCountryTransfers"]):
-                        country_name=pytz.country_names.get(element.get("country", ""), "")
-                        country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
+                        country_name=pytz.country_names.get(element.get("country", ""), None)
+                        if not country_name:
+                            country_name = "No Information Provided"
+                            country_name_german = "Keine Angabe erfolgt."
+                        else:
+                            country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                         countries.append(country_name_german)
                     countries_dict.update({service:countries})
 
@@ -1244,7 +1257,7 @@ class ActionGiveServiceInfo(Action):
                                     #unwichtig=0
                                 elif element=="country":
                                     country=str(con_dict[element])
-                                    value=pytz.country_names[country]
+                                    value=pytz.country_names.get(country, country)
                                     value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                     con.append("Land"+ ": " +value_german)
                                 elif element=="representative":
@@ -1372,7 +1385,7 @@ class ActionGiveServiceInfo(Action):
                                             unwichtig=0
                                         elif element=="country":
                                             country=str(dt_dict["supervisoryAuthority"][element])
-                                            value=pytz.country_names[country]
+                                            value=pytz.country_names.get(country, country)
                                             value_german=GoogleTranslator(source='auto', target='de').translate(value)
                                             info_tmp  = info_tmp +("Land"+ ": " +value) + ".  \n"
                                         else:

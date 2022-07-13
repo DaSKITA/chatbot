@@ -9,16 +9,12 @@ class TiltDefaultFiller:
 
     def replace_values(self, tilt_dict: dict) -> dict:
         for key, value in tilt_dict.items():
-            if hasattr(value, "__getitem__") and not isinstance(value, str):
-                if value == []:
-                    tilt_dict[key] = self._set_default_value()
-                elif isinstance(value, list):
-                    tilt_dict[key] = self._process_list(value)
-                elif isinstance(value, dict):
-                    tilt_dict[key] = self.replace_values(value)
-            else:
-                if not value:
-                    tilt_dict[key] = self._set_default_value()
+            if value == [] or value is None:
+                tilt_dict[key] = self._set_default_value()
+            elif isinstance(value, list):
+                tilt_dict[key] = self._process_list(value)
+            elif isinstance(value, dict):
+                tilt_dict[key] = self.replace_values(value)
         return tilt_dict
 
     def _set_default_value(self):

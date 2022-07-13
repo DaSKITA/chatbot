@@ -312,4 +312,5 @@ $RECYCLE.BIN/
 
 .vscode
 etc/rasa/db/data
+tilthub-creds.txt
 tilthub-creds.env
