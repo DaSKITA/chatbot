@@ -19,7 +19,7 @@ from deep_translator import GoogleTranslator
 
 from graphqlclient import GraphQLClient
 from actions.tilt_default_filler import TiltDefaultFiller
-from service_filter import ServiceFilter
+from actions.service_filter import ServiceFilter
 
 base_url = "http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8080"
 url = 'http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8082/'
