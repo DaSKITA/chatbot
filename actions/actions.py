@@ -18,7 +18,7 @@ from countrygroups import EUROPEAN_UNION
 from deep_translator import GoogleTranslator
 
 from graphqlclient import GraphQLClient
-from tilt_deafault_filler import TiltDefaultFiller
+from actions.tilt_default_filler import TiltDefaultFiller
 from service_filter import ServiceFilter
 
 base_url = "http://ec2-3-64-237-95.eu-central-1.compute.amazonaws.com:8080"
