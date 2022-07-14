@@ -1,4 +1,4 @@
-from config import service_list
+from actions.config import service_list
 
 
 class ServiceFilter:
