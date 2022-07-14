@@ -888,7 +888,7 @@ class ActionGiveServiceInfo(Action):
                     categories=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         if element != "":
-                            categories.append(element)
+                            categories.append(element["category"])
                     if not categories:
                         dispatcher.utter_message(text="Der Dienst {} speichert keine personenbezogene Daten über dich.".format(service_upper))
                     else:
