@@ -322,12 +322,12 @@ rules:
   - action: utter_ask_privacy_form_service
   - action: action_read_services
 
-- rule: no more services and ask for track change to request; privacy
-  steps:
-  - action: utter_ask_service_again
-  - intent: deny
-  # - action: utter_ask_comparison_form_comparison
-  # - action: utter_ask_request_path
+# - rule: no more services and ask for track change to request; privacy
+#   steps:
+#   - action: utter_ask_service_again
+#   - intent: deny
+#   # - action: utter_ask_comparison_form_comparison
+#   # - action: utter_ask_request_path
 
 
 
