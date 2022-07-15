@@ -544,7 +544,7 @@ rules:
   - intent: bot_usage
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+# - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
 
 - rule: Introduce yourself after user greets
@@ -553,19 +553,19 @@ rules:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
 
 - rule: repeat introduction
   steps:
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
   - intent: repeat
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
 
 #go back to start
@@ -574,7 +574,7 @@ rules:
   - intent: start_again
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
 
 #- rule: repeat last message
