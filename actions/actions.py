@@ -892,8 +892,8 @@ class ActionGiveServiceInfo(Action):
                     if not categories:
                         dispatcher.utter_message(text="Der Dienst {} speichert keine personenbezogene Daten über dich.".format(service_upper))
                     else:
-                        categories_string = "  \n".join([str(elem) for elem in categories if elem != ""])
-                        dispatcher.utter_message(text='"Der Dienst {} speichert folgende personenbezogene Daten über dich: {}."'.format(service_upper, categories_string))
+                        categories_string = ",  \n".join([str(elem) for elem in categories if elem != ""])
+                        dispatcher.utter_message(text='Der Dienst {} speichert folgende personenbezogene Daten über dich: {}.'.format(service_upper, categories_string))
 
                 elif datatype=="third parties":
                     third_parties=[]
