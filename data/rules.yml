@@ -326,8 +326,8 @@ rules:
   steps:
   - action: utter_ask_service_again
   - intent: deny
-  - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_request_path
+  # - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_request_path
 
 
 
@@ -403,7 +403,7 @@ rules:
   - action: action_fill_service_slot
   - action: utter_ask_authentification
   - action: utter_ask_privacy_policy_path
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
 
 
 #- rule: ask for datatype; request
