@@ -18,7 +18,7 @@ class TiltDefaultFiller:
         return tilt_dict
 
     def _set_default_value(self):
-        return "Keine Angabe in der Policy."
+        return "Keine Angabe in der Datenschutzerklärung."
 
     def _process_list(self, tilt_list: List) -> List:
         for idx, entry in enumerate(tilt_list):
