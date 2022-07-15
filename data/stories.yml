@@ -8,7 +8,7 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # # - action: utter_ask_requesting
   - intent: privacy_policies
   - action: utter_ask_privacy_form_service
@@ -23,9 +23,9 @@ stories:
   - intent: deny
   - action: utter_ask_service_again
   - intent: deny
-  - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_request_path
-  - intent: deny
+  # - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_request_path
+  # - intent: deny
   - action: utter_goodbye
 
 #- story: privacy path; no more datatypes; no more services; no request; add repeat
@@ -59,7 +59,7 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
   - intent: privacy_policies
   - action: utter_ask_privacy_form_service
@@ -74,8 +74,8 @@ stories:
   - intent: deny
   - action: utter_ask_service_again
   - intent: deny
-  - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_request_path
+  # - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_request_path
   #- intent: affirm
   #- action: action_change_to_request
   #- action: utter_ask_change_to_request_form_request
@@ -101,7 +101,7 @@ stories:
   - action: utter_greet
   - action: utter_bot_usage
   - action: utter_ask_privacy_form_privacy_policy
-  - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_comparison_form_comparison
   # - action: utter_ask_requesting
   - intent: privacy_policies
   - action: utter_ask_privacy_form_service
@@ -116,8 +116,8 @@ stories:
   - intent: deny
   - action: utter_ask_service_again
   - intent: deny
-  - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_request_path
+  # - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_request_path
   #- intent: affirm
   #- action: action_change_to_request
   #- action: utter_ask_change_to_request_form_request
@@ -144,9 +144,9 @@ stories:
   - intent: deny
   - action: utter_ask_service_again
   - intent: deny
-  - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_request_path
-  - intent: deny
+  # - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_request_path
+  # - intent: deny
   - action: utter_goodbye
 
 - story: privacy path; start with datatype question
@@ -157,9 +157,9 @@ stories:
   - intent: deny
   - action: utter_ask_service_again
   - intent: deny
-  - action: utter_ask_comparison_form_comparison
-  - action: utter_ask_request_path
-  - intent: deny
+  # - action: utter_ask_comparison_form_comparison
+  # - action: utter_ask_request_path
+  # - intent: deny
   - action: utter_goodbye
 
 
