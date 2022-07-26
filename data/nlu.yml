@@ -97,7 +97,6 @@ nlu:
     - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
 - intent: services
   examples: |
-    - [TILT Baker](service_company)
     - [ZDF Mediathek](service_company)
     - [whatsapp](service_company)
     - [webde](service_company)
@@ -106,7 +105,6 @@ nlu:
     - [vinci](service_company)
     - [verivox](service_company)
     - [Twitch](service_company)
-    - [TU Berlin](service_company)
     - [techniker krankenkasse](service_company)
     - [telefonica](service_company)
     - [takeda](service_company)
@@ -153,15 +151,41 @@ nlu:
     - [ARD Mediathek](service_company)
     - [amazon](service_company)
     - [Adobe](service_company)
+    - [TU Berlin](service_company)
+    - [TILT Baker](service_company)
     - [Google Support](service_company)
-    - [Crumble AG](service_company)
-    - [Twink Inc.](service_company)
     - [[]](service_company)
     - [We may disclose your Personal Information to members of our corporate group (that is, entities that control, are controlled by, or are under common control with us)](service_company)
     - [Service providers.](service_company)
     - [Legal successors.](service_company)
     - [regulators](service_company)
     - [law enforcement](service_company)
+    - [1&1 Ionos SE](service_company)
+    - [Lotto24](service_company)
+    - [United Internet AG](service_company)
+    - [myLoc managed IT AG](service_company)
+    - [DHL](service_company)
+    - [DPD](service_company)
+    - [GLS](service_company)
+    - [Google](service_company)
+    - [Youtube (Google)](service_company)
+    - [Yahoo EMEA Limited (Yahoo Search)](service_company)
+    - [Bing (Microsoft)](service_company)
+    - [ZeroLight Limited](service_company)
+    - [Volkswagen Deutschland GmbH & Co. KG](service_company)
+    - [Bosse Consulting GmbH](service_company)
+    - [Diconium GmbH](service_company)
+    - [Salesforce.com, Inc.](service_company)
+    - [Amazon Web Services EMEA SARL](service_company)
+    - [CARIAD SE](service_company)
+    - [dx.one](service_company)
+    - [Amazon Web Services Inc.](service_company)
+    - [Salesforce.com EMEA Limited](service_company)
+    - [Google Inc.](service_company)
+    - [HERE EUROPE BV](service_company)
+    - [NTT Data Group](service_company)
+    - [Teleperformance Group Europe](service_company)
+    - [Middle-East and Africa SAS](service_company)
     - [6. Weitergabe von Daten an Dritte
     Seite 9 von 26
     Ihre personenbezogenen Daten werden von uns grundsätzlich nur dann an Dritte gegeben, soweit
@@ -177,7 +201,11 @@ nlu:
     Darüber hinaus können Daten an Dritte übermittelt werden, soweit wir aufgrund gesetzlicher
     Bestimmungen oder durch vollstreckbare behördliche oder gerichtliche Anordnung hierzu
     verpflichtet sein sollten.](service_company)
-    - [Die Betreiber von OpenStreetMap](service_company)
+    - [Amazon.com, Inc.](service_company)
+    - [Telegram Group Inc](service_company)
+    - [Telegram FZ-LLC](service_company)
+    - [Youtube](service_company)
+    - [Flickr-Fotos](service_company)
 - intent: another_service
   examples: |
     - ein anderer Dienst
@@ -644,7 +672,7 @@ nlu:
     - Dienste
     - Service
     - Services
-- synonym: WhatsApp
+- synonym: whatsapp
   examples: |
     - Whats App
     - Whatsapp

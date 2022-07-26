@@ -4,6 +4,8 @@ from typing import List
 
 class TiltDefaultFiller:
 
+    default_value = "Keine Angabe in der Datenschutzerklärung."
+
     def __init__(self) -> None:
         pass
 
@@ -18,7 +20,7 @@ class TiltDefaultFiller:
         return tilt_dict
 
     def _set_default_value(self):
-        return "Keine Angabe in der Datenschutzerklärung."
+        return self.default_value
 
     def _process_list(self, tilt_list: List) -> List:
         for idx, entry in enumerate(tilt_list):

@@ -4,6 +4,7 @@
 # See this guide on how to implement these action:
 # https://rasa.com/docs/rasa/custom-actions
 
+from turtle import tilt
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
@@ -578,21 +579,29 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get("country", ""), "")
-                            country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
+                            country = element.get("country", "")
+                            country_name=pytz.country_names.get(country, None)
+                            if not country_name and country == tilt_default_filler.default_value:
+                                country_name = ""
+                                country_name_german = ""
+                            elif not country_name and country != tilt_default_filler.default_value:
+                                country_name = "worldwide"
+                                country_name_german = "weltweit"
+                            else:
+                                country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
                             countries.append(country_name_german)
                         number_countries=len([country for country in countries if country != ""])
                         countries_string = ', '.join([str(elem) for elem in countries])
                         if number_countries>1:
-                            dispatcher.utter_message(text="Deine Daten werden in {} andere Länder weitergegeben. {} davon gehören zur Europäischen Unsion. **Die Länder sind:** {}".format(str(number_countries), str(EU), countries_string))
+                            dispatcher.utter_message(text="Deine Daten werden in {} andere Länder weitergegeben. {} davon sind Teil der Europäischen Union. **Die Länder sind:** {}".format(str(number_countries), str(EU), countries_string))
                         elif number_countries==1 and EU==1:
-                            dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}".format(countries_string))
+                            dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist Teil der Europäischen Union.".format(countries_string))
                         elif number_countries == 0:
-                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor oder deine Daten werden an keine anderen Länder weitergegeben.")
+                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor.")
                         else:
-                            dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}".format(countries_string))
+                            dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist kein Teil der Europäischen Union.".format(countries_string))
 
                 if datatype=="countries" and len(service_list)>1: #if more than one service given
                     countries=[]
@@ -623,30 +632,36 @@ class ActionGiveServiceInfo(Action):
                     third_parties=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         for recipient in list(element["recipients"]):
-                            third_parties.append(recipient["name"])
-                    if None in third_parties:
-                            third_parties.remove(None)
-                    if not third_parties:
+                            if recipient.get("name") and recipient.get("name") != tilt_default_filler.default_value:
+                                recipient_name = recipient["name"]
+                            else:
+                                recipient_name = recipient.get("category", tilt_default_filler.default_value)
+                            third_parties.append(recipient_name)
+                    if third_parties == []:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        third_parties_string = ', '.join([str(elem) for elem in third_parties])
+                        third_parties_string = ', '.join([str(elem) for elem in list(set(third_parties))])
                         dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
 
                 elif datatype=="number of third parties":
                     third_parties=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         for recipient in list(element["recipients"]):
-                            third_parties.append(recipient["name"])
-                    if None in third_parties:
-                            third_parties.remove(None)
-                    if not third_parties:
+                            if recipient.get("name") and recipient.get("name") != tilt_default_filler.default_value:
+                                recipient_name = recipient["name"]
+                            else:
+                                recipient_name = recipient.get("category", tilt_default_filler.default_value)
+                            third_parties.append(recipient_name)
+                    if third_parties == []:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        number=len(third_parties)
+                        number=len([third_party for third_party in set(third_parties) if third_party != tilt_default_filler.default_value])
                         if number==1:
                             dispatcher.utter_message(text="Deine Daten werden an eine Drittpartei weitergegeben.")
-                        else:
+                        elif number > 1:
                             dispatcher.utter_message(text="Deine Daten werden an {} Drittparteien weitergegeben.".format(number))
+                        else:
+                            dispatcher.utter_message(text="Die Datenschutzerklärung enthält keine Informationen zu Drittparteien.")
 
                 elif datatype=="controller":
                     con_dict=tilt_dict["controller"]
@@ -657,7 +672,7 @@ class ActionGiveServiceInfo(Action):
                         rep=[]
                         if con_dict["name"]:
                             value=str(con_dict["name"])
-                            con.append("Name: "+ str(value))
+                            con.append("Name: "+ "**"+str(value)+"**")
                         for element in con_dict.keys():
                             if con_dict[element]:
                                 if element=="address":
@@ -752,12 +767,11 @@ class ActionGiveServiceInfo(Action):
                             link_email= "mailto:"+ str(tilt_dict["accessAndDataPortability"]["email"])
                             info_access.append("E-Mail: "+ link_email)
                         if access_dict["identificationEvidences"]:
-                            identification=[]
-                            info_access.append("Für eine Identifikation brauchst du: ")
-                            for el in access_dict["identificationEvidences"]:
-                                identification.append(el)
-                            identification_string=', '.join([elem for elem in identification])
-                            info_access.append(identification_string)
+                            identification=access_dict["identificationEvidences"]
+                            if not isinstance(identification, list):
+                                identification = [identification]
+                            identification_string=', '.join(identification)
+                            info_access.append("Für eine Identifikation brauchst du: {}".fortmat(identification_string))
                         if access_dict["administrativeFee"]:
                             fee=[]
                             info_access.append("Die Bearbeitungsgebühr beträgt: ")
@@ -790,12 +804,11 @@ class ActionGiveServiceInfo(Action):
                             if dt_dict["email"]:
                                 info.append("E-Mail: "+str(dt_dict["email"]))
                             if dt_dict["identificationEvidences"]:
-                                identification=[]
-                                info.append("Für eine Identifikation brauchst du: ")
-                                for el in dt_dict["identificationEvidences"]:
-                                    identification.append(el)
-                                identification_string=', '.join([elem for elem in identification])
-                                info.append(identification_string)
+                                identification=dt_dict["identificationEvidences"]
+                                if not isinstance(identification, list):
+                                    identification = [identification]
+                                identification_string=', '.join(identification)
+                                info.append("Für eine Identifikation brauchst du: {}".format(identification_string))
                             if dt_dict["supervisoryAuthority"]:
                                 info_tmp="Aufsichtsbehörde:  \n"
                                 for element in dt_dict["supervisoryAuthority"].keys():
@@ -841,8 +854,8 @@ class ActionGiveServiceInfo(Action):
                             if dt_dict["identificationEvidences"]:
                                 identification=[]
                                 info.append("Für eine Identifikation brachst du: ")
-                                for el in dt_dict["identificationEvidences"]:
-                                    identification.append(el)
+                                if not isinstance(identification, list):
+                                    identification = [identification]
                                 identification_string=', '.join([elem for elem in identification])
                                 info.append(identification_string)
                         info_string = '  \n'.join([str(elem) for elem in info])
@@ -861,17 +874,27 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get("country", ""), "")
-                            country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
+                            country = element.get("country", "")
+                            country_name=pytz.country_names.get(country, None)
+                            if not country_name and country == tilt_default_filler.default_value:
+                                country_name = ""
+                                country_name_german = ""
+                            elif not country_name and country != tilt_default_filler.default_value:
+                                country_name = "worldwide"
+                                country_name_german = "weltweit"
+                            else:
+                                country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
                                 EU=EU+1
                             countries.append(country_name_german)
-                        number_countries=len(countries)
+                        number_countries=len([country for country in countries if country != ""])
                         countries_string = ', '.join([str(elem) for elem in countries])
                         if number_countries>1:
                             dispatcher.utter_message(text="Deine Daten werden in {} andere Länder weitergegeben. {} davon sind Teil der Europäischen Union. **Die Länder sind:** {}".format(str(number_countries), str(EU), countries_string))
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist Teil der Europäischen Union.".format(countries_string))
+                        elif number_countries == 0:
+                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist kein Teil der Europäischen Union.".format(countries_string))
 
@@ -899,30 +922,36 @@ class ActionGiveServiceInfo(Action):
                     third_parties=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         for recipient in list(element["recipients"]):
-                            third_parties.append(recipient["name"])
-                    if None in third_parties:
-                            third_parties.remove(None)
-                    if third_parties==[]:
-                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an keine Drittpartei weiter.".format(service_upper))
+                            if recipient.get("name") and recipient.get("name") != tilt_default_filler.default_value:
+                                recipient_name = recipient["name"]
+                            else:
+                                recipient_name = recipient.get("category", tilt_default_filler.default_value)
+                            third_parties.append(recipient_name)
+                    if third_parties == []:
+                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        third_parties_string = ', '.join([str(elem) for elem in third_parties])
-                        dispatcher.utter_message(text="Drittparteien sind: {}".format(third_parties_string))
+                        third_parties_string = ', '.join([str(elem) for elem in list(set(third_parties))])
+                        dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
 
                 elif datatype=="number of third parties":
                     third_parties=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         for recipient in list(element["recipients"]):
-                            third_parties.append(recipient["name"])
-                    if None in third_parties:
-                            third_parties.remove(None)
-                    if not third_parties:
-                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten an keine Drittparteien weiter.".format(service_upper))
+                            if recipient.get("name") and recipient.get("name") != tilt_default_filler.default_value:
+                                recipient_name = recipient["name"]
+                            else:
+                                recipient_name = recipient.get("category", tilt_default_filler.default_value)
+                            third_parties.append(recipient_name)
+                    if third_parties == []:
+                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        number=len(third_parties)
+                        number=len([third_party for third_party in set(third_parties) if third_party != tilt_default_filler.default_value])
                         if number==1:
                             dispatcher.utter_message(text="Deine Daten werden an eine Drittpartei weitergegeben.")
-                        else:
+                        elif number > 1:
                             dispatcher.utter_message(text="Deine Daten werden an {} Drittparteien weitergegeben.".format(number))
+                        else:
+                            dispatcher.utter_message(text="Die Datenschutzerklärung enthält keine Informationen zu Drittparteien.")
 
                 elif datatype=="controller":
                     con_dict=tilt_dict["controller"]
@@ -1171,10 +1200,14 @@ class ActionGiveServiceInfo(Action):
                         countries=[]
                         EU=0
                         for element in list(tilt_dict["thirdCountryTransfers"]):
-                            country_name=pytz.country_names.get(element.get("country", ""), None)
-                            if not country_name:
-                                country_name = "No Information Provided"
-                                country_name_german = "Keine Angabe erfolgt."
+                            country = element.get("country", "")
+                            country_name=pytz.country_names.get(country, None)
+                            if not country_name and country == tilt_default_filler.default_value:
+                                country_name = ""
+                                country_name_german = ""
+                            elif not country_name and country != tilt_default_filler.default_value:
+                                country_name = "worldwide"
+                                country_name_german = "weltweit"
                             else:
                                 country_name_german=GoogleTranslator(source='auto', target='de').translate(country_name)
                             if country_name in EUROPEAN_UNION.names: #check if country is in EU
@@ -1187,7 +1220,7 @@ class ActionGiveServiceInfo(Action):
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}.".format(countries_string))
                         elif number_countries == 0:
-                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor oder deine Daten werden an keine anderen Länder weitergegeben.")
+                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}.".format(countries_string))
 
@@ -1219,30 +1252,36 @@ class ActionGiveServiceInfo(Action):
                     third_parties=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         for recipient in list(element["recipients"]):
-                            third_parties.append(recipient["name"])
-                    if None in third_parties:
-                            third_parties.remove(None)
-                    if not third_parties:
+                            if recipient.get("name") and recipient.get("name") != tilt_default_filler.default_value:
+                                recipient_name = recipient["name"]
+                            else:
+                                recipient_name = recipient.get("category", tilt_default_filler.default_value)
+                            third_parties.append(recipient_name)
+                    if third_parties == []:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        third_parties_string = ', '.join([str(elem) for elem in third_parties])
-                        dispatcher.utter_message(text="Drittparteien: {}.".format(third_parties_string))
+                        third_parties_string = ', '.join([str(elem) for elem in list(set(third_parties))])
+                        dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
 
                 elif datatype=="number of third parties":
                     third_parties=[]
                     for element in list(tilt_dict['dataDisclosed']):
                         for recipient in list(element["recipients"]):
-                            third_parties.append(recipient["name"])
-                    if None in third_parties:
-                            third_parties.remove(None)
-                    if not third_parties:
+                            if recipient.get("name") and recipient.get("name") != tilt_default_filler.default_value:
+                                recipient_name = recipient["name"]
+                            else:
+                                recipient_name = recipient.get("category", tilt_default_filler.default_value)
+                            third_parties.append(recipient_name)
+                    if third_parties == []:
                         dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
                     else:
-                        number=len(third_parties)
+                        number=len([third_party for third_party in set(third_parties) if third_party != tilt_default_filler.default_value])
                         if number==1:
                             dispatcher.utter_message(text="Deine Daten werden an eine Drittpartei weitergegeben.")
-                        else:
+                        elif number > 1:
                             dispatcher.utter_message(text="Deine Daten werden an {} Drittparteien weitergegeben.".format(number))
+                        else:
+                            dispatcher.utter_message(text="Die Datenschutzerklärung enthält keine Informationen zu Drittparteien.")
 
                 elif datatype=="controller":
                     con_dict=tilt_dict["controller"]
@@ -1333,25 +1372,25 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Leider haben wir keine Informationen zu {} von dem Dienst {}.".format(datatype, service_upper))
                     else:
                         info_access=[]
-                        if access_dict["available"] and access_dict["description"]==False:
+                        if access_dict.get("available") and access_dict.get("description")==False:
                             if access_dict["available"]=="true":
                                 info_access.append("Datenportabilität ist möglich.")
                             else:
                                 info_access.append("Datenportabilität ist nicht möglich.")
-                        if access_dict["description"]:
+                        if access_dict.get("description"):
                             info_access.append(str(tilt_dict["accessAndDataPortability"]["description"]))
-                        if access_dict["url"]:
+                        if access_dict.get("url"):
                             info_access.append("URL: "+str(tilt_dict["accessAndDataPortability"]["url"]))
-                        if access_dict["email"]:
+                        if access_dict.get("email"):
                             link_email= str(tilt_dict["accessAndDataPortability"]["email"])
                             info_access.append("E-Mail: "+ link_email)
-                        if access_dict["identificationEvidences"]:
-                            identification=[]
-                            for el in access_dict["identificationEvidences"]:
-                                identification.append(el)
-                            identification_string='Für eine Identifikation brauchst du: '+', '.join([elem for elem in identification])
+                        if access_dict.get("identificationEvidences", None):
+                            identification=access_dict["identificationEvidences"]
+                            if not isinstance(identification, list):
+                                identification = [identification]
+                            identification_string='Für eine Identifikation brauchst du: '+', '.join(identification)
                             info_access.append(identification_string)
-                        if access_dict["administrativeFee"]:
+                        if access_dict.get("administrativeFee", None):
                             fee=[]
                             for el in access_dict["administrativeFee"]:
                                 fee.append(str(access_dict["administrativeFee"][el]))
