@@ -4,7 +4,6 @@
 # See this guide on how to implement these action:
 # https://rasa.com/docs/rasa/custom-actions
 
-from turtle import tilt
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
@@ -14,7 +13,6 @@ import os
 import json
 import requests
 import pytz
-import ast
 from countrygroups import EUROPEAN_UNION
 from deep_translator import GoogleTranslator
 
