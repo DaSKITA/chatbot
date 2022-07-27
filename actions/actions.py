@@ -546,7 +546,7 @@ class ActionGiveServiceInfo(Action):
                 #check if service name is possible, else return
                 meta_name=service
                 for r in result_dict:
-                    if service in r["node"]["meta"]["name"] or service_upper in r["node"]["meta"]["name"] or service_upper2 in r["node"]["meta"]["name"]:
+                    if service.lower() == r["node"]["meta"]["name"].lower():
                         contains=1
                         meta_name = r["node"]["meta"]["name"]
 
