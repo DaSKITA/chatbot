@@ -36,7 +36,10 @@ class ActionSetSlotValueRequestService(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         slot_value_service_company = tracker.get_slot('service_company')
-        return [SlotSet("service", slot_value_service_company)]
+        if slot_value_service_company[0] in service_filter.service_list:
+            return [SlotSet("service", slot_value_service_company)]
+        else:
+            return [SlotSet("service_not_found", True)]
 
 #fill company slot
 class ActionSetSlotValueRequestCompany(Action):
@@ -66,8 +69,8 @@ class ActionGiveOptions(Action):
         if channel=="socketio":
             #buttons.append({"title": "Metadaten", "payload": '/datatypes{"datatype":"Metadaten"}'})
             buttons.append({"title": "Länder, in die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Länder"}'})
-            buttons.append({"title": "Drittparteien an die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Drittparteien"}'})
-            buttons.append({"title": "Anzahl der Drittparteien an die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Anzahl von Drittparteien"}'})
+            buttons.append({"title": "Drittparteien, an die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Drittparteien"}'})
+            buttons.append({"title": "Anzahl der Drittparteien, an die meine Daten weitergegeben werden", "payload": '/datatypes{"datatype":"Anzahl von Drittparteien"}'})
             buttons.append({"title": "Personenbezogene Daten, die gespeichert werden", "payload": '/datatypes{"datatype":"personenbezogene Daten"}'})
             buttons.append({"title": "Datenschutzbeauftragte*r", "payload": '/datatypes{"datatype":"Datenschutzbeauftragter"}'})
             buttons.append({"title": "Informationen zur Datenportabilität", "payload": '/datatypes{"datatype":"Datenportabilität"}'})
@@ -224,7 +227,7 @@ class ActionGiveComparisonInfoSharingBetween(Action):
                 number = service
                 i = 1
                 for r in result_dict:
-                    if r["node"]["meta"]["language"]=="de":
+                    if r["node"]["meta"]["language"]=="de" or r["node"]["meta"]["language"]=="en":
                         if str(i) == number:
                             meta_name=r["node"]["meta"]["name"]
                             service = meta_name
@@ -304,7 +307,7 @@ class ActionGiveComparisonInfoCountry(Action):
                 number = service
                 i = 1
                 for r in result_dict:
-                    if r["node"]["meta"]["language"]=="de":
+                    if r["node"]["meta"]["language"]=="de" or r["node"]["meta"]["language"]=="en":
                         if str(i) == number:
                             meta_name=r["node"]["meta"]["name"]
                             service = meta_name
@@ -388,7 +391,7 @@ class ActionGiveComparisonInfoCompany(Action):
                 number = service
                 i = 1
                 for r in result_dict:
-                    if r["node"]["meta"]["language"]=="de":
+                    if r["node"]["meta"]["language"]=="de" or r["node"]["meta"]["language"]=="en":
                         if str(i) == number:
                             meta_name=r["node"]["meta"]["name"]
                             service = meta_name
@@ -519,6 +522,7 @@ class ActionGiveServiceInfo(Action):
         result = client.execute('''query { TiltNodes(first:10000) { edges { node { meta {name, language} } } } } ''')
         result_dict=json.loads(result)
         result_dict=result_dict["data"]["TiltNodes"]["edges"]
+        result_dict = [node for node in result_dict if node.get("node").get("meta")]
         service_list=service
 
         countries_dict={} #initalize dict for countries in case of more services
@@ -534,7 +538,7 @@ class ActionGiveServiceInfo(Action):
                 number = service
                 i = 1
                 for r in result_dict:
-                    if r["node"]["meta"]["language"]=="de":
+                    if r["node"]["meta"]["language"]=="de" or r["node"]["meta"]["language"]=="en":
                         if str(i) == number:
                             meta_name=r["node"]["meta"]["name"]
                             service_upper = meta_name
@@ -597,7 +601,7 @@ class ActionGiveServiceInfo(Action):
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist Teil der Europäischen Union.".format(countries_string))
                         elif number_countries == 0:
-                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor.")
+                            dispatcher.utter_message(text="Es liegen keine Informationen zu Ländern für die Datenschutzklärung vor.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist kein Teil der Europäischen Union.".format(countries_string))
 
@@ -893,7 +897,7 @@ class ActionGiveServiceInfo(Action):
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist Teil der Europäischen Union.".format(countries_string))
                         elif number_countries == 0:
-                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor.")
+                            dispatcher.utter_message(text="Es liegen keine Informationen zu Ländern für die Datenschutzklärung vor.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben: {}. Es ist kein Teil der Europäischen Union.".format(countries_string))
 
@@ -1130,10 +1134,10 @@ class ActionGiveServiceInfo(Action):
                             if dt_dict["email"]:
                                 info.append("E-Mail: mailto:"+str(dt_dict["email"]))
                             if dt_dict["identificationEvidences"]:
-                                identification=[]
+                                identification=dt_dict["identificationEvidences"]
                                 info.append("Für eine Identifikation benötigst du: ")
-                                for el in dt_dict["identificationEvidences"]:
-                                    identification.append(el)
+                                if not isinstance(identification, list):
+                                    identification = [identification]
                                 identification_string=', '.join([elem for elem in identification])
                                 info.append(identification_string)
                             if dt_dict["supervisoryAuthority"]:
@@ -1178,10 +1182,10 @@ class ActionGiveServiceInfo(Action):
                             if dt_dict["email"]:
                                 info.append("E-Mail: mailto:"+str(dt_dict["email"]))
                             if dt_dict["identificationEvidences"]:
-                                identification=[]
+                                identification=dt_dict["identificationEvidences"]
                                 info.append("Für eine Identifikation benötigst du: ")
-                                for el in dt_dict["identificationEvidences"]:
-                                    identification.append(el)
+                                if not isinstance(identification, list):
+                                    identification = [identification]
                                 identification_string=', '.join([elem for elem in identification])
                                 info.append(identification_string)
                         info_string = '  \n'.join([str(elem) for elem in info])
@@ -1220,7 +1224,7 @@ class ActionGiveServiceInfo(Action):
                         elif number_countries==1 and EU==1:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist Teil der Europäischen Union: {}.".format(countries_string))
                         elif number_countries == 0:
-                            dispatcher.utter_message(text="Es liegen entweder keine Informationen zu Ländern für die Datenschutzklärung vor.")
+                            dispatcher.utter_message(text="Es liegen keine Informationen zu Ländern für die Datenschutzklärung vor.")
                         else:
                             dispatcher.utter_message(text="Deine Daten werden in ein anderes Land weitergegeben. Es ist kein Teil der Europäischen Union: {}.".format(countries_string))
 

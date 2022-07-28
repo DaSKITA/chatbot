@@ -236,6 +236,9 @@ rules:
   - action: action_read_services
 
 - rule: ask for datatype
+  condition:
+    - slot_was_set:
+      - service_not_found: false
   steps:
   - action: utter_ask_privacy_form_service
   - action: action_read_services
@@ -245,6 +248,9 @@ rules:
   - action: action_give_options
 
 - rule: repeat ask for datatype
+  condition:
+    - slot_was_set:
+      - service_not_found: false
   steps:
   - action: utter_ask_privacy_form_datatype
   - action: action_give_options
@@ -261,6 +267,9 @@ rules:
 #  - action: action_give_options
 
 - rule: give info if asked for datatype and ask for more datatypes; privacy
+  condition:
+    - slot_was_set:
+      - service_not_found: false
   steps:
   - action: utter_ask_privacy_form_datatype
   - action: action_give_options
@@ -277,6 +286,9 @@ rules:
   - action: utter_datatypes_again
 
 - rule: ask for more datatypes; privacy
+  condition:
+    - slot_was_set:
+      - service_not_found: false
   steps:
   - action: utter_datatypes_again
   - intent: affirm
@@ -284,6 +296,9 @@ rules:
   - action: action_give_options
 
 - rule: repeat more datatypes, privacy
+  condition:
+    - slot_was_set:
+      - service_not_found: false
   steps:
   - action: utter_ask_privacy_form_datatype
   - action: action_give_options
@@ -497,12 +512,17 @@ rules:
 #  - action: action_give_options
 
 - rule: repeat this service, privacy
+  condition:
+    - slot_was_set:
+      - service_not_found: false
   steps:
   - action: utter_ask_privacy_form_datatype
   - action: action_give_options
   - intent: repeat
   - action: utter_ask_privacy_form_datatype
   - action: action_give_options
+
+
 
 #- rule: change to privacy track; no change
 #  steps:
@@ -582,5 +602,10 @@ rules:
 #  - intent: repeat
 #  - action: action_repeat
 
-
-
+- rule: faulty service
+  condition:
+    - slot_was_set:
+      - service_not_found: true
+  steps:
+    - action: utter_default
+    - action: utter_ask_privacy_form_privacy_policy

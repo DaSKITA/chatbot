@@ -41,6 +41,10 @@ entities:
 
 
 slots:
+  service_not_found:
+    type: bool
+    initial_value: false
+
   service_company:
     type: list
 
@@ -111,16 +115,16 @@ responses:
 
 #exception handling
   utter_default:
-  - text: "Tut mir Leid, das habe ich nicht verstanden. Könntest du deine Eingabe bitte umformulieren?"
+  - text: "Tut mir Leid, das habe ich nicht verstanden. Bitte starte deine Eingabe von vorne."
 
 # bot introduction
   utter_bot_usage:
-  - text: "Willkommen, ich kann dir helfen Informationen über den Datenschutz verschiedener Dienste zu erhalten. Wofür interessierst du dich?"
+  - text: "Willkommen, ich kann dir helfen Informationen über den Datenschutz verschiedener Dienste zu erhalten."
 
 
 #ask privacy policy
   utter_ask_privacy_form_privacy_policy:
-  - text: "Interessierst du dich für Informationen über die Datenschutzerklärungen von Diensten?"
+  - text: "Was kann ich für dich tun?"
 
 #ask request
   utter_ask_requesting:
