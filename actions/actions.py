@@ -635,10 +635,10 @@ class ActionGiveServiceInfo(Action):
                             else:
                                 recipient_name = recipient.get("category", tilt_default_filler.default_value)
                             third_parties.append(recipient_name)
+                    third_parties = [third_party for third_party in third_parties if third_party != tilt_default_filler.default_value]
                     if third_parties == []:
-                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
+                        dispatcher.utter_message(text="Der Dienst {} macht keine Angaben zu Drittparteien.".format(service_upper))
                     else:
-                        third_parties = [third_party for third_party in third_parties if third_party != tilt_default_filler.default_value]
                         third_parties_string = ', '.join([str(elem) for elem in list(set(third_parties))])
                         dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
 
@@ -926,10 +926,10 @@ class ActionGiveServiceInfo(Action):
                             else:
                                 recipient_name = recipient.get("category", tilt_default_filler.default_value)
                             third_parties.append(recipient_name)
+                    third_parties = [third_party for third_party in third_parties if third_party != tilt_default_filler.default_value]
                     if third_parties == []:
-                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
+                        dispatcher.utter_message(text="Der Dienst {} macht keine Angaben zu Drittparteien.".format(service_upper))
                     else:
-                        third_parties = [third_party for third_party in third_parties if third_party != tilt_default_filler.default_value]
                         third_parties_string = ', '.join([str(elem) for elem in list(set(third_parties))])
                         dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
 
@@ -1257,10 +1257,10 @@ class ActionGiveServiceInfo(Action):
                             else:
                                 recipient_name = recipient.get("category", tilt_default_filler.default_value)
                             third_parties.append(recipient_name)
+                    third_parties = [third_party for third_party in third_parties if third_party != tilt_default_filler.default_value]
                     if third_parties == []:
-                        dispatcher.utter_message(text="Der Dienst {} gibt deine Daten nicht an Drittparteien weiter.".format(service_upper))
+                        dispatcher.utter_message(text="Der Dienst {} gmacht keine Angaben zu Drittparteien.".format(service_upper))
                     else:
-                        third_parties = [third_party for third_party in third_parties if third_party != tilt_default_filler.default_value]
                         third_parties_string = ', '.join([str(elem) for elem in list(set(third_parties))])
                         dispatcher.utter_message(text="Drittparteien: {}".format(third_parties_string))
 
