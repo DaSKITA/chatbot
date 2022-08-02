@@ -65,36 +65,44 @@ nlu:
     - Informationen zu einer [Datenschutzerklärung](privacy_policy)
     - Infos zu einer [Datenschutzerklärung](privacy_policy)
     - eine [datenschutzerklärung](privacy_policy)
-- intent: comparison
-  examples: |
-    - [vergleich](comparison)
-    - [vergleichen](comparison)
-    - Ich interessiere mich für einen [Vergleich](comparison) von verschiedenen Datenschutzerklärungen.
-    - [vergleichen](comparison) von Datenschutzerklärungen
-    - [Vergleich](comparison) von Diensten
-    - [vergleichen](comparison) von verschiedenen Diensten
-    - [vergleichen](comparison) der Datenschutzerklärungen von verschiedenen Diensten
-    - [Vergleich](comparison) der Datenschutzerklärungen von Diensten
-    - Ich interessiere mich für einen [Vergleich](comparison)
-    - Hi, ich interessiere mich für einen [Vergleich](comparison) von Datenschutzerklärungen
-    - Hallo, ich möchte Informationen zu einem [vergleich](comparison) von verschiedenen Diensten
-    - Hey, ich interessiere mich für [Vergleiche](comparison) von verschiedenen Datenschutzerklärungen
-    - Ich möchte verschiedene Datenschutzerklärungen [vergleichen](comparison)
-    - Ich möchte die Datenschutzerklärungen von verschiedenen Diensten [vergleichen](comparison)
-    - Ich interessiere mich dafür Datenschutzerklärungen von verschiedenen Diensten zu [vergleichen](comparison)
-    - Ich interessiere mich dafür Datenschutzerklärungen zu [vergleichen](comparison)
-- intent: requesting
-  examples: |
-    - [Anfrage](requesting)
-    - [Auskunftsanfrage](requesting)
-    - [Auskunftsanfrage](requesting) bei einem Dienst
-    - [Auskunft](requesting) von einem Dienst
-    - Ich interessiere mich für eine [Auskunftsanfrage](requesting) bei einem Dienst
-    - Ich möchte eine [Auskunftsanfrage](requesting) stellen
-    - Ich möchte eine [Anfrage](requesting) zu meinen Daten bei einem Dienst stellen
-    - Ich möchte eine [Auskunft](requesting) erhalten
-    - Ich interessiere mich dafür eine [Auskunft](requesting) zu bekommen
-    - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
+    - Ich möchte gerne mehr über die [Datenschutzerklärungen](privacy_policy) verschiedener Dienste erfahren.
+    - Ich will mehr über die [Datenschutzerklärung](privacy_policy) eines Anbieters lernen.
+    - Aufgaben zu den [Datenschutzerklärung](privacy_policy) lösen
+    - Bitte gib mir Informationen zu einem Dienst.
+    - Bitte erkläre mir die [Datenschutzerklärung](privacy_policy) verschiedener Dienste.
+    - Kannst du mir beim Lösen der Aufgaben helfen?
+    - Kannst du mir die [Datenschutzerklärung](privacy_policy) eines Dienstes erklären?
+    - Kannst du TILT Informationen verarbeiten?
+# - intent: comparison
+#   examples: |
+#     - [vergleich](comparison)
+#     - [vergleichen](comparison)
+#     - Ich interessiere mich für einen [Vergleich](comparison) von verschiedenen Datenschutzerklärungen.
+#     - [vergleichen](comparison) von Datenschutzerklärungen
+#     - [Vergleich](comparison) von Diensten
+#     - [vergleichen](comparison) von verschiedenen Diensten
+#     - [vergleichen](comparison) der Datenschutzerklärungen von verschiedenen Diensten
+#     - [Vergleich](comparison) der Datenschutzerklärungen von Diensten
+#     - Ich interessiere mich für einen [Vergleich](comparison)
+#     - Hi, ich interessiere mich für einen [Vergleich](comparison) von Datenschutzerklärungen
+#     - Hallo, ich möchte Informationen zu einem [vergleich](comparison) von verschiedenen Diensten
+#     - Hey, ich interessiere mich für [Vergleiche](comparison) von verschiedenen Datenschutzerklärungen
+#     - Ich möchte verschiedene Datenschutzerklärungen [vergleichen](comparison)
+#     - Ich möchte die Datenschutzerklärungen von verschiedenen Diensten [vergleichen](comparison)
+#     - Ich interessiere mich dafür Datenschutzerklärungen von verschiedenen Diensten zu [vergleichen](comparison)
+#     - Ich interessiere mich dafür Datenschutzerklärungen zu [vergleichen](comparison)
+# - intent: requesting
+#   examples: |
+#     - [Anfrage](requesting)
+#     - [Auskunftsanfrage](requesting)
+#     - [Auskunftsanfrage](requesting) bei einem Dienst
+#     - [Auskunft](requesting) von einem Dienst
+#     - Ich interessiere mich für eine [Auskunftsanfrage](requesting) bei einem Dienst
+#     - Ich möchte eine [Auskunftsanfrage](requesting) stellen
+#     - Ich möchte eine [Anfrage](requesting) zu meinen Daten bei einem Dienst stellen
+#     - Ich möchte eine [Auskunft](requesting) erhalten
+#     - Ich interessiere mich dafür eine [Auskunft](requesting) zu bekommen
+#     - Ich interessiere mich für eine [Auskunftsanfrage](requesting)
 - intent: services
   examples: |
     - [ZDF Mediathek](service_company)

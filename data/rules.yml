@@ -34,11 +34,11 @@ rules:
   - action: action_read_services
 
 #activate comparison form
-- rule: Activate comparison form
-  steps:
-  - intent: comparison
-  - action: utter_ask_comparison_form_service
-  - action: action_read_services
+# - rule: Activate comparison form
+#   steps:
+#   - intent: comparison
+#   - action: utter_ask_comparison_form_service
+#   - action: action_read_services
 
 - rule: repeat services comparison
   steps:
@@ -48,20 +48,20 @@ rules:
   - action: utter_ask_comparison_form_service
   - action: action_read_services
 
-#comparison path
-- rule: start comparison track
-  steps:
-  - intent: comparison
-  - action: utter_ask_comparison_form_service
-  - action: action_read_services
+# #comparison path
+# - rule: start comparison track
+#   steps:
+#   - intent: comparison
+#   - action: utter_ask_comparison_form_service
+#   - action: action_read_services
 
-- rule: ask for comparison type
-  steps:
-  - action: utter_ask_comparison_form_service
-  - action: action_read_services
-  - intent: services
-  - action: action_fill_service_slot
-  - action: utter_ask_comparison_form_comparison_types
+# - rule: ask for comparison type
+#   steps:
+#   - action: utter_ask_comparison_form_service
+#   - action: action_read_services
+#   - intent: services
+#   - action: action_fill_service_slot
+#   - action: utter_ask_comparison_form_comparison_types
 
 - rule: repeat ask for comparison types
   steps:
