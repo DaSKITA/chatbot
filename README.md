@@ -1,4 +1,4 @@
-# Transparency Information Bot (TIBO)
+# Transparency Information Bot (TIBO) ([Try here](https://daskita-chatbot.infra.ise-apps.de/))
 
 Development of a conversational AI with which users can communicate (as a user interface to tilt documents).
 
