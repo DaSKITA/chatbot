@@ -37,8 +37,8 @@ class ActionSetSlotValueRequestService(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         slot_value_service_company = tracker.get_slot('service_company')
         lowered_service_dict= {company_name.lower(): idx for idx, company_name in enumerate(service_filter.service_list)}
-        if slot_value_service_company and lowered_service_dict.get(slot_value_service_company[0]):
-            company_idx = lowered_service_dict.get(slot_value_service_company[0])
+        if slot_value_service_company and lowered_service_dict.get(slot_value_service_company[0].lower()):
+            company_idx = lowered_service_dict.get(slot_value_service_company[0].lower())
             return [SlotSet("service", service_filter.service_list[company_idx])]
         else:
             return [SlotSet("service_not_found", True)]
