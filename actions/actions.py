@@ -775,7 +775,7 @@ class ActionGiveServiceInfo(Action):
                             identification=access_dict["identificationEvidences"]
                             if not isinstance(identification, list):
                                 identification = [identification]
-                            identification_string=', '.join(identification)
+                            identification_string=', '.join(set(identification))
                             info_access.append("Für eine Identifikation brauchst du: {}".fortmat(identification_string))
                         if access_dict["administrativeFee"]:
                             fee=[]
@@ -812,7 +812,7 @@ class ActionGiveServiceInfo(Action):
                                 identification=dt_dict["identificationEvidences"]
                                 if not isinstance(identification, list):
                                     identification = [identification]
-                                identification_string=', '.join(identification)
+                                identification_string=', '.join(set(identification))
                                 info.append("Für eine Identifikation brauchst du: {}".format(identification_string))
                             if dt_dict.get("supervisoryAuthority"):
                                 info_tmp="Aufsichtsbehörde:  \n"
@@ -861,7 +861,7 @@ class ActionGiveServiceInfo(Action):
                                 info.append("Für eine Identifikation brachst du: ")
                                 if not isinstance(identification, list):
                                     identification = [identification]
-                                identification_string=', '.join([elem for elem in identification])
+                                identification_string=', '.join(set([elem for elem in identification]))
                                 info.append(identification_string)
                         info_string = '  \n'.join([str(elem) for elem in info])
                         dispatcher.utter_message(text="{}".format(info_string))
@@ -1102,7 +1102,7 @@ class ActionGiveServiceInfo(Action):
                             info_access.append("Für eine Identifikation benötigst du: ")
                             for el in access_dict["identificationEvidences"]:
                                 identification.append("*"+el+"*")
-                            identification_string=', '.join([elem for elem in identification])
+                            identification_string=', '.join(set([elem for elem in identification]))
                             info_access.append(identification_string)
                         if access_dict.get("administrativeFee"):
                             fee=[]
@@ -1140,7 +1140,7 @@ class ActionGiveServiceInfo(Action):
                                 info.append("Für eine Identifikation benötigst du: ")
                                 if not isinstance(identification, list):
                                     identification = [identification]
-                                identification_string=', '.join([elem for elem in identification])
+                                identification_string=', '.join(set([elem for elem in identification]))
                                 info.append(identification_string)
                             if dt_dict.get("supervisoryAuthority"):
                                 info_tmp="Aufsichtsbehörde:  \n"
@@ -1188,7 +1188,7 @@ class ActionGiveServiceInfo(Action):
                                 info.append("Für eine Identifikation benötigst du: ")
                                 if not isinstance(identification, list):
                                     identification = [identification]
-                                identification_string=', '.join([elem for elem in identification])
+                                identification_string=', '.join(set([elem for elem in identification]))
                                 info.append(identification_string)
                         info_string = '  \n'.join([str(elem) for elem in info])
                         dispatcher.utter_message(text="{}".format(info_string))
@@ -1395,7 +1395,7 @@ class ActionGiveServiceInfo(Action):
                             identification=access_dict["identificationEvidences"]
                             if not isinstance(identification, list):
                                 identification = [identification]
-                            identification_string='Für eine Identifikation brauchst du: '+', '.join(identification)
+                            identification_string='Für eine Identifikation brauchst du: '+', '.join(set(identification))
                             info_access.append(identification_string)
                         if access_dict.get("administrativeFee", None):
                             fee=[]
