@@ -677,7 +677,7 @@ class ActionGiveServiceInfo(Action):
                         rep=[]
                         if con_dict["name"]:
                             value=str(con_dict["name"])
-                            con.append("Name: "+ "**"+str(value)+"**")
+                            con.append("Name: "+str(value))
                         for element in con_dict.keys():
                             if con_dict[element]:
                                 if element=="address":
@@ -814,7 +814,7 @@ class ActionGiveServiceInfo(Action):
                                     identification = [identification]
                                 identification_string=', '.join(identification)
                                 info.append("Für eine Identifikation brauchst du: {}".format(identification_string))
-                            if dt_dict["supervisoryAuthority"]:
+                            if dt_dict.get("supervisoryAuthority"):
                                 info_tmp="Aufsichtsbehörde:  \n"
                                 for element in dt_dict["supervisoryAuthority"].keys():
                                     if dt_dict["supervisoryAuthority"][element]:
@@ -850,11 +850,11 @@ class ActionGiveServiceInfo(Action):
                                     info.append("Datenzugriff ist möglich.")
                                 else:
                                     info_access.append("Datenzugriff ist nicht möglich.")
-                            if dt_dict["description"]:
+                            if dt_dict.get("description"):
                                 info.append(str(dt_dict["description"]))
-                            if dt_dict["url"]:
+                            if dt_dict.get("url"):
                                 info.append("URL: "+str(dt_dict["url"]))
-                            if dt_dict["email"]:
+                            if dt_dict.get("email"):
                                 info.append("E-Mail: mailto:"+str(dt_dict["email"]))
                             if dt_dict["identificationEvidences"]:
                                 identification=[]
@@ -1085,26 +1085,26 @@ class ActionGiveServiceInfo(Action):
                         dispatcher.utter_message(text="Leider haben wir keine Informationen über {} für den Dienst {}.".format(datatype, service_upper))
                     else:
                         info_access=[]
-                        if access_dict["available"] and access_dict["description"]==False:
+                        if access_dict.get("available") and access_dict["description"]==False:
                             if access_dict["available"]=="true":
                                 info_access.append("Datenportabilität ist möglich.")
                             else:
                                 info_access.append("Datenportabilität ist nicht möglich.")
-                        if access_dict["description"]:
+                        if access_dict.get("description"):
                             info_access.append(str(tilt_dict["accessAndDataPortability"]["description"]))
-                        if access_dict["url"]:
+                        if access_dict.get("url"):
                             info_access.append("URL: "+ "*"+str(tilt_dict["accessAndDataPortability"]["url"])+"*")
-                        if access_dict["email"]:
+                        if access_dict.get("email"):
                             link_email= "mailto:"+ str(tilt_dict["accessAndDataPortability"]["email"])
                             info_access.append("E-Mail: "+"*"+ link_email+"*")
-                        if access_dict["identificationEvidences"]:
+                        if access_dict.get("identificationEvidences"):
                             identification=[]
                             info_access.append("Für eine Identifikation benötigst du: ")
                             for el in access_dict["identificationEvidences"]:
                                 identification.append("*"+el+"*")
                             identification_string=', '.join([elem for elem in identification])
                             info_access.append(identification_string)
-                        if access_dict["administrativeFee"]:
+                        if access_dict.get("administrativeFee"):
                             fee=[]
                             info_access.append("Die Bearbeitungsgebühr beträgt: ")
                             for el in access_dict["administrativeFee"]:
@@ -1124,25 +1124,25 @@ class ActionGiveServiceInfo(Action):
                             dispatcher.utter_message(text="Leider haben wir keine Informationen über {} für den Dienst {}.".format(datatype_out, service_upper))
                         elif dt=="rightToComplain":
                             info.append("Das sind die Informationen zu deinem " + right_names[rights.index(dt)]+":")
-                            if dt_dict["available"] and dt_dict["description"]==False:
+                            if dt_dict.get("available") and dt_dict["description"]==False:
                                 if dt_dict["available"]=="true":
                                     info.append("Datenzugriff ist möglich.")
                                 else:
                                     info.append("Datenzugriff ist nicht möglich.")
-                            if dt_dict["description"]:
+                            if dt_dict.get("description"):
                                 info.append(str(dt_dict["description"]))
-                            if dt_dict["url"]:
+                            if dt_dict.get("url"):
                                 info.append("URL: "+str(dt_dict["url"]))
-                            if dt_dict["email"]:
+                            if dt_dict.get("email"):
                                 info.append("E-Mail: mailto:"+str(dt_dict["email"]))
-                            if dt_dict["identificationEvidences"]:
+                            if dt_dict.get("identificationEvidences"):
                                 identification=dt_dict["identificationEvidences"]
                                 info.append("Für eine Identifikation benötigst du: ")
                                 if not isinstance(identification, list):
                                     identification = [identification]
                                 identification_string=', '.join([elem for elem in identification])
                                 info.append(identification_string)
-                            if dt_dict["supervisoryAuthority"]:
+                            if dt_dict.get("supervisoryAuthority"):
                                 info_tmp="Aufsichtsbehörde:  \n"
                                 for element in dt_dict["supervisoryAuthority"].keys():
                                     if dt_dict["supervisoryAuthority"][element]:
@@ -1172,18 +1172,18 @@ class ActionGiveServiceInfo(Action):
                                 info.append(info_tmp)
                         else:
                             info.append("Hier sind die Informationen zu deinem " + right_names[rights.index(dt)]+":")
-                            if dt_dict["available"] and dt_dict["description"]==False:
+                            if dt_dict.get("available") and dt_dict["description"]==False:
                                 if dt_dict["available"]=="true":
                                     info.append("Datenzugriff ist möglich.")
                                 else:
                                     info_access.append("Datenzugriff ist nicht möglich.")
-                            if dt_dict["description"]:
+                            if dt_dict.get("description"):
                                 info.append(str(dt_dict["description"]))
-                            if dt_dict["url"]:
+                            if dt_dict.get("url"):
                                 info.append("URL: "+str(dt_dict["url"]))
-                            if dt_dict["email"]:
+                            if dt_dict.get("email"):
                                 info.append("E-Mail: mailto:"+str(dt_dict["email"]))
-                            if dt_dict["identificationEvidences"]:
+                            if dt_dict.get("identificationEvidences"):
                                 identification=dt_dict["identificationEvidences"]
                                 info.append("Für eine Identifikation benötigst du: ")
                                 if not isinstance(identification, list):
