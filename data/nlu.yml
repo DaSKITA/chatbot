@@ -73,6 +73,8 @@ nlu:
     - Kannst du mir beim Lösen der Aufgaben helfen?
     - Kannst du mir die [Datenschutzerklärung](privacy_policy) eines Dienstes erklären?
     - Kannst du TILT Informationen verarbeiten?
+    - Informationen über die [Datenschutzerklärung](privacy_policy)
+    - Informationen über den [Datenschutz](privacy_policy)
 # - intent: comparison
 #   examples: |
 #     - [vergleich](comparison)
